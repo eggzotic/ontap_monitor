@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
+import 'package:ontap_monitor/ontap_cluster.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -56,43 +56,5 @@ class ClusterInfo extends StatelessWidget {
         child: Icon(Icons.refresh),
       ),
     );
-  }
-}
-
-class Clusters with ChangeNotifier {
-  List<OntapCluster> _all;
-  void addCluster(OntapCluster cluster) {
-    if (clusterExists(cluster)) return;
-    _all.add(cluster);
-  }
-  //
-  bool clusterExists(OntapCluster cluster) {
-    return _all.map((e) => e.uuid).toList().contains(cluster.uuid);
-  }
-}
-
-class OntapCluster {
-  final String uuid;
-  String name;
-  String version;
-
-  // Constructor
-  OntapCluster._private(this.uuid, this.name, this.version);
-
-  factory OntapCluster.fromMap(Map<String, dynamic> json) {
-    final String uuid = json['uuid'];
-    if (uuid == null) return null;
-    final String name = json['name'] ?? 'Unknown';
-    final String version = jsonDecode(json['version'])['full'];
-    //
-    return OntapCluster._private(uuid, name, version);
-  }
-
-  factory OntapCluster.fake() {
-    return OntapCluster.fromMap({
-      'name': 'unknown-name',
-      'uuid': 'unknown-uuid',
-      'version': '{ "full" : "Unknown version"}'
-    });
   }
 }
