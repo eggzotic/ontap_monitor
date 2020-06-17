@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 
 class OntapCluster with ChangeNotifier {
-  static const idPrefix = 'ontap-cluster_';
   final String _id;
   String _name;
   String _description;
@@ -16,7 +15,7 @@ class OntapCluster with ChangeNotifier {
   factory OntapCluster() {
     final uuid = Uuid();
     final v4 = uuid.v4();
-    return OntapCluster._private(id: idPrefix + v4);
+    return OntapCluster._private(id: v4);
   }
   //
   // all instances should ultimately be created by this, suitably wrapped in a factory constructor

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/about_ontap_monitor.dart';
-import 'package:ontap_monitor/cluster_credential_page.dart';
+import 'package:ontap_monitor/main_drawer.dart';
 import 'package:ontap_monitor/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster_edit_page.dart';
 import 'package:ontap_monitor/ontap_cluster_list_ui.dart';
@@ -31,32 +30,7 @@ class OntapClusterPage extends StatelessWidget {
           ),
         ],
       ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            ListTile(
-              leading: Icon(Icons.info_outline),
-              title: Text('About Ontap Monitor'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => AboutOntapMonitor()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.lock_outline),
-              title: Text('Manage Credentials'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => ClusterCredentialPage()),
-                );
-              },
-            )
-          ],
-        ),
-      ),
+      drawer: MainDrawer(),
       body: OntapClusterListUi(),
     );
   }

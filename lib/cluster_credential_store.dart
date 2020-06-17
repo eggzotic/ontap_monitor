@@ -3,12 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/cluster_credentials.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ontap_monitor/persistent_storage.dart';
 
 class ClusterCredentialStore with ChangeNotifier {
   ClusterCredentialStore() {
-    load();
+    _load();
   }
+  final _persistentStorage = PersistentStorage();
   // the real content, i.e. the credentials
   Map<String, ClusterCredentials> _allCredentials = {};
   // convenience getters
@@ -34,16 +35,16 @@ class ClusterCredentialStore with ChangeNotifier {
   bool existsForId(String id) => _allCredentials.containsKey(id);
   //
   // add a credential
-  void add(ClusterCredentials credential) {
+  void add(ClusterCredentials credential, {bool store = true}) {
     final id = credential.id;
     _allCredentials[id] = credential;
     print('After add, Store = $asJson');
     // save the cred
-    credential.store();
+    if (store) _persistentStorage.storeCredential(credential);
     // we add this listener here to trigger saving the cred
     //  this ensures only creds managed by this ClusterCredentialStore are stored
     credential.addListener(() {
-      credential.store();
+      _persistentStorage.storeCredential(credential);
     });
     notifyListeners();
   }
@@ -53,31 +54,20 @@ class ClusterCredentialStore with ChangeNotifier {
     final deletedCred = _allCredentials.remove(credentialId);
     print('After delete, store = $asJson');
     deletedCred.removeListener(() {
-      deletedCred.store();
+      _persistentStorage.storeCredential(deletedCred);
     });
-    deletedCred.delete();
+    _persistentStorage.deleteCredential(deletedCred);
     notifyListeners();
   }
 
   //
-  List<Map<String, String>> get toMap =>
-      _allCredentials.values.map((value) => value.toMap).toList();
+  List<Map<String, String>> get toMap => _allCredentials.values.map((value) => value.toMap).toList();
   String get asJson => json.encode(toMap);
   //
   // persistent storage
-  // via SharedPreferences:
-  void load() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    // load the relevant keys
-    final ids = prefs.getKeys();
-    final prefLen = ClusterCredentials.idPrefix.length;
-    final credentialIds = ids.where((element) =>
-        element.substring(0, prefLen) == ClusterCredentials.idPrefix);
-    credentialIds.forEach((key) {
-      final cred = ClusterCredentials.fromJson(prefs.getString(key));
-      print('Loaded credential: $cred');
-      add(cred);
-    });
+  void _load() async {
+    final loadedCreds = await _persistentStorage.loadCredentials();
+    loadedCreds.forEach((cred) => add(cred, store: false));
     notifyListeners();
   }
   //

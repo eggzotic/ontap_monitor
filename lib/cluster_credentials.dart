@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 //
 class ClusterCredentials with ChangeNotifier {
-  static const idPrefix = 'cluster-credential_';
+  //
   final String _id;
   String _name;
   String _userName;
@@ -16,7 +15,7 @@ class ClusterCredentials with ChangeNotifier {
   factory ClusterCredentials() {
     final uuid = Uuid();
     final v4 = uuid.v4();
-    return ClusterCredentials._private(id: idPrefix + v4);
+    return ClusterCredentials._private(id: v4);
   }
   //
   ClusterCredentials._private({
@@ -108,19 +107,5 @@ class ClusterCredentials with ChangeNotifier {
     String newText = text.trim();
     // other tidying tasks here?
     return newText;
-  }
-
-  //
-  // persistent storage
-  // via SharedPreferences
-  void store() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    print('Storing credential $asJson');
-    prefs.setString(_id, asJson);
-  }
-  // delete from storage
-  void delete() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(_id);
   }
 }
