@@ -1,21 +1,36 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-// import 'package:ontap_monitor/cluster_credential_page.dart';
-import 'package:ontap_monitor/cluster_credential_store.dart';
-import 'package:ontap_monitor/ontap_cluster_page.dart';
-import 'package:ontap_monitor/ontap_cluster_store.dart';
+import 'package:ontap_monitor/cluster_credentials/cluster_credential_store.dart';
+import 'package:ontap_monitor/ontap_api_actions/ontap_action_store.dart';
+import 'package:ontap_monitor/ontap_cluster/ontap_cluster_page.dart';
+import 'package:ontap_monitor/ontap_cluster/ontap_cluster_store.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
+// this is required when working with self-signed certs, such as the average ONTAP system will have
+//  based on the final solution by pepie at https://github.com/flutter/flutter/issues/19588
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
 }
 
-class MyApp extends StatelessWidget {
+void main() {
+  // here's we we hook it into our app
+  HttpOverrides.global = new MyHttpOverrides();
+  // and then run the app, as usual
+  runApp(OntapMonitorApp());
+}
+
+class OntapMonitorApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ClusterCredentialStore()),
+        ChangeNotifierProvider(create: (context) => OntapActionStore()),
         ChangeNotifierProvider(create: (context) => OntapClusterStore()),
       ],
       child: MaterialApp(
@@ -25,7 +40,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        // home: ClusterCredentialPage(),
         home: OntapClusterPage(),
       ),
     );

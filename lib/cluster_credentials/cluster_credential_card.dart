@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/cluster_credential_edit_page.dart';
-import 'package:ontap_monitor/cluster_credentials.dart';
+import 'package:ontap_monitor/cluster_credentials/cluster_credential_edit_page.dart';
+import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
 import 'package:provider/provider.dart';
 
 class ClusterCredentialCard extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/ontap_cluster.dart';
-import 'package:ontap_monitor/ontap_cluster_edit_page.dart';
+import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
+import 'package:ontap_monitor/ontap_cluster/ontap_cluster_actions_page.dart';
 import 'package:provider/provider.dart';
 
 class OntapClusterCard extends StatelessWidget {
@@ -16,9 +16,11 @@ class OntapClusterCard extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) =>
-                  OntapClusterEditPage(clusterId: cluster.id),
-            ),
+                builder: (context) => ChangeNotifierProvider.value(
+                      value: cluster,
+                      child: OntapClusterActionsPage(),
+                    )
+                ),
           );
         },
       ),

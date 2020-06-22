@@ -10,6 +10,7 @@ class OntapCluster with ChangeNotifier {
   String _description;
   String _adminLifAddress;
   String _credentialsId;
+  Set<String> _actionIds;
   //
   // to be used from outside,
   factory OntapCluster() {
@@ -25,12 +26,14 @@ class OntapCluster with ChangeNotifier {
     String adminLifAddress = '',
     String credentialsId = '',
     String description = '',
+    Set<String> actionIds,
   })  : assert(id != null),
         _id = id {
     _name = name;
     _adminLifAddress = adminLifAddress;
     _credentialsId = credentialsId;
     _description = description;
+    _actionIds = actionIds ?? Set<String>();
   }
   factory OntapCluster.fromJson(String encoded) {
     return OntapCluster.fromMap(json.decode(encoded));
@@ -43,6 +46,7 @@ class OntapCluster with ChangeNotifier {
     final String adminLifAddress = json['adminLifAddress'];
     final String credentialsId = json['credentialsId'];
     final String description = json['description'];
+    final Set<String> actionIds = Set.from(json['actionIds']);
     //
     return OntapCluster._private(
       id: id,
@@ -50,15 +54,17 @@ class OntapCluster with ChangeNotifier {
       adminLifAddress: adminLifAddress,
       credentialsId: credentialsId,
       description: description,
+      actionIds: actionIds,
     );
   }
   //
-  Map<String, String> get toMap => {
+  Map<String, dynamic> get toMap => {
         'id': _id,
         'name': _name,
         'adminLifAddress': _adminLifAddress,
         'credentialsId': _credentialsId,
         'description': _description,
+        'actionIds': _actionIds.toList(),
       };
   //
   static String _tidyText(String text) {
@@ -101,4 +107,14 @@ class OntapCluster with ChangeNotifier {
   }
 
   String get description => _description;
+  //
+  List<String> get actionIds => _actionIds.toList();
+  int get actionCount => _actionIds.length;
+  //
+  void toggleActionId(String actionId) {
+    _actionIds.contains(actionId) ? _actionIds.remove(actionId) : _actionIds.add(actionId);
+    notifyListeners();
+  }
+
+  bool hasActionId(String actionId) => _actionIds.contains(actionId);
 }

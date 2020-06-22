@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/ontap_cluster_card.dart';
-import 'package:ontap_monitor/ontap_cluster_store.dart';
+import 'package:ontap_monitor/ontap_cluster/ontap_cluster_card.dart';
+import 'package:ontap_monitor/ontap_cluster/ontap_cluster_store.dart';
 import 'package:provider/provider.dart';
 
 class OntapClusterListUi extends StatelessWidget {

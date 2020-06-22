@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:ontap_monitor/ontap_cluster.dart';
+import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/persistent_storage.dart';
 
 class OntapClusterStore with ChangeNotifier {
@@ -36,7 +36,7 @@ class OntapClusterStore with ChangeNotifier {
   void add(OntapCluster cluster, {bool store = true}) {
     final id = cluster.id;
     _allClusters[id] = cluster;
-    print('After add, Store = $asJson');
+    print('After add, Cluster Store = $asJson');
     if (store) _persistentStorage.storeCluster(cluster);
     cluster.addListener(() {
       _persistentStorage.storeCluster(cluster);
@@ -57,7 +57,7 @@ class OntapClusterStore with ChangeNotifier {
   }
 
   //
-  List<Map<String, String>> get toMap => _allClusters.values.map((e) => e.toMap).toList();
+  List<Map<String, dynamic>> get toMap => _allClusters.values.map((e) => e.toMap).toList();
   String get asJson => json.encode(toMap);
   //
   void _load() async {

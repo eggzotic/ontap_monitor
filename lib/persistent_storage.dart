@@ -1,13 +1,17 @@
 //
-import 'package:ontap_monitor/cluster_credentials.dart';
-import 'package:ontap_monitor/ontap_cluster.dart';
+import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
+import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
+import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PersistentStorage {
   // for identifying serialized instances on persistent-storage
   static const _clusterCredentialIdPrefix = 'cluster-credential_';
   static const _ontapClusterIdPrefix = 'ontap-cluster_';
+  static const _ontapActionIdPrefix = 'ontap-action_';
 
+  //
+  // Cluster Credentials
   //
   Future<List<ClusterCredentials>> loadCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -39,6 +43,8 @@ class PersistentStorage {
   }
 
   //
+  // Ontap Clusters
+  //
   Future<List<OntapCluster>> loadClusters() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final ids = prefs.getKeys();
@@ -64,5 +70,35 @@ class PersistentStorage {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     print('Removing cluster ${cluster.asJson}');
     prefs.remove(_ontapClusterIdPrefix + cluster.id);
+  }
+
+  //
+  // Ontap Actions
+  //
+  Future<List<OntapAction>> loadActions() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final ids = prefs.getKeys();
+    print('loadActions: Found ${ids.length} keys');
+    final prefLen = _ontapActionIdPrefix.length;
+    final actionIds = ids.where((id) => id.substring(0, prefLen) == _ontapActionIdPrefix);
+    return actionIds.map((key) {
+      final action = OntapAction.fromJson(prefs.getString(key));
+      print('Loaded action: $action');
+      return action;
+    }).toList();
+  }
+
+  //
+  void storeOntapAction(OntapAction action) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print('Storing ontap action ${action.asJson}');
+    prefs.setString(_ontapActionIdPrefix + action.id, action.asJson);
+  }
+
+  //
+  void deleteAction(OntapAction action) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print('Removing action ${action.asJson}');
+    prefs.remove(_ontapActionIdPrefix + action.id);
   }
 }
