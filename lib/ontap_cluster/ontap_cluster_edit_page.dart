@@ -16,8 +16,9 @@ class OntapClusterEditPage extends StatelessWidget {
     print('OntapClusterEditPage build');
     final clusterStore = Provider.of<OntapClusterStore>(context);
     final add = clusterId == null;
-    final cluster = add ? Provider.of<OntapCluster>(context) : clusterStore.forId(clusterId);
-
+    final cluster = add
+        ? Provider.of<OntapCluster>(context)
+        : clusterStore.forId(clusterId);
     return Scaffold(
       appBar: AppBar(
         title: Text(add ? 'Add Cluster' : 'Edit Cluster'),

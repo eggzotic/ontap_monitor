@@ -108,8 +108,13 @@ class OntapAction with ChangeNotifier {
     return p;
   }
 
-  void addParameterName(String param) {
-    _parameterNames.add(param);
+  // void addParameterName(String param) {
+  //   _parameterNames.add(param);
+  //   notifyListeners();
+  // }
+  void addParameterName() {
+    _parameterNames.add(_newApiParameter);
+    _newApiParameter = '';
     notifyListeners();
   }
 
@@ -121,4 +126,10 @@ class OntapAction with ChangeNotifier {
   //
   // convenience getter for building the URL
   String get path => _ontapApiPath + _api;
+  //
+  // some ephemereal state
+  String _newApiParameter = '';
+  void setNewParameter(String param) {
+    _newApiParameter = param;
+  }
 }

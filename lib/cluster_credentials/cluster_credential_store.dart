@@ -45,6 +45,7 @@ class ClusterCredentialStore with ChangeNotifier {
     //  this ensures only creds managed by this ClusterCredentialStore are stored
     credential.addListener(() {
       _persistentStorage.storeCredential(credential);
+      notifyListeners();
     });
     notifyListeners();
   }
@@ -55,13 +56,15 @@ class ClusterCredentialStore with ChangeNotifier {
     print('After delete, Credential store = $asJson');
     deletedCred.removeListener(() {
       _persistentStorage.storeCredential(deletedCred);
+      notifyListeners();
     });
     _persistentStorage.deleteCredential(deletedCred);
     notifyListeners();
   }
 
   //
-  List<Map<String, String>> get toMap => _allCredentials.values.map((value) => value.toMap).toList();
+  List<Map<String, String>> get toMap =>
+      _allCredentials.values.map((value) => value.toMap).toList();
   String get asJson => json.encode(toMap);
   //
   // load from persistent storage

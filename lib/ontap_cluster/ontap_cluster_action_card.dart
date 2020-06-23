@@ -39,6 +39,8 @@ class OntapClusterActionCard extends StatelessWidget {
           final cred = credentialStore.forId(cluster.credentialsId);
           // if the cluster does not have a valid set of credentials assigned, we take the user to the define-creds screen
           if (cred == null) {
+            print('Creds required');
+            cluster.setCredentialsRequired(true);
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => OntapClusterEditPage(clusterId: cluster.id),

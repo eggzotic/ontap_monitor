@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_store.dart';
 import 'package:ontap_monitor/ontap_cluster/cluster_select_credentials_ui.dart';
@@ -12,6 +13,20 @@ class OntapClusterEditUi extends StatelessWidget {
     print('OntapClusterEditUi build');
     final cluster = Provider.of<OntapCluster>(context);
     final actionStore = Provider.of<OntapActionStore>(context);
+
+    if (cluster.credentialsRequired) {
+      cluster.setCredentialsRequired(false);
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        print('addPostFrameCallback called');
+        Flushbar(
+          flushbarPosition: FlushbarPosition.TOP,
+          title: 'Credentials Required',
+          message: 'Select or Create Credentials',
+          duration: Duration(seconds: 2),
+        )..show(context);
+      });
+    }
+
     return ListView(
       children: [
         Padding(

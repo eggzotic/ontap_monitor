@@ -76,7 +76,8 @@ class OntapCluster with ChangeNotifier {
   //
   String get asJson => json.encode(toMap);
   //
-  bool get isValid => _name.isNotEmpty && _adminLifAddress.isNotEmpty && _id.isNotEmpty;
+  bool get isValid =>
+      _name.isNotEmpty && _adminLifAddress.isNotEmpty && _id.isNotEmpty;
   //
   String get id => _id;
   //
@@ -112,9 +113,16 @@ class OntapCluster with ChangeNotifier {
   int get actionCount => _actionIds.length;
   //
   void toggleActionId(String actionId) {
-    _actionIds.contains(actionId) ? _actionIds.remove(actionId) : _actionIds.add(actionId);
+    _actionIds.contains(actionId)
+        ? _actionIds.remove(actionId)
+        : _actionIds.add(actionId);
     notifyListeners();
   }
 
   bool hasActionId(String actionId) => _actionIds.contains(actionId);
+  //
+  // ephemeral state
+  bool _credentialsRequired = false;
+  bool get credentialsRequired => _credentialsRequired;
+  void setCredentialsRequired(bool value) => _credentialsRequired = value;
 }

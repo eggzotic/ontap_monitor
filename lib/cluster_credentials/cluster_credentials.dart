@@ -61,7 +61,7 @@ class ClusterCredentials with ChangeNotifier {
   String get asJson => json.encode(toMap);
   //
   bool get isValid =>
-      _userName.isNotEmpty && _name.isNotEmpty && _id.isNotEmpty;
+      _userName.isNotEmpty && _name.isNotEmpty && _id.isNotEmpty && _password.isNotEmpty;
   //
   String get id => _id;
   //

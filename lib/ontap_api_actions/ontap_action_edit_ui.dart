@@ -15,7 +15,6 @@ class OntapActionEditUi extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             initialValue: action.name,
-            readOnly: false,
             textCapitalization: TextCapitalization.words,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(labelText: 'Action Name'),
@@ -26,7 +25,6 @@ class OntapActionEditUi extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             initialValue: action.description,
-            readOnly: false,
             textCapitalization: TextCapitalization.none,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(labelText: 'Description'),
@@ -38,7 +36,6 @@ class OntapActionEditUi extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: TextFormField(
             initialValue: action.api,
-            readOnly: false,
             textCapitalization: TextCapitalization.none,
             keyboardType: TextInputType.text,
             decoration: InputDecoration(labelText: 'API Name'),
@@ -51,12 +48,25 @@ class OntapActionEditUi extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: TextFormField(
-            readOnly: false,
-            textCapitalization: TextCapitalization.none,
-            keyboardType: TextInputType.text,
-            decoration: InputDecoration(labelText: 'Add Parameter'),
-            onChanged: (newParam) => action.addParameterName(newParam),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  initialValue: '',
+                  textCapitalization: TextCapitalization.none,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(labelText: 'Add Parameter'),
+                  onChanged: (newParam) => action.setNewParameter(newParam),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.add_circle_outline),
+                color: Colors.blue,
+                onPressed: () {
+                  action.addParameterName();
+                },
+              ),
+            ],
           ),
         ),
         if (action.parameterNames.length > 0)
