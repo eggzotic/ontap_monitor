@@ -108,10 +108,6 @@ class OntapAction with ChangeNotifier {
     return p;
   }
 
-  // void addParameterName(String param) {
-  //   _parameterNames.add(param);
-  //   notifyListeners();
-  // }
   void addParameterName() {
     _parameterNames.add(_newApiParameter);
     _newApiParameter = '';
@@ -131,5 +127,10 @@ class OntapAction with ChangeNotifier {
   String _newApiParameter = '';
   void setNewParameter(String param) {
     _newApiParameter = param;
+    // notifyListeners();
   }
+
+  // String get newApiParameter => _newApiParameter;
+
+  bool get newApiParamValid => _newApiParameter.isNotEmpty;
 }

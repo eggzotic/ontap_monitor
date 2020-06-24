@@ -16,7 +16,8 @@ class OntapActionEditPage extends StatelessWidget {
     print('OntapActionEditPage build');
     final actionStore = Provider.of<OntapActionStore>(context);
     final add = actionId == null;
-    final action = add ? Provider.of<OntapAction>(context) : actionStore.forId(actionId);
+    final action =
+        add ? Provider.of<OntapAction>(context) : actionStore.forId(actionId);
     return Scaffold(
       appBar: AppBar(
         title: Text(add ? 'Create Action' : 'Edit action'),
@@ -52,9 +53,14 @@ class OntapActionEditPage extends StatelessWidget {
                   ),
                 )
               // main case where we're editing an existing, or creating a new, action
-              : ChangeNotifierProvider.value(
-                  value: action,
-                  builder: (_, __) => OntapActionEditUi(),
+              : MultiProvider(
+                  providers: [
+                    ChangeNotifierProvider(
+                      create: (_) => TextEditingController(),
+                    ),
+                    ChangeNotifierProvider.value(value: action),
+                  ],
+                  child: OntapActionEditUi(),
                 ),
     );
   }

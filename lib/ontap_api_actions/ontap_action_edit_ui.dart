@@ -9,6 +9,8 @@ class OntapActionEditUi extends StatelessWidget {
   Widget build(BuildContext context) {
     print('OntapActionEditUi build');
     final action = Provider.of<OntapAction>(context);
+    final newParamController = Provider.of<TextEditingController>(context);
+    //
     return ListView(
       children: [
         Padding(
@@ -52,19 +54,25 @@ class OntapActionEditUi extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
-                  initialValue: '',
+                  // initialValue: '',
+                  controller: newParamController,
                   textCapitalization: TextCapitalization.none,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(labelText: 'Add Parameter'),
-                  onChanged: (newParam) => action.setNewParameter(newParam),
+                  onChanged: (newParam) {
+                    action.setNewParameter(newParam);
+                  },
                 ),
               ),
               IconButton(
                 icon: Icon(Icons.add_circle_outline),
                 color: Colors.blue,
-                onPressed: () {
-                  action.addParameterName();
-                },
+                onPressed: action.newApiParamValid
+                    ? () {
+                        action.addParameterName();
+                        newParamController.clear();
+                      }
+                    : null,
               ),
             ],
           ),
