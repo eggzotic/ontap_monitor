@@ -15,20 +15,21 @@ class ClusterCredentialPage extends StatelessWidget {
         title: Text('Credentials ($credentialCount)'),
         actions: [
           // a '+' button to launch the "create credential" page
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  final newCredential = ClusterCredentials();
-                  return ChangeNotifierProvider.value(
-                    value: newCredential,
-                    builder: (_, __) => ClusterCredentialEditPage(),
-                  );
-                },
+          if (credentialCount > 0)
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    final newCredential = ClusterCredentials();
+                    return ChangeNotifierProvider.value(
+                      value: newCredential,
+                      builder: (_, __) => ClusterCredentialEditPage(),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
         ],
       ),
       body: ClusterCredentialListUi(),

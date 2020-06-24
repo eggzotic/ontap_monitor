@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_card.dart';
+import 'package:ontap_monitor/ontap_api_actions/ontap_action_edit_page.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_store.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +12,26 @@ class OntapActionListUi extends StatelessWidget {
     final actionStore = Provider.of<OntapActionStore>(context);
     final actionIds = actionStore.idsSorted;
     final actionCount = actionStore.actionCount;
+    //
+    if (actionCount == 0)
+      return Card(
+        child: ListTile(
+          title: Text('Create an action'),
+          trailing: Icon(Icons.add),
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                final newAction = OntapAction();
+                return ChangeNotifierProvider.value(
+                  value: newAction,
+                  builder: (_, __) => OntapActionEditPage(),
+                );
+              },
+            ),
+          ),
+        ),
+      );
+    //
     return ListView.builder(
       itemCount: actionCount,
       itemBuilder: (context, index) {

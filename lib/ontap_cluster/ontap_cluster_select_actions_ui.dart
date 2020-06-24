@@ -18,8 +18,8 @@ class OntapClusterSelectActionsUi extends StatelessWidget {
     if (actionStore.actionCount == 0) {
       return Card(
         child: ListTile(
-          title: Text('Create some actions'),
-          trailing: Icon(Icons.chevron_right),
+          title: Text('Create actions'),
+          trailing: Icon(Icons.add),
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => OntapActionPage()),

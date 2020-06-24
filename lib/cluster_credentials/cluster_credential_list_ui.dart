@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credential_card.dart';
+import 'package:ontap_monitor/cluster_credentials/cluster_credential_edit_page.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credential_store.dart';
+import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
 import 'package:provider/provider.dart';
 
 class ClusterCredentialListUi extends StatelessWidget {
@@ -9,6 +11,27 @@ class ClusterCredentialListUi extends StatelessWidget {
     final credentialStore = Provider.of<ClusterCredentialStore>(context);
     final credentialIds = credentialStore.idsSorted;
     final credentialCount = credentialStore.credentialCount;
+    //
+    if (credentialCount == 0) {
+      return Card(
+        child: ListTile(
+          title: Text('Create some credentials'),
+          trailing: Icon(Icons.add),
+          onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  final newCredential = ClusterCredentials();
+                  return ChangeNotifierProvider.value(
+                    value: newCredential,
+                    builder: (_, __) => ClusterCredentialEditPage(),
+                  );
+                },
+              ),
+            ),
+        ),
+      );
+    }
+    //
     return ListView.builder(
       itemCount: credentialCount,
       itemBuilder: (context, index) {

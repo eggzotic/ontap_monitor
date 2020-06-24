@@ -16,18 +16,19 @@ class OntapActionPage extends StatelessWidget {
         title: Text('Actions ($actionCount)'),
         actions: [
           // a '+' button to launch the "add action" page
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) {
-                final newAction = OntapAction();
-                return ChangeNotifierProvider.value(
-                  value: newAction,
-                  builder: (_, __) => OntapActionEditPage(),
-                );
-              }),
+          if (actionCount > 0)
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  final newAction = OntapAction();
+                  return ChangeNotifierProvider.value(
+                    value: newAction,
+                    builder: (_, __) => OntapActionEditPage(),
+                  );
+                }),
+              ),
             ),
-          ),
         ],
       ),
       body: OntapActionListUi(),

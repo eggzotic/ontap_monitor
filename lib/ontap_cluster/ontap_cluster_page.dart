@@ -16,18 +16,19 @@ class OntapClusterPage extends StatelessWidget {
         title: Text('Clusters ($clusterCount)'),
         actions: [
           // a '+' button to launch the "add cluster" page
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) {
-                final newCluster = OntapCluster();
-                return ChangeNotifierProvider.value(
-                  value: newCluster,
-                  builder: (_, __) => OntapClusterEditPage(),
-                );
-              }),
+          if (clusterCount > 0)
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) {
+                  final newCluster = OntapCluster();
+                  return ChangeNotifierProvider.value(
+                    value: newCluster,
+                    builder: (_, __) => OntapClusterEditPage(),
+                  );
+                }),
+              ),
             ),
-          ),
         ],
       ),
       drawer: MainDrawer(),

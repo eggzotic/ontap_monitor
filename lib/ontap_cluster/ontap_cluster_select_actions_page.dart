@@ -9,20 +9,24 @@ class OntapClusterSelectActionsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final cluster = Provider.of<OntapCluster>(context);
     final actionStore = Provider.of<OntapActionStore>(context);
+    final name = cluster.name.isNotEmpty ? cluster.name : '(New)';
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.done),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(cluster.name + ': Select Actions'),
+        title: Text(name + ': Select Actions'),
         actions: [
-          IconButton(
-            icon: Icon(actionStore.showSelectedOnly ? Icons.visibility_off : Icons.visibility),
-            onPressed: () {
-              actionStore.toggleSelectedOnly();
-            },
-          ),
+          if (actionStore.actionCount > 0)
+            IconButton(
+              icon: Icon(actionStore.showSelectedOnly
+                  ? Icons.visibility_off
+                  : Icons.visibility),
+              onPressed: () {
+                actionStore.toggleSelectedOnly();
+              },
+            ),
         ],
       ),
       body: OntapClusterSelectActionsUi(),
