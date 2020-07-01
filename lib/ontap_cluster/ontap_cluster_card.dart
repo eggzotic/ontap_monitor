@@ -12,15 +12,17 @@ class OntapClusterCard extends StatelessWidget {
       child: ListTile(
         title: Text(cluster.name),
         subtitle: Text(cluster.adminLifAddress),
-        trailing: Icon(Icons.chevron_right),
+        trailing: Icon(
+          Icons.chevron_right,
+          color: Theme.of(context).accentColor,
+        ),
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => ChangeNotifierProvider.value(
                       value: cluster,
                       child: OntapClusterActionsPage(),
-                    )
-                ),
+                    )),
           );
         },
       ),

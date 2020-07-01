@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credential_edit_ui.dart';
-import 'package:ontap_monitor/cluster_credentials/cluster_credential_store.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
+import 'package:ontap_monitor/data_storage/data_store.dart';
 import 'package:provider/provider.dart';
 
 class ClusterCredentialEditPage extends StatelessWidget {
@@ -14,7 +14,7 @@ class ClusterCredentialEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('ClusterCredentialEditPage build');
-    final credentialStore = Provider.of<ClusterCredentialStore>(context);
+    final credentialStore = Provider.of<DataStore<ClusterCredentials>>(context);
     final add = credentialId == null;
     final credential = add
         ? Provider.of<ClusterCredentials>(context)
@@ -40,7 +40,8 @@ class ClusterCredentialEditPage extends StatelessWidget {
         ],
       ),
       body:
-          // edge case where the credential might have been deleted while this screen is open
+          // edge case where the credential might have been deleted while this
+          //  screen is open
           credentialId != null && !credentialStore.existsForId(credentialId)
               ? Center(
                   child: Column(
@@ -53,7 +54,8 @@ class ClusterCredentialEditPage extends StatelessWidget {
                     ],
                   ),
                 )
-              // main case where we're editing an existing, or creating a new, set of credentials
+              // main case where we're editing an existing, or creating a new,
+              //  set of credentials
               : ChangeNotifierProvider.value(
                   value: credential,
                   builder: (_, __) => ClusterCredentialEditUi(),

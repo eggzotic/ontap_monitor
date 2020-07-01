@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/data_storage/data_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_edit_ui.dart';
-import 'package:ontap_monitor/ontap_api_actions/ontap_action_store.dart';
 import 'package:provider/provider.dart';
 
 class OntapActionEditPage extends StatelessWidget {
@@ -14,13 +14,15 @@ class OntapActionEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('OntapActionEditPage build');
-    final actionStore = Provider.of<OntapActionStore>(context);
+    final actionStore = Provider.of<DataStore<OntapAction>>(context);
     final add = actionId == null;
     final action =
         add ? Provider.of<OntapAction>(context) : actionStore.forId(actionId);
+    final editable = action.isEditable;
+    //
     return Scaffold(
       appBar: AppBar(
-        title: Text(add ? 'Create Action' : 'Edit action'),
+        title: Text(!editable ? 'View Action': add ? 'Create Action' : 'Edit action'),
         leading: IconButton(
           icon: Icon(Icons.done),
           onPressed: !action.isValid
@@ -39,12 +41,12 @@ class OntapActionEditPage extends StatelessWidget {
         ],
       ),
       body:
-          // just in case the credential has been deleted
+          // just in case the action has been deleted
           actionId != null && !actionStore.existsForId(actionId)
               ? Center(
                   child: Column(
                     children: [
-                      Text('Cannot find Credentials'),
+                      Text('Cannot find Action'),
                       RaisedButton(
                         onPressed: () => Navigator.of(context).pop(),
                         child: Text('Close'),
@@ -52,7 +54,8 @@ class OntapActionEditPage extends StatelessWidget {
                     ],
                   ),
                 )
-              // main case where we're editing an existing, or creating a new, action
+              // main case where we're editing an existing, or creating a new,
+              //  action
               : MultiProvider(
                   providers: [
                     ChangeNotifierProvider(

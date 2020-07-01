@@ -11,8 +11,13 @@ class OntapActionCard extends StatelessWidget {
     return Card(
       child: ListTile(
         title: Text(action.name),
-        subtitle: Text(action.api),
-        trailing: Icon(Icons.chevron_right),
+        subtitle: Text(action.api.name),
+        trailing: action.isBuiltin
+            ? Icon(Icons.block)
+            : Icon(
+                Icons.edit,
+                color: Theme.of(context).accentColor,
+              ),
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(

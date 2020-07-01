@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/data_storage/data_store.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_edit_ui.dart';
-import 'package:ontap_monitor/ontap_cluster/ontap_cluster_store.dart';
 import 'package:provider/provider.dart';
 
 class OntapClusterEditPage extends StatelessWidget {
@@ -14,7 +14,7 @@ class OntapClusterEditPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('OntapClusterEditPage build');
-    final clusterStore = Provider.of<OntapClusterStore>(context);
+    final clusterStore = Provider.of<DataStore<OntapCluster>>(context);
     final add = clusterId == null;
     final cluster = add
         ? Provider.of<OntapCluster>(context)

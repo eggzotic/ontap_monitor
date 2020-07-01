@@ -12,7 +12,10 @@ class ClusterCredentialCard extends StatelessWidget {
       child: ListTile(
         title: Text(credential.name),
         subtitle: Text(credential.userName),
-        trailing: Icon(Icons.chevron_right),
+        trailing: Icon(
+          Icons.edit,
+          color: Theme.of(context).accentColor,
+        ),
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credential_card.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credential_edit_page.dart';
-import 'package:ontap_monitor/cluster_credentials/cluster_credential_store.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
+import 'package:ontap_monitor/data_storage/data_store.dart';
 import 'package:provider/provider.dart';
 
 class ClusterCredentialListUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final credentialStore = Provider.of<ClusterCredentialStore>(context);
+    final credentialStore = Provider.of<DataStore<ClusterCredentials>>(context);
     final credentialIds = credentialStore.idsSorted;
-    final credentialCount = credentialStore.credentialCount;
+    final credentialCount = credentialStore.itemCount;
     //
     if (credentialCount == 0) {
       return Card(

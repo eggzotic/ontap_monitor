@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:ontap_monitor/data_storage/data_item.dart';
 import 'package:uuid/uuid.dart';
 
 //
-class ClusterCredentials with ChangeNotifier {
+class ClusterCredentials extends DataItem {
+  static const idPrefix = 'cluster-credential_';
   //
   final String _id;
   String _name;
@@ -14,7 +16,7 @@ class ClusterCredentials with ChangeNotifier {
   // create a new credentials from scratch
   factory ClusterCredentials() {
     final uuid = Uuid();
-    final v4 = uuid.v4();
+    final v4 = idPrefix + uuid.v4();
     return ClusterCredentials._private(id: v4);
   }
   //
@@ -32,9 +34,6 @@ class ClusterCredentials with ChangeNotifier {
     _description = description;
   }
   //
-  factory ClusterCredentials.fromJson(String encoded) {
-    return ClusterCredentials.fromMap(json.decode(encoded));
-  }
   factory ClusterCredentials.fromMap(Map<String, dynamic> json) {
     final String id = json['id'];
     final String name = json['name'];
@@ -58,10 +57,11 @@ class ClusterCredentials with ChangeNotifier {
         'description': _description,
       };
   //
-  String get asJson => json.encode(toMap);
-  //
   bool get isValid =>
-      _userName.isNotEmpty && _name.isNotEmpty && _id.isNotEmpty && _password.isNotEmpty;
+      _userName.isNotEmpty &&
+      _name.isNotEmpty &&
+      _id.isNotEmpty &&
+      _password.isNotEmpty;
   //
   String get id => _id;
   //

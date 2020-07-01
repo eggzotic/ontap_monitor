@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/data_storage/data_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_card.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_edit_page.dart';
-import 'package:ontap_monitor/ontap_api_actions/ontap_action_store.dart';
 import 'package:provider/provider.dart';
 
 class OntapActionListUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('OntapActionListUi build');
-    final actionStore = Provider.of<OntapActionStore>(context);
+    final actionStore = Provider.of<DataStore<OntapAction>>(context);
     final actionIds = actionStore.idsSorted;
-    final actionCount = actionStore.actionCount;
+    final actionCount = actionStore.itemCount;
     //
     if (actionCount == 0)
       return Card(
@@ -36,18 +36,27 @@ class OntapActionListUi extends StatelessWidget {
       itemCount: actionCount,
       itemBuilder: (context, index) {
         final id = actionIds[index];
+        final action = actionStore.forId(id);
+        final editable = action.isEditable;
         return Dismissible(
           key: ValueKey(id),
+          confirmDismiss: (_) {
+            // this prevents builtin's being deleted
+            return Future.value(editable);
+          },
           direction: DismissDirection.endToStart,
           background: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: Icon(Icons.delete_sweep, color: Colors.white),
+            child: Icon(
+              editable ? Icons.delete_sweep : Icons.block,
+              color: Colors.white,
+            ),
             alignment: Alignment.centerRight,
-            color: Colors.red,
+            color: editable ? Colors.red : Theme.of(context).disabledColor,
           ),
           onDismissed: (direction) => actionStore.deleteForId(id),
           child: ChangeNotifierProvider.value(
-            value: actionStore.forId(id),
+            value: action,
             builder: (_, __) => OntapActionCard(),
           ),
         );

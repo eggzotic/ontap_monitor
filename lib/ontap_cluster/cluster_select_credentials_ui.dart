@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credential_edit_page.dart';
-import 'package:ontap_monitor/cluster_credentials/cluster_credential_store.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
+import 'package:ontap_monitor/data_storage/data_store.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:provider/provider.dart';
 
 class ClusterSelectCredentialsUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final credentialStore = Provider.of<ClusterCredentialStore>(context);
+    final credentialStore = Provider.of<DataStore<ClusterCredentials>>(context);
     final cluster = Provider.of<OntapCluster>(context);
 
     return DropdownButton<String>(
-      // if there's a stale credential ID (e.g. one that's since been deleted), then use ''
+      // if there's a stale credential ID (e.g. one that's since been deleted),
+      //  then use ''
       value: credentialStore.existsForId(cluster.credentialsId)
           ? cluster.credentialsId
           : '',
+      iconEnabledColor: Theme.of(context).accentColor,
       onChanged: (id) {
         // selected the "Create new credentials"
         if (id.isEmpty) {

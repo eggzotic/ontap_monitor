@@ -1,25 +1,31 @@
 //
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
+import 'package:ontap_monitor/data_storage/data_item.dart';
+import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:uuid/uuid.dart';
 
-class OntapCluster with ChangeNotifier {
+class OntapCluster extends DataItem {
+  static const idPrefix = 'ontap-cluster_';
   final String _id;
   String _name;
   String _description;
   String _adminLifAddress;
   String _credentialsId;
   Set<String> _actionIds;
+  DateTime _lastUpdated;
+  Map<String, String> _cachedActionResultId;
+  // String _cachedApiOntapClusterId;
   //
   // to be used from outside,
   factory OntapCluster() {
     final uuid = Uuid();
-    final v4 = uuid.v4();
-    return OntapCluster._private(id: v4);
+    final v4 = idPrefix + uuid.v4();
+    return OntapCluster._private(id: v4, lastUpdated: DateTime.now());
   }
   //
-  // all instances should ultimately be created by this, suitably wrapped in a factory constructor
+  // all instances should ultimately be created by this, suitably wrapped in a
+  //  factory constructor
   OntapCluster._private({
     @required String id,
     String name = '',
@@ -27,6 +33,8 @@ class OntapCluster with ChangeNotifier {
     String credentialsId = '',
     String description = '',
     Set<String> actionIds,
+    DateTime lastUpdated,
+    Map<String, String> cachedActionResultId,
   })  : assert(id != null),
         _id = id {
     _name = name;
@@ -34,9 +42,8 @@ class OntapCluster with ChangeNotifier {
     _credentialsId = credentialsId;
     _description = description;
     _actionIds = actionIds ?? Set<String>();
-  }
-  factory OntapCluster.fromJson(String encoded) {
-    return OntapCluster.fromMap(json.decode(encoded));
+    _lastUpdated = lastUpdated;
+    _cachedActionResultId = cachedActionResultId ?? {};
   }
   //
   // to be used to re-inflate a newly read DB record
@@ -47,6 +54,9 @@ class OntapCluster with ChangeNotifier {
     final String credentialsId = json['credentialsId'];
     final String description = json['description'];
     final Set<String> actionIds = Set.from(json['actionIds']);
+    final DateTime lastUpdated = DateTime.parse(json['lastUpdated']);
+    final Map<String, String> cachedActionResultId =
+        Map<String, String>.from(json['cachedActionResultId']);
     //
     return OntapCluster._private(
       id: id,
@@ -55,6 +65,8 @@ class OntapCluster with ChangeNotifier {
       credentialsId: credentialsId,
       description: description,
       actionIds: actionIds,
+      lastUpdated: lastUpdated,
+      cachedActionResultId: cachedActionResultId,
     );
   }
   //
@@ -65,6 +77,8 @@ class OntapCluster with ChangeNotifier {
         'credentialsId': _credentialsId,
         'description': _description,
         'actionIds': _actionIds.toList(),
+        'lastUpdated': _lastUpdated.toString(),
+        'cachedActionResultId': _cachedActionResultId,
       };
   //
   static String _tidyText(String text) {
@@ -73,8 +87,6 @@ class OntapCluster with ChangeNotifier {
     return cleanText;
   }
 
-  //
-  String get asJson => json.encode(toMap);
   //
   bool get isValid =>
       _name.isNotEmpty && _adminLifAddress.isNotEmpty && _id.isNotEmpty;
@@ -120,6 +132,40 @@ class OntapCluster with ChangeNotifier {
   }
 
   bool hasActionId(String actionId) => _actionIds.contains(actionId);
+  //
+  DateTime get lastUpdated => _lastUpdated;
+
+  void setLastUpdated(DateTime date) {
+    _lastUpdated = date;
+    notifyListeners();
+  }
+
+  //
+  // Cached Result ID handling
+  String cachedResultIdFor(String actionId) => _cachedActionResultId[actionId];
+  void setCachedResultId(String actionId, String resultId) {
+    _cachedActionResultId[actionId] = resultId;
+    notifyListeners();
+  }
+
+  void clearCachedResultIds() {
+    _cachedActionResultId.clear();
+    notifyListeners();
+  }
+
+  //
+  // clear stale action IDs
+  int clearStaleActionIds({
+    @required DataStore<OntapAction> usingActionStore,
+  }) {
+    final staleIds =
+        _actionIds.where((id) => !usingActionStore.existsForId(id)).toList();
+    final deletedStaleActionIdCount = staleIds.length;
+    staleIds.forEach((id) => _actionIds.remove(id));
+    notifyListeners(); // to commit to persistent storage via the listener in the upstream datastore
+    return deletedStaleActionIdCount;
+  }
+
   //
   // ephemeral state
   bool _credentialsRequired = false;
