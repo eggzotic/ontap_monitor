@@ -33,6 +33,7 @@ class OntapClusterLicensingUi extends StatelessWidget {
                             : Icons.thumb_down,
                       ),
                       title: Text(lic.owner),
+                      trailing: Text(lic.active ? 'Active' : 'Inactive'),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
