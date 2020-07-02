@@ -41,6 +41,7 @@ class ApiOntapLicensePackage {
         ApiOntapLicenseScope.fromString(json['scope']);
     final ApiOntapLicenseComplianceState state =
         ApiOntapLicenseComplianceState.fromString(json['state']);
+    print('Ending ApiOntapLicensePackage.fromMap');
     //
     return ApiOntapLicensePackage(
       licenses: licenses,
