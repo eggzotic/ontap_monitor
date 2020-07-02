@@ -30,7 +30,11 @@ class OntapClusterLicensingUi extends StatelessWidget {
                         lic.complianceState ==
                                 ApiOntapLicenseComplianceState.compliant
                             ? Icons.check
-                            : Icons.thumb_down,
+                            : Icons.warning,
+                        color: lic.complianceState ==
+                                ApiOntapLicenseComplianceState.compliant
+                            ? Colors.green
+                            : Colors.red,
                       ),
                       title: Text(lic.owner),
                       trailing: Text(lic.active ? 'Active' : 'Inactive'),
