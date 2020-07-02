@@ -32,6 +32,7 @@ class ApiOntapLicensePackage {
   }
   //
   factory ApiOntapLicensePackage.fromMap(Map<String, dynamic> json) {
+    print('Begin ApiOntapLicensePackage.fromMap');
     final List<ApiOntapLicense> licenses = List.from(json['licenses'])
         .map((e) => ApiOntapLicense.fromMap(e))
         .toList();

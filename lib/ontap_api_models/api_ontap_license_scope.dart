@@ -27,6 +27,7 @@ class ApiOntapLicenseScope {
   //
   String toString() => _value.toString();
   factory ApiOntapLicenseScope.fromString(String text) {
+    print('Begin ApiOntapLicenseScope.fromString');
     return values.firstWhere(
       (value) => value.toString() == text,
       orElse: () => notAvailable,

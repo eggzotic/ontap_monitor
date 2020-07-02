@@ -32,6 +32,7 @@ class ApiOntapLicenseResponse extends DataItem {
   }
   //
   factory ApiOntapLicenseResponse.fromMap(Map<String, dynamic> json) {
+    print('Begin ApiOntapLicenseResponse.fromMap');
     final String id = json['id'] ?? Uuid().v4();
     final List<ApiOntapLicensePackage> records = List.from(json['records'])
         .map((packageMap) =>

@@ -30,6 +30,7 @@ class ApiOntapLicenseComplianceState {
   //
   String toString() => _value.toString();
   factory ApiOntapLicenseComplianceState.fromString(String text) {
+    print('Begin ApiOntapLicenseComplianceState.fromString');
     return values.firstWhere(
       (value) => value.toString() == text,
       orElse: () => unknown,
