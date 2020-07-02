@@ -47,16 +47,19 @@ class ApiOntapLicense {
   }
   //
   factory ApiOntapLicense.fromMap(Map<String, dynamic> json) {
+    print('Beginning ApiOntapLicense.fromMap');
     final String owner = json['owner'];
     final String serialNumber = json['serial_number'];
     final bool active = json['active'];
     final bool evaluation = json['evaluation'];
     final ApiOntapLicenseComplianceState complianceState =
-        ApiOntapLicenseComplianceState.fromString(Map.from(json['compliance'])['state']);
+        ApiOntapLicenseComplianceState.fromString(
+            Map.from(json['compliance'])['state']);
     final DateTime expiryTime = DateTime.parse(json['expiry_time']);
     final DateTime startTime = DateTime.parse(json['start_time']);
     final ApiOntapLicenseCapacity capacity =
         ApiOntapLicenseCapacity.fromMap(json['capacity']);
+    print('Ending ApiOntapLicense.fromMap');
     return ApiOntapLicense(
       owner: owner,
       serialNumber: serialNumber,
@@ -70,13 +73,13 @@ class ApiOntapLicense {
   }
   //
   Map<String, dynamic> get toMap => {
-    'owner': owner,
-    'serial_number': serialNumber,
-    'active': active,
-    'evaluation': evaluation,
-    'compliance': { 'state': complianceState.toString()},
-    'expiry_time': expiryTime.toString(),
-    'start_time': startTime.toString(),
-    'capacity': capacity.toMap,
-  };
+        'owner': owner,
+        'serial_number': serialNumber,
+        'active': active,
+        'evaluation': evaluation,
+        'compliance': {'state': complianceState.toString()},
+        'expiry_time': expiryTime.toString(),
+        'start_time': startTime.toString(),
+        'capacity': capacity.toMap,
+      };
 }
