@@ -26,6 +26,7 @@ class OntapClusterLicensingUi extends StatelessWidget {
               children: package.licenses
                   .map(
                     (lic) => ListTile(
+                      isThreeLine: true,
                       leading: Icon(
                         lic.complianceState ==
                                 ApiOntapLicenseComplianceState.compliant
