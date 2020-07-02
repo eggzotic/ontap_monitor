@@ -28,7 +28,8 @@ class ApiOntapLicenseComplianceState {
     unknown,
   ];
   //
-  String toString() => _value.toString();
+  String toString() => _value.toString().split('.').last;
+  //
   factory ApiOntapLicenseComplianceState.fromString(String text) {
     print('Begin ApiOntapLicenseComplianceState.fromString');
     return values.firstWhere(
