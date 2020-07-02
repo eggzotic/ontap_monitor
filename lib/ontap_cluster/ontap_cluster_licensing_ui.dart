@@ -20,47 +20,46 @@ class OntapClusterLicensingUi extends StatelessWidget {
         initiallyExpanded: true,
         title: Text(apiOntapLicenseResponse.name),
         children: [
-          ...apiOntapLicenseResponse.records
-              .map(
-                (package) => ExpansionTile(
-                  title: Text(package.name),
-                  children: [
-                    ...package.licenses
-                        .map((lic) => ListTile(
-                              leading: Icon(
-                                lic.complianceState ==
-                                        ApiOntapLicenseComplianceState.compliant
-                                    ? Icons.check
-                                    : Icons.thumb_down,
-                              ),
-                              title: Text(lic.owner),
-                              subtitle: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(lic.serialNumber),
-                                  if (lic.evaluation)
-                                    Text(lic.expiryTime
-                                        .toIso8601String()
-                                        .substring(0, 10))
-                                ],
-                              ),
-                            ))
-                        .toList(),
-                    ListTile(
-                      title: Text(apiOntapLicenseResponse.lastConnected
-                          .toIso8601String()
-                          .substring(0, 19)),
-                      subtitle: Text('Last updated'),
-                      trailing: Icon(
-                        Icons.refresh,
-                        color: Theme.of(context).accentColor,
+          ...apiOntapLicenseResponse.records.map(
+            (package) => ExpansionTile(
+              title: Text(package.name),
+              children: package.licenses
+                  .map(
+                    (lic) => ListTile(
+                      leading: Icon(
+                        lic.complianceState ==
+                                ApiOntapLicenseComplianceState.compliant
+                            ? Icons.check
+                            : Icons.thumb_down,
                       ),
-                      onTap: () => toRefresh(),
+                      title: Text(lic.owner),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(lic.serialNumber),
+                          if (lic.evaluation)
+                            Text(lic.expiryTime
+                                .toIso8601String()
+                                .substring(0, 10))
+                        ],
+                      ),
                     ),
-                  ],
-                ),
-              )
-              .toList(),
+                  )
+                  .toList(),
+            ),
+          ),
+          ListTile(
+            title: Text(apiOntapLicenseResponse.lastConnected
+                .toIso8601String()
+                .substring(0, 19)),
+            subtitle: Text('Last updated'),
+            trailing: Icon(
+              Icons.refresh,
+              color: Theme.of(context).accentColor,
+            ),
+            onTap: () => toRefresh(),
+          ),
         ],
       ),
     );
