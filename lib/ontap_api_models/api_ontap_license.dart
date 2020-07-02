@@ -1,6 +1,6 @@
 //
 import 'package:flutter/foundation.dart';
-// import 'package:ontap_monitor/ontap_api_models/api_ontap_license_capacity.dart';
+import 'package:ontap_monitor/ontap_api_models/api_ontap_license_capacity.dart';
 import 'package:ontap_monitor/ontap_api_models/api_ontap_license_compliance_state.dart';
 
 class ApiOntapLicense {
@@ -11,7 +11,7 @@ class ApiOntapLicense {
   final ApiOntapLicenseComplianceState complianceState;
   final DateTime expiryTime;
   final DateTime startTime;
-  // final ApiOntapLicenseCapacity capacity;
+  final ApiOntapLicenseCapacity capacity;
   //
   ApiOntapLicense._private(
     this.owner,
@@ -21,18 +21,19 @@ class ApiOntapLicense {
     this.complianceState,
     this.expiryTime,
     this.startTime,
-    // this.capacity,
+    this.capacity,
   );
   //
+  // factory ApiOntapLicense({
   factory ApiOntapLicense({
     @required String owner,
     @required String serialNumber,
     @required bool active,
     @required bool evaluation,
     @required ApiOntapLicenseComplianceState complianceState,
-    @required DateTime expiryTime,
-    @required DateTime startTime,
-    // @required ApiOntapLicenseCapacity capacity,
+    DateTime expiryTime,
+    DateTime startTime,
+    ApiOntapLicenseCapacity capacity,
   }) {
     return ApiOntapLicense._private(
       owner,
@@ -42,7 +43,7 @@ class ApiOntapLicense {
       complianceState,
       expiryTime,
       startTime,
-      // capacity,
+      capacity,
     );
   }
   //
@@ -55,10 +56,15 @@ class ApiOntapLicense {
     final ApiOntapLicenseComplianceState complianceState =
         ApiOntapLicenseComplianceState.fromString(
             Map.from(json['compliance'])['state']);
-    final DateTime expiryTime = DateTime.parse(json['expiry_time']);
-    final DateTime startTime = DateTime.parse(json['start_time']);
-    // final ApiOntapLicenseCapacity capacity =
-    //     ApiOntapLicenseCapacity.fromMap(json['capacity']);
+    DateTime expiryTime;
+    DateTime startTime;
+    ApiOntapLicenseCapacity capacity;
+    if (json.containsKey('expiry_time'))
+      expiryTime = DateTime.parse(json['expiry_time']);
+    if (json.containsKey('start_time'))
+      startTime = DateTime.parse(json['start_time']);
+    if (json.containsKey('capacity'))
+      capacity = ApiOntapLicenseCapacity.fromMap(json['capacity']);
     print('Ending ApiOntapLicense.fromMap');
     return ApiOntapLicense(
       owner: owner,
@@ -68,7 +74,7 @@ class ApiOntapLicense {
       complianceState: complianceState,
       expiryTime: expiryTime,
       startTime: startTime,
-      // capacity: capacity,
+      capacity: capacity,
     );
   }
   //
@@ -78,8 +84,8 @@ class ApiOntapLicense {
         'active': active,
         'evaluation': evaluation,
         'compliance': {'state': complianceState.toString()},
-        'expiry_time': expiryTime.toString(),
-        'start_time': startTime.toString(),
-        // 'capacity': capacity.toMap,
+        'expiry_time': expiryTime?.toString(),
+        'start_time': startTime?.toString(),
+        'capacity': capacity?.toMap,
       };
 }
