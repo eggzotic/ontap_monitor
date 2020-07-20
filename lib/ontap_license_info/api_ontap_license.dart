@@ -1,7 +1,7 @@
 //
 import 'package:flutter/foundation.dart';
-import 'package:ontap_monitor/ontap_api_models/api_ontap_license_capacity.dart';
-import 'package:ontap_monitor/ontap_api_models/api_ontap_license_compliance_state.dart';
+import 'package:ontap_monitor/ontap_license_info/api_ontap_license_compliance_state.dart';
+import 'package:ontap_monitor/ontap_license_info/api_ontap_license_capacity.dart';
 
 class ApiOntapLicense {
   final String owner;
@@ -24,7 +24,6 @@ class ApiOntapLicense {
     this.capacity,
   );
   //
-  // factory ApiOntapLicense({
   factory ApiOntapLicense({
     @required String owner,
     @required String serialNumber,
@@ -48,24 +47,23 @@ class ApiOntapLicense {
   }
   //
   factory ApiOntapLicense.fromMap(Map<String, dynamic> json) {
-    print('Beginning ApiOntapLicense.fromMap');
     final String owner = json['owner'];
-    final String serialNumber = json['serial_number'];
+    final String serialNumber = json['serial_number'] ?? 'none';
     final bool active = json['active'];
     final bool evaluation = json['evaluation'];
     final ApiOntapLicenseComplianceState complianceState =
-        ApiOntapLicenseComplianceState.fromString(
+        ApiOntapLicenseComplianceStateMembers.fromString(
             Map.from(json['compliance'])['state']);
+    // optionally-present properties
     DateTime expiryTime;
     DateTime startTime;
     ApiOntapLicenseCapacity capacity;
-    if (json.containsKey('expiry_time'))
+    if (json['expiry_time'] != null)
       expiryTime = DateTime.parse(json['expiry_time']);
-    if (json.containsKey('start_time'))
+    if (json['start_time'] != null)
       startTime = DateTime.parse(json['start_time']);
-    if (json.containsKey('capacity'))
+    if (json['capacity'] != null)
       capacity = ApiOntapLicenseCapacity.fromMap(json['capacity']);
-    print('Ending ApiOntapLicense.fromMap');
     return ApiOntapLicense(
       owner: owner,
       serialNumber: serialNumber,
@@ -83,9 +81,9 @@ class ApiOntapLicense {
         'serial_number': serialNumber,
         'active': active,
         'evaluation': evaluation,
-        'compliance': {'state': complianceState.toString()},
-        'expiry_time': expiryTime?.toString(),
-        'start_time': startTime?.toString(),
+        'compliance': {'state': complianceState.name},
+        'expiry_time': expiryTime?.toIso8601String(),
+        'start_time': startTime?.toIso8601String(),
         'capacity': capacity?.toMap,
       };
 }

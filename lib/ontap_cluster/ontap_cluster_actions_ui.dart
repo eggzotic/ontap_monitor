@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
+import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
-import 'package:ontap_monitor/ontap_api_models/api_ontap_cluster.dart';
-import 'package:ontap_monitor/ontap_api_models/api_ontap_license_response.dart';
+import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
+import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
+import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
+import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
 import 'package:ontap_monitor/ontap_api_reporter.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_action_card.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_select_actions_page.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 import 'package:provider/provider.dart';
 
 class OntapClusterActionsUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cluster = Provider.of<OntapCluster>(context);
-    final actionStore = Provider.of<DataStore<OntapAction>>(context);
-    // final resultStore = Provider.of<DataStore<ApiOntapCluster>>(context);
+    final ItemStore<OntapAction> actionStore =
+        Provider.of<SuperStore>(context).storeForType(OntapAction);
     final actionIds = actionStore.sortedIds(
       cluster.actionIds
           .where(
@@ -59,34 +63,66 @@ class OntapClusterActionsUi extends StatelessWidget {
         return ChangeNotifierProvider.value(
           value: action,
           builder: (_, __) {
-            switch (action.api.responseModel) {
-              case ApiOntapCluster:
-                return ChangeNotifierProvider(
-                  create: (_) => OntapApiReporter<ApiOntapCluster>(
-                    fromMap: ApiOntapCluster.constructFromMap,
-                    owner: cluster,
-                    dataStore: Provider.of<DataStore<ApiOntapCluster>>(context),
-                    actionId: action.id,
-                  ),
-                  builder: (_, __) => OntapClusterActionCard<ApiOntapCluster>(),
-                );
-              case ApiOntapLicenseResponse:
-                return ChangeNotifierProvider(
-                  create: (_) => OntapApiReporter<ApiOntapLicenseResponse>(
-                    fromMap: ApiOntapLicenseResponse.constructFromMap,
-                    owner: cluster,
-                    dataStore: Provider.of<DataStore<ApiOntapLicenseResponse>>(
-                        context),
-                    actionId: action.id,
-                  ),
-                  builder: (_, __) => OntapClusterActionCard<ApiOntapLicenseResponse>(),
-                );
-              // insert further types here
-              default:
-                return Center(
-                  child: Text('Unknown Data-model for API ${action.api.name}'),
-                );
-            }
+            print('API responseModel = ${action.api.responseModel}');
+            //
+            final model = action.api.responseModel;
+            if (model == ApiOntapCluster)
+              return ChangeNotifierProvider(
+                create: (_) => OntapApiReporter<ApiOntapCluster>(
+                  owner: cluster,
+                  dataStore: Provider.of<SuperStore>(context)
+                      .storeForType(ApiOntapCluster),
+                  actionId: action.id,
+                ),
+                builder: (_, __) => OntapClusterActionCard<ApiOntapCluster>(),
+              );
+            if (model == ApiOntapLicensePackage)
+              return ChangeNotifierProvider(
+                create: (_) => OntapApiReporter<ApiOntapLicensePackage>(
+                  owner: cluster,
+                  dataStore: Provider.of<SuperStore>(context)
+                      .storeForType(ApiOntapLicensePackage),
+                  actionId: action.id,
+                ),
+                builder: (_, __) =>
+                    OntapClusterActionCard<ApiOntapLicensePackage>(),
+              );
+            if (model == ApiOntapNode)
+              return ChangeNotifierProvider(
+                create: (_) => OntapApiReporter<ApiOntapNode>(
+                  owner: cluster,
+                  dataStore: Provider.of<SuperStore>(context)
+                      .storeForType(ApiOntapNode),
+                  actionId: action.id,
+                ),
+                builder: (_, __) => OntapClusterActionCard<ApiOntapNode>(),
+              );
+            if (model == ApiOntapNetworkEthernetPort)
+              return ChangeNotifierProvider(
+                create: (_) => OntapApiReporter<ApiOntapNetworkEthernetPort>(
+                  owner: cluster,
+                  dataStore: Provider.of<SuperStore>(context)
+                      .storeForType(ApiOntapNetworkEthernetPort),
+                  actionId: action.id,
+                ),
+                builder: (_, __) =>
+                    OntapClusterActionCard<ApiOntapNetworkEthernetPort>(),
+              );
+            if (model == ApiOntapStorageDisk)
+              return ChangeNotifierProvider(
+                create: (_) => OntapApiReporter<ApiOntapStorageDisk>(
+                  owner: cluster,
+                  dataStore: Provider.of<SuperStore>(context)
+                      .storeForType(ApiOntapStorageDisk),
+                  actionId: action.id,
+                ),
+                builder: (_, __) =>
+                    OntapClusterActionCard<ApiOntapStorageDisk>(),
+              );
+            return Center(
+              child: Text('Unknown Data-model for API ${action.api.name}'),
+            );
+            // }
           },
         );
       },

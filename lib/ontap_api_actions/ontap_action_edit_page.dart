@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_edit_ui.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +13,7 @@ class OntapActionEditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('OntapActionEditPage build');
-    final actionStore = Provider.of<DataStore<OntapAction>>(context);
+    final actionStore = Provider.of<ItemStore<OntapAction>>(context);
     final add = actionId == null;
     final action =
         add ? Provider.of<OntapAction>(context) : actionStore.forId(actionId);

@@ -1,6 +1,7 @@
 import 'package:floating_search_bar/floating_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
+import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_page.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
@@ -10,7 +11,8 @@ class OntapClusterSelectActionsUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cluster = Provider.of<OntapCluster>(context);
-    final actionStore = Provider.of<DataStore<OntapAction>>(context);
+    final ItemStore<OntapAction> actionStore =
+        Provider.of<SuperStore>(context).storeForType(OntapAction);
     final searchEnabled = !actionStore.showSelectedOnly;
     final visibleActionIds = searchEnabled
         ? actionStore.filteredActionsIds
@@ -37,8 +39,14 @@ class OntapClusterSelectActionsUi extends StatelessWidget {
         final checked = cluster.hasActionId(action.id);
         return ListTile(
           leading: checked
-              ? Icon(Icons.check_circle)
-              : Icon(Icons.radio_button_unchecked),
+              ? Icon(
+                  Icons.check_circle,
+                  color: Theme.of(context).accentColor,
+                )
+              : Icon(
+                  Icons.radio_button_unchecked,
+                  color: Theme.of(context).accentColor,
+                ),
           title: Text(action.name),
           onTap: () => cluster.toggleActionId(action.id),
         );

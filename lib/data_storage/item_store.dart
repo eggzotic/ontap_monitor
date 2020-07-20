@@ -2,45 +2,37 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:ontap_monitor/data_storage/data_item.dart';
-import 'package:ontap_monitor/data_storage/persistent_data_store.dart';
+import 'package:ontap_monitor/data_storage/storable_item.dart';
+import 'package:ontap_monitor/data_storage/persistent_item_store.dart';
 
-class DataStore<T extends DataItem> with ChangeNotifier {
-  DataStore({
-    @required T Function(Map<String, dynamic>) itemFromMap,
-    @required String itemIdPrefix,
+/// [T] represents the item-type that this stores
+class ItemStore<T extends StorableItem> with ChangeNotifier {
+  ItemStore({
     this.isCacheData = false,
+    @required String itemIdPrefix,
+    @required this.itemFromMap,
   }) {
-    _load(itemFromMap: itemFromMap, itemIdPrefix: itemIdPrefix);
-    // cached-data is kept in the static list
-    if (isCacheData) _cachedDataStores.add(this);
-  }
-  //
-  static List<DataStore> _cachedDataStores = [];
-  static Map<Type, int> clearCaches() {
-    final Map<Type, int> cacheCount = {};
-    _cachedDataStores.forEach((dataStore) {
-      cacheCount[dataStore.type] = dataStore.clear();
-    });
-    return cacheCount;
+    _persistentStorage = PersistentItemStore<T>(itemIdPrefix: itemIdPrefix);
+    _load();
   }
 
+  final T Function(Map<String, dynamic> map, {String ownerId}) itemFromMap;
+
   //
-  final _persistentStorage = PersistentDataStore<T>();
+  PersistentItemStore<T> _persistentStorage;
   //
   // the real content
   Map<String, T> _allItems = {};
   // convenience getters
   int get itemCount => _allItems.length;
-  List<String> get _ids => _allItems.keys.toList();
   // the item ids sorted in alphabetical name-order
   List<String> get idsSorted {
-    final ids = _ids;
+    final ids = _allItems.keys.toList();
     ids.sort(_byName);
     return ids;
   }
 
-  final type = T;
+  final itemType = T;
 
   final bool isCacheData;
   //
@@ -64,27 +56,27 @@ class DataStore<T extends DataItem> with ChangeNotifier {
   T forId(String id) => _allItems[id];
   bool existsForId(String id) => _allItems.containsKey(id);
 
+  List<T> forIds(List<String> ids) => ids.map((id) => _allItems[id]).toList();
+
   // add an item
   void add(
     T item, {
     bool storeNow = true,
     bool neverStore = false,
   }) {
-    final id = item.id;
-    _allItems[id] = item;
+    assert(item != null);
+    _allItems[item.id] = item;
+    notifyListeners();
     print('After add, $T Store = $asJson');
 
     // save the item when updates are notified - unless we never want it to be
     //  committed to persistent storage (neverStore == true)
-    if (!neverStore)
-      item.addListener(() {
-        _persistentStorage.store(item);
-      });
-    // save the item now - unless we're instructed not to (storeNow == false)
-    if (storeNow) {
+    if (neverStore) return;
+    item.addListener(() {
       _persistentStorage.store(item);
-      notifyListeners();
-    }
+    });
+    // save the item now - unless we're instructed not to (storeNow == false)
+    if (storeNow) _persistentStorage.store(item);
   }
 
   // remove an item
@@ -98,20 +90,33 @@ class DataStore<T extends DataItem> with ChangeNotifier {
     notifyListeners();
   }
 
+  List<String> idsForOwnerId(String ownerId) =>
+      idsSorted.where((id) => _allItems[id].ownerId == ownerId).toList();
+
+  // ***RLS* only used for debug
   List<Map<String, dynamic>> get toMap =>
       _allItems.values.map((value) => value.toMap).toList();
   String get asJson => json.encode(toMap);
+  // ***RLS* only used for debug
 
   // load from persistent storage
-  void _load({
-    @required T Function(Map<String, dynamic>) itemFromMap,
-    @required String itemIdPrefix,
-  }) async {
+  void _load() async {
     await _persistentStorage.load(
-      addItem: (map) => add(itemFromMap(map), storeNow: false),
-      idPrefix: itemIdPrefix,
+      addItem: (map) => add(
+        itemFromMap(map),
+        storeNow: false,
+      ),
     );
     notifyListeners();
+  }
+
+  //
+  // Clear the store (only deletes for stores marked as cached-data)
+  int clear() {
+    if (!isCacheData) return 0;
+    final deletedCount = itemCount;
+    _allItems.keys.toList().forEach((id) => deleteForId(id));
+    return deletedCount;
   }
 
   //
@@ -143,13 +148,5 @@ class DataStore<T extends DataItem> with ChangeNotifier {
     final filteredIds = filteredActions.map((action) => action.id).toList();
     filteredIds.sort(_byName);
     return filteredIds;
-  }
-
-  //
-  // Clear the store (only do this for stores comtaining cached info!)
-  int clear() {
-    final deletedCount = itemCount;
-    _ids.forEach((id) => deleteForId(id));
-    return deletedCount;
   }
 }

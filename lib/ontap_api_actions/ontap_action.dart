@@ -1,33 +1,31 @@
 import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
-import 'package:ontap_monitor/data_storage/data_item.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/data_storage/storable_item.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/ontap_api/ontap_api.dart';
 import 'package:ontap_monitor/ontap_api_reporter.dart';
 import 'package:uuid/uuid.dart';
 import 'package:rest_client/rest_client.dart' as rc;
+import 'package:ontap_monitor/ontap_api_models/api_method.dart';
 
 //
-class OntapAction extends DataItem {
-  static const idPrefix = 'ontap-action_';
-  // static const _ontapApiPath = '/api/';
+class OntapAction extends StorableItem {
+  /// used to help generate unique IDs for the builtin Actions, so that their
+  /// IDs will be constant across invocations. Since builtins are not stored
+  /// persistently, they might otherwise get a random ID each time the app starts
   static int _builtinActionId = 0;
   //
   final String _id;
   String _name;
   String _description;
   OntapApi _api;
-  // ApiMethod _method;
-  // Set<String> _parameterNames;
   final bool _builtin;
   //
   factory OntapAction({bool builtin = false}) {
     final uuid = Uuid();
-    final v4 = idPrefix +
-        (builtin ? ('builtin_' + _builtinActionId.toString()) : uuid.v4());
-    if (builtin) {
-      _builtinActionId += 1;
-    }
+    final v4 = builtin ? ('builtin_' + _builtinActionId.toString()) : uuid.v4();
+    if (builtin) _builtinActionId += 1;
+    //
     return OntapAction._private(id: v4, builtin: builtin);
   }
   OntapAction._private({
@@ -35,16 +33,14 @@ class OntapAction extends DataItem {
     String name = '',
     String description = '',
     OntapApi api,
-    // ApiMethod method = ApiMethod.get,
-    // Set<String> parameterNames,
+    DateTime lastUpdated,
     bool builtin = false,
   })  : _id = id,
-        _builtin = builtin {
+        _builtin = builtin,
+        super(lastUpdated: lastUpdated) {
     _name = name;
     _description = description;
     _api = api;
-    // _method = method;
-    // _parameterNames = parameterNames ?? Set<String>();
   }
   //
   Map<String, dynamic> get toMap => {
@@ -52,24 +48,21 @@ class OntapAction extends DataItem {
         'name': _name,
         'description': _description,
         'api': _api.id,
+        'lastUpdated': lastUpdated.toIso8601String(),
       };
   //
   factory OntapAction.fromMap(Map<String, dynamic> json) {
-    print('OntapAction.fromMap: json = $json');
     final String id = json['id'];
     final String name = json['name'];
     final String description = json['description'];
     final OntapApi api = OntapApi.forId(json['api']);
-    // final int methodIndex = json['methodIndex'];
-    // final method = ApiMethod.fromIndex(methodIndex);
-    // final Set<String> parameterNames = Set.from(json['parameterNames']);
+    final DateTime lastUpdated = DateTime.parse(json['lastUpdated']);
     return OntapAction._private(
       id: id,
       name: name,
       description: description,
       api: api,
-      // method: method,
-      // parameterNames: parameterNames,
+      lastUpdated: lastUpdated,
     );
   }
   //
@@ -103,33 +96,6 @@ class OntapAction extends DataItem {
   }
 
   //
-  // ApiMethod get method => _method;
-  // void setMethod(ApiMethod method) {
-  //   _method = method;
-  //   notifyListeners();
-  // }
-
-  //
-  // List<String> get parameterNames {
-  //   final p = _parameterNames.map((param) => param).toList();
-  //   p.sort();
-  //   return p;
-  // }
-
-  // void addParameterName() {
-  //   _parameterNames.add(_newApiParameter);
-  //   _newApiParameter = '';
-  //   notifyListeners();
-  // }
-
-  // void deleteParameterName(String param) {
-  //   _parameterNames.remove(param);
-  //   notifyListeners();
-  // }
-
-  //
-
-  //
   Future<void> execute({
     @required String host,
     @required ClusterCredentials credentials,
@@ -157,54 +123,52 @@ class OntapAction extends DataItem {
 
   //
   // some builtin Actions
+  // never delete/insert - append-only here - so that the builtin IDs will
+  //  remain consistent
   static final List<OntapAction> _builinActions = [
     OntapAction(builtin: true)
       ..setName('Cluster Info')
       ..setDescription('Builtin Action')
-      ..setApi(OntapApi.forId('cluster+GET')),
-    // ..setMethod(ApiMethod.get),
-    // OntapAction(builtin: true)
-    //   ..setName('Cluster Nodes')
-    //   ..setDescription('Builtin Action')
-    //   ..setApi('cluster/nodes')
-    //   ..setMethod(ApiMethod.get),
-    // OntapAction(builtin: true)
-    //   ..setName('Cluster Peers')
-    //   ..setDescription('Builtin Action')
-    //   ..setApi('cluster/peers')
-    //   ..setMethod(ApiMethod.get),
+      ..setApi(OntapApi.forId('GET cluster')),
     OntapAction(builtin: true)
       ..setName('Cluster Licenses')
       ..setDescription('Builtin Action')
-      ..setApi(OntapApi.forId('cluster/licensing/licenses+GET')),
-    // ..setMethod(ApiMethod.get)
-    // ..setNewParameter('fields=*'),
+      ..setApi(OntapApi.forId('GET cluster/licensing/licenses')),
+    OntapAction(builtin: true)
+      ..setName('Cluster Nodes')
+      ..setDescription('Builtin Action')
+      ..setApi(OntapApi.forId('GET cluster/nodes')),
+    OntapAction(builtin: true)
+      ..setName('Ethernet Ports')
+      ..setDescription('Builtin Action')
+      ..setApi(OntapApi.forId('GET network/ethernet/ports')),
+    OntapAction(builtin: true)
+      ..setName('Disks')
+      ..setDescription('Builtin Action')
+      ..setApi(OntapApi.forId('GET storage/disks')),
   ];
   static bool _builtinsAdded = false;
-  static void addBuiltins(DataStore<OntapAction> dataStore) {
+  static void addBuiltins(ItemStore<OntapAction> dataStore) {
     if (_builtinsAdded) return;
-    // print('Begin add builtins');
     _builinActions.forEach((action) {
-      // print('Begin add builtin ${action.name}, ${action.id}');
-      // print('API ${action.api.name}, ${action.api.id}');
       dataStore.add(
         action,
         storeNow: false,
         neverStore: true,
       );
     });
-    print('Completed add builtins');
     // ensure this only runs once!
     _builtinsAdded = true;
   }
 
+  // disabled due to Actions currently being builtin-only
   //
-  // some ephemereal state
-  String _newApiParameter = '';
-  // set only - no get!
-  void setNewParameter(String param) {
-    _newApiParameter = param;
-  }
+  // // some ephemereal state
+  // String _newApiParameter = '';
+  // // set only - no get!
+  // void setNewParameter(String param) {
+  //   _newApiParameter = param;
+  // }
 
-  bool get newApiParamValid => _newApiParameter.isNotEmpty;
+  // bool get newApiParamValid => _newApiParameter.isNotEmpty;
 }

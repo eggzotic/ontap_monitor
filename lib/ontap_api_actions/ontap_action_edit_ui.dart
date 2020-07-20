@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
-// import 'package:ontap_monitor/api_parameter_tile.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/ontap_api/ontap_api.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
-// import 'package:ontap_monitor/ontap_api_actions/ontap_action_select_method_ui.dart';
 import 'package:provider/provider.dart';
+import 'package:ontap_monitor/ontap_api_models/api_method.dart';
 
 class OntapActionEditUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('OntapActionEditUi build');
-    final apiStore = Provider.of<DataStore<OntapApi>>(context);
+    final apiStore = Provider.of<ItemStore<OntapApi>>(context);
     final action = Provider.of<OntapAction>(context);
-    // final newParamController = Provider.of<TextEditingController>(context);
     final editable = action.isEditable;
     //
     return ListView(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
+import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_select_actions_ui.dart';
@@ -9,7 +10,8 @@ class OntapClusterSelectActionsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cluster = Provider.of<OntapCluster>(context);
-    final actionStore = Provider.of<DataStore<OntapAction>>(context);
+    final ItemStore<OntapAction> actionStore =
+        Provider.of<SuperStore>(context).storeForType(OntapAction);
     final name = cluster.name.isNotEmpty ? cluster.name : '(New)';
     return Scaffold(
       appBar: AppBar(

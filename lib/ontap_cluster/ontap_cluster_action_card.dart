@@ -1,30 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/api_request_state.dart';
+import 'package:ontap_monitor/ontap_api_models/api_request_state.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
-import 'package:ontap_monitor/data_storage/data_item.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/data_storage/storable_item.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
+import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
-import 'package:ontap_monitor/ontap_api_models/api_ontap_cluster.dart';
-import 'package:ontap_monitor/ontap_api_models/api_ontap_license_response.dart';
+import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
+import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
+import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
+import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
 import 'package:ontap_monitor/ontap_api_reporter.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_edit_page.dart';
-import 'package:ontap_monitor/ontap_cluster/ontap_cluster_licensing_ui.dart';
-import 'package:ontap_monitor/ontap_cluster_info/ontap_cluster_info_ui.dart';
+import 'package:ontap_monitor/ontap_license_info/ontap_cluster_licensing_card.dart';
+import 'package:ontap_monitor/ontap_network_info/ontap_cluster_network_ethernet_ports_card.dart';
+import 'package:ontap_monitor/ontap_node_info/ontap_cluster_nodes_card.dart';
+import 'package:ontap_monitor/ontap_cluster_info/ontap_cluster_info_card.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disks_card.dart';
 import 'package:provider/provider.dart';
 
-class OntapClusterActionCard<T extends DataItem> extends StatelessWidget {
+class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('OntapClusterActionCard build for $T');
-    final credentialStore = Provider.of<DataStore<ClusterCredentials>>(context);
+    final ItemStore<ClusterCredentials> credentialStore =
+        Provider.of<SuperStore>(context).storeForType(ClusterCredentials);
     final cluster = Provider.of<OntapCluster>(context);
     final action = Provider.of<OntapAction>(context);
-    final apiModelStore = Provider.of<DataStore<T>>(context);
-    final cachedId = cluster.cachedResultIdFor(action.id);
-    final cachedItem = apiModelStore.forId(cachedId);
-    final isCached = cachedItem != null;
-    print('Result is cached: $isCached');
+    final ItemStore<T> apiModelStore =
+        Provider.of<SuperStore>(context).storeForType(T);
+    final cachedIds = cluster.cachedResultIdsFor(action.id);
+    print('Cached $T IDs: $cachedIds');
+    final cachedItems = apiModelStore.forIds(cachedIds.toList());
+    final isCached = cachedIds != null && cachedIds.isNotEmpty;
     final reporter = Provider.of<OntapApiReporter<T>>(context);
     final cred = credentialStore.forId(cluster.credentialsId);
     final toRun = () {
@@ -48,9 +56,8 @@ class OntapClusterActionCard<T extends DataItem> extends StatelessWidget {
                     ),
               onTap: () {
                 // if the cluster does not have a valid set of credentials
-                //  assigned, we take the user to the define-creds screen
+                //  assigned, we take the user to the define/associate-creds screen
                 if (cred == null) {
-                  print('Creds required');
                   cluster.setCredentialsRequired(true);
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -63,7 +70,6 @@ class OntapClusterActionCard<T extends DataItem> extends StatelessWidget {
                 try {
                   toRun();
                 } catch (e) {
-                  print('Error occurred: $e');
                   showDialog(
                       context: context,
                       builder: (context) {
@@ -85,22 +91,25 @@ class OntapClusterActionCard<T extends DataItem> extends StatelessWidget {
               },
             ),
           )
-        : ChangeNotifierProvider.value(
-            value: cachedItem ?? reporter.responseObject,
-            // ***RLS*** need to have corresponding UI pages to show for the different actions/api-models?
+        : Provider.value(
+            value: cachedItems ?? reporter.responseObject,
             builder: (_, __) {
-              switch (action.api.responseModel) {
-                case ApiOntapCluster:
-                  return OntapClusterInfoUi(toRefresh: toRun);
-                case ApiOntapLicenseResponse:
-                  return OntapClusterLicensingUi(toRefresh: toRun);
-                default:
-                  return Center(
-                    child: Text('Unknown Action Card for API ${action.api.id}'),
-                  );
-              }
+              final model = action.api.responseModel;
+              // ***RLS*** need to wrap each of these in the relevant Provider.value...?
+              if (model == ApiOntapCluster)
+                return OntapClusterInfoCard(toRefresh: toRun);
+              if (model == ApiOntapLicensePackage)
+                return OntapClusterLicensingCard(toRefresh: toRun);
+              if (model == ApiOntapNode)
+                return OntapClusterNodesCard(toRefresh: toRun);
+              if (model == ApiOntapNetworkEthernetPort)
+                return OntapClusterNetworkEthernetPortsCard(toRefresh: toRun);
+              if (model == ApiOntapStorageDisk)
+                return ApiOntapStorageDisksCard(toRefresh: toRun);
+              return Center(
+                child: Text('Unknown Action Card for API ${action.api.id}'),
+              );
             },
-            // builder: (_, __) => OntapClusterLicensingUi(toRefresh: toRun),
           );
   }
 }

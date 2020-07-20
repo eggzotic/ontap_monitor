@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 class ClusterCredentialCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('CredentialCard build');
     final credential = Provider.of<ClusterCredentials>(context);
     return Card(
       child: ListTile(

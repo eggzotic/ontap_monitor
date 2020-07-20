@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/about_ontap_monitor.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credential_page.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
+import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
-// import 'package:ontap_monitor/ontap_api_actions/ontap_action_page.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:provider/provider.dart';
 
 class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final clusterStore = Provider.of<DataStore<OntapCluster>>(context);
-    final actionStore = Provider.of<DataStore<OntapAction>>(context);
+    final superStore = Provider.of<SuperStore>(context);
+    final ItemStore<OntapCluster> clusterStore =
+        superStore.storeForType(OntapCluster);
+    final ItemStore<OntapAction> actionStore =
+        superStore.storeForType(OntapAction);
     final iconColor = Theme.of(context).accentColor;
     //
     return Drawer(
@@ -61,14 +64,17 @@ class MainDrawer extends StatelessWidget {
             onTap: () {
               // this code should probably be moved somewhere else...?
               // Clear the cached-items datastores
-              final cacheCounters = DataStore.clearCaches();
+              final cacheCounters = superStore.clearCaches();
               //
               // Count & clear Stale Action IDs still attached to clusters
+              //  currently this will always be 0, since actions are not
+              //  deletable...
               int deletedStaleActionIds = 0;
               clusterStore.idsSorted.forEach((id) {
                 final cluster = clusterStore.forId(id);
                 deletedStaleActionIds +=
-                    cluster.clearStaleActionIds(usingActionStore: actionStore);
+                    cluster.clearStaleActionIds(usingStore: actionStore);
+                cluster.clearCachedResultIds();
               });
 
               // insert other cache-clearings above here

@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:ontap_monitor/data_storage/data_item.dart';
+import 'package:ontap_monitor/data_storage/storable_item.dart';
 import 'package:uuid/uuid.dart';
 
 //
-class ClusterCredentials extends DataItem {
-  static const idPrefix = 'cluster-credential_';
+class ClusterCredentials extends StorableItem {
   //
   final String _id;
   String _name;
@@ -15,9 +14,7 @@ class ClusterCredentials extends DataItem {
   //
   // create a new credentials from scratch
   factory ClusterCredentials() {
-    final uuid = Uuid();
-    final v4 = idPrefix + uuid.v4();
-    return ClusterCredentials._private(id: v4);
+    return ClusterCredentials._private(id: Uuid().v4());
   }
   //
   ClusterCredentials._private({
@@ -26,8 +23,10 @@ class ClusterCredentials extends DataItem {
     String userName = '',
     String password = '',
     String description = '',
+    DateTime lastUpdated,
   })  : assert(id != null),
-        _id = id {
+        _id = id,
+        super(lastUpdated: lastUpdated) {
     _name = name;
     _userName = userName;
     _password = password;
@@ -40,13 +39,16 @@ class ClusterCredentials extends DataItem {
     final String userName = utf8.decode(base64.decode(json['userName']));
     final String password = utf8.decode(base64.decode(json['password']));
     final String description = json['description'];
+    final DateTime lastUpdated = DateTime.parse(json['lastUpdated']);
     //
     return ClusterCredentials._private(
-        id: id,
-        name: name,
-        userName: userName,
-        password: password,
-        description: description);
+      id: id,
+      name: name,
+      userName: userName,
+      password: password,
+      description: description,
+      lastUpdated: lastUpdated,
+    );
   }
   //
   Map<String, String> get toMap => {
@@ -55,6 +57,7 @@ class ClusterCredentials extends DataItem {
         'userName': base64.encode(utf8.encode(_userName)),
         'password': base64.encode(utf8.encode(_password)),
         'description': _description,
+        'lastUpdated': lastUpdated.toIso8601String(),
       };
   //
   bool get isValid =>

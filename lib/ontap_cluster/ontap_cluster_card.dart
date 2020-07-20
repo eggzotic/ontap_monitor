@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 class OntapClusterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('OntapClusterCard build');
     final cluster = Provider.of<OntapCluster>(context);
     return Card(
       child: ListTile(
@@ -19,10 +18,11 @@ class OntapClusterCard extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => ChangeNotifierProvider.value(
-                      value: cluster,
-                      child: OntapClusterActionsPage(),
-                    )),
+              builder: (context) => ChangeNotifierProvider.value(
+                value: cluster,
+                child: OntapClusterActionsPage(),
+              ),
+            ),
           );
         },
       ),

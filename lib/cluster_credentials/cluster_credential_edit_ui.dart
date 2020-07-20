@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 class ClusterCredentialEditUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('ClusterCredentialEditUi build');
     final credential = Provider.of<ClusterCredentials>(context);
     return ListView(
       children: [

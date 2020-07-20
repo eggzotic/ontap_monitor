@@ -3,24 +3,21 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
-import 'package:ontap_monitor/api_request_state.dart';
-import 'package:ontap_monitor/data_storage/data_item.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/ontap_api_models/api_request_state.dart';
+import 'package:ontap_monitor/data_storage/storable_item.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:rest_client/rest_client.dart';
 
-// class OntapApiReporter<T extends ApiResponseData>
-class OntapApiReporter<T extends DataItem>
+class OntapApiReporter<T extends StorableItem>
     with ChangeNotifier
     implements Reporter {
   OntapApiReporter({
-    @required this.fromMap,
     @required this.owner,
     @required this.dataStore,
     @required this.actionId,
   });
-  // a property to indicate the completion (non-null), success (true), failure
-  //  (false) of the associated request
+  // The status of the associated request
   ApiRequestState _statusValue = ApiRequestState.notStarted;
   ApiRequestState get _status => _statusValue;
   ApiRequestState get status => _status;
@@ -30,19 +27,15 @@ class OntapApiReporter<T extends DataItem>
   }
 
   /// the response data will be inserted into this property
-  T _responseObject;
+  List<T> _responseObjects;
   // and can be fetched from here
-  T get responseObject => _responseObject;
-  // the constructor-from-map for our data-model, expressed a function (i.e.
-  //  cannot simply pass the name of a constructor) "(map) => T.fromMap(map)",
-  //  except generics do not support "T.fromMap" style names...
-  final T Function(Map<String, dynamic>) fromMap;
+  List<T> get responseObject => _responseObjects;
 
   /// the "owner" of this response
   final OntapCluster owner;
 
   /// where to store the object
-  final DataStore<T> dataStore;
+  final ItemStore<T> dataStore;
 
   /// the action ID this reporter is working for
   final String actionId;
@@ -59,7 +52,7 @@ class OntapApiReporter<T extends DataItem>
     @required String url,
   }) {
     print('Failure exception: $exception');
-    print('Failure url:  $url');
+    print('Failure url: $url');
     print('Request ID: $requestId');
     _status = ApiRequestState.completeFail;
     return null;
@@ -75,10 +68,10 @@ class OntapApiReporter<T extends DataItem>
     @required String requestId,
     @required String url,
   }) {
-    print('Request headers: $headers');
-    print('Request body: $body');
+    // print('Request headers: $headers');
+    // print('Request body: $body');
     print('Request url:  $url');
-    print('Request ID: $requestId');
+    // print('Request ID: $requestId');
     _status = ApiRequestState.started;
     return null;
   }
@@ -97,12 +90,28 @@ class OntapApiReporter<T extends DataItem>
     print('Request ID: $requestId');
     //
     if (statusCode >= 200 && statusCode <= 299) {
-      print('Begin create $T fromMap');
-      _responseObject = fromMap(json.decode(body));
-      print('End create $T fromMap');
-      dataStore.add(_responseObject);
-      owner.setCachedResultId(actionId, _responseObject.id);
-      // owner.setCachedApiOntapClusterId(_responseObject.id);
+      final Map<String, dynamic> bodyAsMap = Map.from(json.decode(body));
+      if (bodyAsMap.containsKey('records')) {
+        print('Begin create List<$T> fromMap');
+        final List<Map<String, dynamic>> listOfRecords =
+            List.from(bodyAsMap['records']);
+        _responseObjects = listOfRecords
+            .map((e) => dataStore.itemFromMap(e, ownerId: owner.id))
+            .toList();
+        print('End create List<$T> fromMap');
+      } else {
+        print('Begin create $T fromMap');
+        // create a 1-element list so
+        _responseObjects = [
+          dataStore.itemFromMap(bodyAsMap, ownerId: owner.id)
+        ];
+        print('End create $T fromMap');
+      }
+      _responseObjects.forEach((obj) {
+        dataStore.add(obj);
+      });
+      owner.setCachedResultId(
+          actionId, _responseObjects.map((e) => e.id).toSet());
       _status = ApiRequestState.completeSuccess;
       return null;
     }
@@ -123,9 +132,6 @@ class OntapApiReporter<T extends DataItem>
     @required int statusCode,
     @required String url,
   }) {
-    print('Success status: $statusCode');
-    print('Success url: $url');
-    print('Request ID: $requestId');
     return null;
   }
 }

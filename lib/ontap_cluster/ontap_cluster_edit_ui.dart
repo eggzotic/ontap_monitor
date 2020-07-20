@@ -1,6 +1,7 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/data_storage/data_store.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
+import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_cluster/cluster_select_credentials_ui.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
@@ -11,14 +12,13 @@ import 'package:provider/provider.dart';
 class OntapClusterEditUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('OntapClusterEditUi build');
     final cluster = Provider.of<OntapCluster>(context);
-    final actionStore = Provider.of<DataStore<OntapAction>>(context);
+    final ItemStore<OntapAction> actionStore =
+        Provider.of<SuperStore>(context).storeForType(OntapAction);
 
     if (cluster.credentialsRequired) {
       cluster.setCredentialsRequired(false);
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-        print('addPostFrameCallback called');
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Flushbar(
           flushbarPosition: FlushbarPosition.TOP,
           title: 'Credentials Required',

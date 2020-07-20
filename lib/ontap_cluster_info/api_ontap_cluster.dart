@@ -1,66 +1,74 @@
 //
 import 'package:flutter/foundation.dart';
-import 'package:ontap_monitor/data_storage/data_item.dart';
-import 'package:ontap_monitor/ontap_api_models/api_ontap_version.dart';
+import 'package:ontap_monitor/data_storage/storable_item.dart';
+import 'package:ontap_monitor/ontap_cluster_info/api_ontap_version.dart';
 
-class ApiOntapCluster extends DataItem {
-  static const idPrefix = 'api-ontap-cluster_';
+class ApiOntapCluster extends StorableItem {
   //
+  @override
+  String ownerId;
+  @override
   final String name;
   final String uuid;
   final String contact;
   final String location;
   final bool isAsa;
   final ApiOntapVersion version;
-  final DateTime lastConnected;
-
-  String get id => idPrefix + uuid;
+  @override
+  String get id => ownerId + '_' + uuid;
 
   // for storing these
+  @override
   Map<String, dynamic> get toMap => {
-        'id': id,
+        'ownerId': ownerId,
         'name': name,
         'uuid': uuid,
         'contact': contact,
         'location': location,
         'san_optimized': isAsa,
         'version': version.toMap,
-        'lastConnected': lastConnected.toString(),
+        'lastUpdated': lastUpdated.toIso8601String(),
       };
   //
   ApiOntapCluster._private(
+    this.ownerId,
     this.uuid,
     this.name,
     this.contact,
     this.location,
     this.isAsa,
     this.version,
-    this.lastConnected,
-  );
+    DateTime lastUpdated,
+  ) : super(lastUpdated: lastUpdated);
   //
   // for re-inflating
   factory ApiOntapCluster({
     @required String uuid,
+    String ownerId,
     String name = '',
     String contact = '',
     String location = '',
     bool isAsa = false,
     ApiOntapVersion version,
-    DateTime lastConnected,
+    DateTime lastUpdated,
   }) {
     return ApiOntapCluster._private(
+      ownerId,
       uuid,
       name,
       contact,
       location,
       isAsa,
       version,
-      lastConnected,
+      lastUpdated,
     );
   }
 
-  factory ApiOntapCluster.fromMap(Map<String, dynamic> json) {
-    print('ApiOntapCluster.fromMap beginning');
+  factory ApiOntapCluster.fromMap(
+    Map<String, dynamic> json, {
+    String ownerId,
+  }) {
+    assert(ownerId != null || json['ownerId'] != null);
     final String name = json['name'];
     final String uuid = json['uuid'];
     final String contact = json['contact'];
@@ -69,10 +77,9 @@ class ApiOntapCluster extends DataItem {
     final ApiOntapVersion version = ApiOntapVersion.fromMap(json['version']);
     // covering the case where the input is coming from both persistent storage
     //  and from an API call
-    final DateTime lastConnected = DateTime.parse(
-      json['lastConnected'] ?? DateTime.now().toString(),
-    );
-    print('ApiOntapCluster.fromMap ending');
+    DateTime lastUpdated;
+    if (json['lastUpdated'] != null)
+      lastUpdated = DateTime.parse(json['lastUpdated']);
     return ApiOntapCluster(
       uuid: uuid,
       contact: contact,
@@ -80,11 +87,8 @@ class ApiOntapCluster extends DataItem {
       name: name,
       isAsa: isAsa,
       version: version,
-      lastConnected: lastConnected,
+      lastUpdated: lastUpdated,
+      ownerId: json['ownerId'] ?? ownerId,
     );
   }
-  //
-  // syntactic sugar for use where this constructor must be provided
-  static final constructFromMap =
-      (Map<String, dynamic> map) => ApiOntapCluster.fromMap(map);
 }
