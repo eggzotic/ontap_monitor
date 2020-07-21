@@ -23,7 +23,7 @@ class ApiOntapStorageShelfPort {
   final bool internal;
   final String macAddress;
   final ApiOntapStorageShelfPortModuleId moduleId;
-  final ApiOntapStorageShelfPortRemoteRemote remote;
+  final ApiOntapStorageShelfPortRemote remote;
   final ApiOntapStorageShelfPortState state;
   final String wwn;
 
@@ -42,10 +42,11 @@ class ApiOntapStorageShelfPort {
         moduleId: json["module_id"] == null
             ? null
             : ApiOntapStorageShelfPortModuleIdMembers.fromString(
-                json["module_id"]),
+                json["module_id"],
+              ),
         remote: json["remote"] == null
             ? null
-            : ApiOntapStorageShelfPortRemoteRemote.fromMap(json["remote"]),
+            : ApiOntapStorageShelfPortRemote.fromMap(json["remote"]),
         state: json["state"] == null
             ? null
             : ApiOntapStorageShelfPortStateMembers.fromString(json["state"]),
@@ -53,13 +54,13 @@ class ApiOntapStorageShelfPort {
       );
 
   Map<String, dynamic> get toMap => {
-        "cable": cable == null ? null : cable.toMap,
-        "designator": designator == null ? null : designator.name,
+        "cable": cable?.toMap,
+        "designator": designator?.name,
         "id": id,
         "internal": internal,
         "mac_address": macAddress,
         "module_id": moduleId?.name,
-        "remote": remote == null ? null : remote.toMap,
+        "remote": remote?.toMap,
         "state": state?.name,
         "wwn": wwn,
       };

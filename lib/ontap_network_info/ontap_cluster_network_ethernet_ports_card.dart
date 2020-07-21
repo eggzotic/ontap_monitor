@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port_state.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port_type.dart';
@@ -38,7 +39,7 @@ class OntapClusterNetworkEthernetPortsCard extends StatelessWidget {
                 (port) => ExpansionTile(
                   key: PageStorageKey(port.node.name + ': ' + port.name),
                   leading: port.state == ApiOntapNetworkEthernetPortState.up
-                      ? Icon(Icons.check, color: Colors.green)
+                      ? Icon(FontAwesomeIcons.networkWired, color: Colors.green)
                       : Icon(Icons.warning, color: Colors.red),
                   title: Text(port.node.name + ': ' + port.name),
                   subtitle: Text(port.macAddress ?? 'unknown'),

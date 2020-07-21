@@ -10,6 +10,8 @@ import 'package:ontap_monitor/ontap_api_reporter.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_action_card.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_select_actions_page.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 import 'package:provider/provider.dart';
 
@@ -118,6 +120,28 @@ class OntapClusterActionsUi extends StatelessWidget {
                 ),
                 builder: (_, __) =>
                     OntapClusterActionCard<ApiOntapStorageDisk>(),
+              );
+            if (model == ApiOntapStorageAggregate)
+              return ChangeNotifierProvider(
+                create: (_) => OntapApiReporter<ApiOntapStorageAggregate>(
+                  owner: cluster,
+                  dataStore: Provider.of<SuperStore>(context)
+                      .storeForType(ApiOntapStorageAggregate),
+                  actionId: action.id,
+                ),
+                builder: (_, __) =>
+                    OntapClusterActionCard<ApiOntapStorageAggregate>(),
+              );
+            if (model == ApiOntapStorageCluster)
+              return ChangeNotifierProvider(
+                create: (_) => OntapApiReporter<ApiOntapStorageCluster>(
+                  owner: cluster,
+                  dataStore: Provider.of<SuperStore>(context)
+                      .storeForType(ApiOntapStorageCluster),
+                  actionId: action.id,
+                ),
+                builder: (_, __) =>
+                    OntapClusterActionCard<ApiOntapStorageCluster>(),
               );
             return Center(
               child: Text('Unknown Data-model for API ${action.api.name}'),

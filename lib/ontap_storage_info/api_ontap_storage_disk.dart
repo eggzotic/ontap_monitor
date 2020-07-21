@@ -1,11 +1,11 @@
 //
 
 import 'package:ontap_monitor/data_storage/storable_item.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_aggregate.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_disk_pool.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_disk_state.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_disk_type.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_pool.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_state.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_type.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_container_type.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_class.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_shelf.dart';
@@ -21,7 +21,7 @@ class ApiOntapStorageDisk extends StorableItem {
     this.usableSize,
     this.rpm,
     this.type,
-    this.apiOntapStorageDiskClass,
+    this.diskClass,
     this.containerType,
     this.pool,
     this.state,
@@ -49,14 +49,14 @@ class ApiOntapStorageDisk extends StorableItem {
   final String firmwareVersion;
   final int usableSize;
   final int rpm;
-  final ApiOntapDiskType type;
-  final ApiOntapStorageDiskClass apiOntapStorageDiskClass;
+  final ApiOntapStorageDiskType type;
+  final ApiOntapStorageDiskClass diskClass;
   final ApiOntapStorageContainerType containerType;
-  final ApiOntapDiskPool pool;
-  final ApiOntapDiskState state;
+  final ApiOntapStorageDiskPool pool;
+  final ApiOntapStorageDiskState state;
   final ApiOntapNode node;
   final ApiOntapNode homeNode;
-  final List<ApiOntapAggregate> aggregates;
+  final List<ApiOntapStorageAggregate> aggregates;
   final int bay;
   final bool selfEncrypting;
   final bool fipsCertified;
@@ -78,8 +78,8 @@ class ApiOntapStorageDisk extends StorableItem {
       rpm: json["rpm"],
       type: json["type"] == null
           ? null
-          : ApiOntapDiskTypeMembers.fromString(json["type"]),
-      apiOntapStorageDiskClass: json["class"] == null
+          : ApiOntapStorageDiskTypeMembers.fromString(json["type"]),
+      diskClass: json["class"] == null
           ? null
           : ApiOntapStorageDiskClassMembers.fromName(json["class"]),
       containerType: json["container_type"] == null
@@ -100,8 +100,8 @@ class ApiOntapStorageDisk extends StorableItem {
           : ApiOntapNode.fromMap(json["home_node"], ownerId: ownerId),
       aggregates: json["aggregates"] == null
           ? null
-          : List<ApiOntapAggregate>.from(json["aggregates"]
-              .map((x) => ApiOntapAggregate.fromMap(x, ownerId: ownerId))),
+          : List<ApiOntapStorageAggregate>.from(json["aggregates"]
+              .map((x) => ApiOntapStorageAggregate.fromMap(x, ownerId: ownerId))),
       bay: json["bay"],
       selfEncrypting: json["self_encrypting"] ?? false,
       fipsCertified: json["fips_certified"] ?? false,
@@ -126,7 +126,7 @@ class ApiOntapStorageDisk extends StorableItem {
         "usable_size": usableSize,
         "rpm": rpm,
         "type": type?.name,
-        "class": apiOntapStorageDiskClass?.name,
+        "class": diskClass?.name,
         "container_type": containerType?.name,
         "pool": pool?.name,
         "state": state?.name,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_compliance_state.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
 import 'package:ontap_monitor/refresh_results_tile.dart';
@@ -42,7 +43,7 @@ class OntapClusterLicensingCard extends StatelessWidget {
               key: PageStorageKey(package.name),
               title: Text(package.name),
               leading: package.state == ApiOntapLicenseComplianceState.compliant
-                  ? Icon(Icons.check, color: Colors.green)
+                  ? FaIcon(FontAwesomeIcons.certificate, color: Colors.green)
                   : Icon(Icons.warning, color: Colors.red),
               subtitle: Text(package.scope.name),
               children: package.licenses

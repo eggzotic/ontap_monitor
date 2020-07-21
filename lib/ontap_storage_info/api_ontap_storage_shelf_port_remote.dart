@@ -1,5 +1,5 @@
-class ApiOntapStorageShelfPortRemoteRemote {
-  ApiOntapStorageShelfPortRemoteRemote({
+class ApiOntapStorageShelfPortRemote {
+  ApiOntapStorageShelfPortRemote({
     this.chassis,
     this.macAddress,
     this.phy,
@@ -13,9 +13,9 @@ class ApiOntapStorageShelfPortRemoteRemote {
   final String port;
   final String wwn;
 
-  factory ApiOntapStorageShelfPortRemoteRemote.fromMap(
+  factory ApiOntapStorageShelfPortRemote.fromMap(
           Map<String, dynamic> json) =>
-      ApiOntapStorageShelfPortRemoteRemote(
+      ApiOntapStorageShelfPortRemote(
         chassis: json["chassis"],
         macAddress: json["mac_address"],
         phy: json["phy"],

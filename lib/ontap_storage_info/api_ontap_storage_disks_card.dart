@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_disk_state.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_disk_type.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_class.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_state.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_type.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_container_type.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 import 'package:ontap_monitor/refresh_results_tile.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:provider/provider.dart';
 
@@ -36,28 +38,28 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
     }
     // non-null cases
     switch (disk.state) {
-      case ApiOntapDiskState.present:
-        _diskStateIcon = Icons.check;
+      case ApiOntapStorageDiskState.present:
+        // _diskStateIcon = Icons.check;
+        _diskStateIcon = FontAwesomeIcons.hdd;
         _diskStateColor = Colors.green;
         return;
-      case ApiOntapDiskState.broken:
-        // _diskStateIcon = Icons.mood_bad;
+      case ApiOntapStorageDiskState.broken:
         _diskStateIcon = Icons.sentiment_very_dissatisfied;
         _diskStateColor = Colors.red;
         return;
-      case ApiOntapDiskState.spare:
+      case ApiOntapStorageDiskState.spare:
         _diskStateIcon = Icons.more_horiz;
         _diskStateColor = Colors.blue;
         return;
-      case ApiOntapDiskState.zeroing:
+      case ApiOntapStorageDiskState.zeroing:
         _diskStateIcon = Icons.threesixty;
         _diskStateColor = Colors.blue;
         return;
-      case ApiOntapDiskState.maintenance:
+      case ApiOntapStorageDiskState.maintenance:
         _diskStateIcon = Icons.group_work;
         _diskStateColor = Theme.of(context).iconTheme.color;
         return;
-      case ApiOntapDiskState.reconstructing:
+      case ApiOntapStorageDiskState.reconstructing:
         _diskStateIcon = Icons.healing;
         _diskStateColor = Colors.orange;
         return;
@@ -67,6 +69,10 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
         return;
     }
   }
+
+  String _toGb(int bytes) => bytes == null
+      ? ''
+      : ('  ' + (bytes / gigabyte).round().toString() + ' GiB');
 
   //
   @override
@@ -93,31 +99,29 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
             _diskState(context, disk);
             return ExpansionTile(
               key: PageStorageKey(disk.name),
-              leading: Icon(_diskStateIcon, color: _diskStateColor),
-              title: Text(disk.name),
-              subtitle: Text(disk.node?.name ?? 'unassigned'),
+              leading: FaIcon(_diskStateIcon, color: _diskStateColor),
+              title: Text(disk.name + ' ' + _toGb(disk?.usableSize)),
+              subtitle: Text((disk.node?.name ?? 'unassigned') +
+                  (disk.containerType == ApiOntapStorageContainerType.aggregate
+                      ? (': ' +
+                          (disk.aggregates
+                              .map((a) => a.name)
+                              .toList()
+                              .join(', ')))
+                      : '')),
               children: [
                 ListTile(
                   title: Text(disk.vendor),
                   subtitle: Text('Vendor'),
                 ),
+                if (disk.type?.name != null)
                 ListTile(
-                  title: Text(disk.type.name),
-                  subtitle: Text('Type'),
+                  title: Text(disk.type.name + ' / ' + disk.diskClass.name),
+                  subtitle: Text('Disk type / class'),
                 ),
                 ListTile(
-                  title: Text(
-                    disk.containerType == ApiOntapStorageContainerType.aggregate
-                        ? (disk.aggregates
-                            .map((a) => a.name)
-                            .toList()
-                            .join(', '))
-                        : disk.containerType.name,
-                  ),
-                  subtitle: Text(disk.containerType ==
-                          ApiOntapStorageContainerType.aggregate
-                      ? 'Aggregate'
-                      : 'Container type'),
+                  title: Text(disk.containerType.name),
+                  subtitle: Text('Container type'),
                 ),
                 ListTile(
                   title: Text(disk.model),
@@ -125,14 +129,15 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
                 ),
                 ListTile(
                   title: Text(disk.usableSize != null
-                      ? ((disk.usableSize / gigabyte).ceil().toString() + ' GB')
+                      ? ((disk.usableSize / gigabyte).ceil().toString() +
+                          ' GiB')
                       : '-'),
                   subtitle: Text('Usable Size'),
                 ),
                 ListTile(
                   title: Text(
-                      (disk.shelf?.name ?? '-') + ' : ' + disk.bay.toString()),
-                  subtitle: Text('Shelf : Bay'),
+                      (disk.shelf?.name ?? '-') + ' / ' + disk.bay.toString()),
+                  subtitle: Text('Shelf / Bay'),
                 ),
                 // ListTile(
                 //   title: Text(''), subtitle: Text(''),

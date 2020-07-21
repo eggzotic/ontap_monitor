@@ -143,7 +143,7 @@ class ItemStore<T extends StorableItem> with ChangeNotifier {
     if (_filterText == null || _filterText.isEmpty) return idsSorted;
     //
     final filteredActions = _allItems.values
-        .where((action) => action.name.contains(_filterText))
+        .where((action) => action.name.toLowerCase().contains(_filterText))
         .toList();
     final filteredIds = filteredActions.map((action) => action.id).toList();
     filteredIds.sort(_byName);

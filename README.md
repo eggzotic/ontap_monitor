@@ -25,4 +25,4 @@ samples, guidance on mobile development, and a full API reference.
 
 Richard Shepherd (eggzotic@gmail.com, richard.shepherd3@netapp.com)
 
-June 2020
+July 2020

@@ -146,6 +146,14 @@ class OntapAction extends StorableItem {
       ..setName('Disks')
       ..setDescription('Builtin Action')
       ..setApi(OntapApi.forId('GET storage/disks')),
+    OntapAction(builtin: true)
+      ..setName('Aggregates')
+      ..setDescription('Builtin Action')
+      ..setApi(OntapApi.forId('GET storage/aggregates')),
+    OntapAction(builtin: true)
+      ..setName('Cluster Storage Summary')
+      ..setDescription('Builtin Action')
+      ..setApi(OntapApi.forId('GET storage/cluster')),
   ];
   static bool _builtinsAdded = false;
   static void addBuiltins(ItemStore<OntapAction> dataStore) {

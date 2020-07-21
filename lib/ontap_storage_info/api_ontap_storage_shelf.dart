@@ -89,7 +89,7 @@ class ApiOntapStorageShelf extends StorableItem {
         "bays": bays?.map((x) => x?.toMap)?.toList(),
         "connection_type": connectionType?.name,
         "disk_count": diskCount,
-        "drawers": drawers?.map((x) => x?.toMap())?.toList(),
+        "drawers": drawers?.map((x) => x?.toMap)?.toList(),
         "frus": frus?.map((x) => x?.toMap)?.toList(),
         "id": id,
         "internal": internal,

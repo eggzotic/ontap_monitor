@@ -16,6 +16,10 @@ import 'package:ontap_monitor/ontap_license_info/ontap_cluster_licensing_card.da
 import 'package:ontap_monitor/ontap_network_info/ontap_cluster_network_ethernet_ports_card.dart';
 import 'package:ontap_monitor/ontap_node_info/ontap_cluster_nodes_card.dart';
 import 'package:ontap_monitor/ontap_cluster_info/ontap_cluster_info_card.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregates_card.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster_card.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disks_card.dart';
 import 'package:provider/provider.dart';
@@ -106,6 +110,10 @@ class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
                 return OntapClusterNetworkEthernetPortsCard(toRefresh: toRun);
               if (model == ApiOntapStorageDisk)
                 return ApiOntapStorageDisksCard(toRefresh: toRun);
+              if (model == ApiOntapStorageAggregate)
+                return ApiOntapStorageAggregatesCard(toRefresh: toRun);
+              if (model == ApiOntapStorageCluster)
+                return ApiOntapStorageClusterCard(toRefresh: toRun);
               return Center(
                 child: Text('Unknown Action Card for API ${action.api.id}'),
               );

@@ -11,6 +11,8 @@ import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 
 class OntapApi<T extends StorableItem> extends StorableItem {
@@ -120,6 +122,26 @@ class OntapApi<T extends StorableItem> extends StorableItem {
     ),
     OntapApi<ApiOntapStorageDisk>._named(
       name: 'storage/disks',
+      parameters: Set.from(
+        [
+          ApiParameter<String>(name: 'fields', defaultValue: '*'),
+          ApiParameter<bool>(name: 'return_records', defaultValue: true),
+          ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
+        ],
+      ),
+    ),
+    OntapApi<ApiOntapStorageAggregate>._named(
+      name: 'storage/aggregates',
+      parameters: Set.from(
+        [
+          ApiParameter<String>(name: 'fields', defaultValue: '*'),
+          ApiParameter<bool>(name: 'return_records', defaultValue: true),
+          ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
+        ],
+      ),
+    ),
+    OntapApi<ApiOntapStorageCluster>._named(
+      name: 'storage/cluster',
       parameters: Set.from(
         [
           ApiParameter<String>(name: 'fields', defaultValue: '*'),

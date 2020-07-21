@@ -9,6 +9,8 @@ import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart'
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 
 class SuperStore with ChangeNotifier {
@@ -135,8 +137,32 @@ class SuperStore with ChangeNotifier {
             ApiOntapStorageDisk.fromMap(map, ownerId: ownerId),
       ),
     );
-    // add(type: , store: ItemStore<>(itemIdPrefix: null, itemFromMap: null));
-    // add(type: , store: ItemStore<>(itemIdPrefix: null, itemFromMap: null));
+    add(
+      type: ApiOntapStorageAggregate,
+      store: ItemStore<ApiOntapStorageAggregate>(
+        isCacheData: true,
+        itemIdPrefix: 'api-ontap-storage-aggregate-response_',
+        itemFromMap: (map, {ownerId}) =>
+            ApiOntapStorageAggregate.fromMap(map, ownerId: ownerId),
+      ),
+    );
+    add(
+      type: ApiOntapStorageCluster,
+      store: ItemStore<ApiOntapStorageCluster>(
+        isCacheData: true,
+        itemIdPrefix: 'api-ontap-storage-cluster-response_',
+        itemFromMap: (map, {ownerId}) =>
+            ApiOntapStorageCluster.fromMap(map, ownerId: ownerId),
+      ),
+    );
+    // add(
+    //   type: ,
+    //   store: ItemStore<>(
+    //     isCacheData: true,
+    //     itemIdPrefix: null,
+    //     itemFromMap: null,
+    //   ),
+    // );
     print('_addStores ending');
   }
 }

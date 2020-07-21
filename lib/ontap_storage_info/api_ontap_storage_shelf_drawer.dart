@@ -32,13 +32,13 @@ class ApiOntapStorageShelfDrawer {
             : ApiOntapStorageShelfDrawerStateMembers.fromString(json["state"]),
       );
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> get toMap => {
         "closed": closed ?? false,
         "disk_count": diskCount,
         "error": error,
         "id": id,
         "part_number": partNumber,
         "serial_number": serialNumber,
-        "state": state == null ? null : state.name,
+        "state": state?.name,
       };
 }

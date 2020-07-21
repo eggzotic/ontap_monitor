@@ -7,7 +7,7 @@ import 'package:ontap_monitor/ontap_license_info/api_ontap_license_scope.dart';
 
 class ApiOntapLicensePackage extends StorableItem {
   @override
-  String ownerId;
+  final String ownerId;
   final List<ApiOntapLicense> licenses;
   @override
   final String name;
