@@ -8,11 +8,11 @@ This project demonstrates the use of the NetApp ONTAP REST API within a Flutter 
 
 For development purposes you can have your own running ONTAP Simulator - download the OVA from the NetApp support site at https://mysupport.netapp.com/ (NetApp SSO login required).
 
-Configuration storage is currently local-device-only (using SharedPreferences) for simplicity and to keep the repo self-contained and ready-to-run for new users. For a real enterprise app an external DB, with per-user authentication, and stronger encryption for credentials, would be required.
+Persistent storage of config (& cached API responses) is currently local-device-only (using SharedPreferences) - for simplicity and to keep the repo self-contained - ready-to-run for new users. For a real enterprise app an external DB, with per-user authentication, and stronger encryption for credentials, would be required.
 
-The aim is to demonstrate how custom apps can be built that leverage the REST API for monitoring, configuration and provisioning of ONTAP resources. This could, for example, allow a Managed Services partner to create a self-branded, customer-needs-targeted - even self-service - application to monitor/manage their customers NetApp estate.
+The aim is to demonstrate how custom apps can be built that leverage the REST API e.g. for reporting, monitoring, configuration and provisioning of ONTAP resources. This could, for example, allow a Managed Services partner to create a self-branded, customer-needs-targeted - even self-service - application to monitor/manage their customers NetApp estate.
 
-This app can be run on iOS, Android and web using the appropriate "flutter run -d ..." device spec.
+This app can be run on iOS, Android using the appropriate "flutter run -d ..." device spec. Flutter web will not currently work as the ONTAP REST server (builtin to ONTAP) does not appear to support CORS (Cross Origin Resource Sharing) - which Javascript-in-a-browser requires, sigh...
 
 A few resources to get you up and running with Flutter:
 
