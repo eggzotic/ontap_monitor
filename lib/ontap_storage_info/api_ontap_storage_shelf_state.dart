@@ -8,7 +8,7 @@ enum ApiOntapStorageShelfState {
 extension ApiOntapStorageShelfStateMembers on ApiOntapStorageShelfState {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageShelfState fromString(String text) =>
+  static ApiOntapStorageShelfState fromName(String text) =>
       ApiOntapStorageShelfState.values.firstWhere(
         (v) => v.name == text,
         orElse: () => ApiOntapStorageShelfState.disconnected,

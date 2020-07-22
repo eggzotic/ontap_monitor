@@ -6,7 +6,7 @@ import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
-import 'package:ontap_monitor/ontap_api_reporter.dart';
+import 'package:ontap_monitor/ontap_api/ontap_api_reporter.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_action_card.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_select_actions_page.dart';
@@ -62,6 +62,24 @@ class OntapClusterActionsUi extends StatelessWidget {
       itemCount: actionsCount,
       itemBuilder: (context, index) {
         final action = actionStore.forId(actionIds[index]);
+        final onError = (String e) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('Error',
+                      style: Theme.of(context).textTheme.headline6),
+                  content:
+                      Text('$e', style: Theme.of(context).textTheme.bodyText1),
+                  actions: [
+                    FlatButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text('OK'),
+                    ),
+                  ],
+                );
+              });
+        };
         return ChangeNotifierProvider.value(
           value: action,
           builder: (_, __) {
@@ -75,6 +93,7 @@ class OntapClusterActionsUi extends StatelessWidget {
                   dataStore: Provider.of<SuperStore>(context)
                       .storeForType(ApiOntapCluster),
                   actionId: action.id,
+                  onError: onError,
                 ),
                 builder: (_, __) => OntapClusterActionCard<ApiOntapCluster>(),
               );
@@ -85,6 +104,7 @@ class OntapClusterActionsUi extends StatelessWidget {
                   dataStore: Provider.of<SuperStore>(context)
                       .storeForType(ApiOntapLicensePackage),
                   actionId: action.id,
+                  onError: onError,
                 ),
                 builder: (_, __) =>
                     OntapClusterActionCard<ApiOntapLicensePackage>(),
@@ -96,6 +116,7 @@ class OntapClusterActionsUi extends StatelessWidget {
                   dataStore: Provider.of<SuperStore>(context)
                       .storeForType(ApiOntapNode),
                   actionId: action.id,
+                  onError: onError,
                 ),
                 builder: (_, __) => OntapClusterActionCard<ApiOntapNode>(),
               );
@@ -106,6 +127,7 @@ class OntapClusterActionsUi extends StatelessWidget {
                   dataStore: Provider.of<SuperStore>(context)
                       .storeForType(ApiOntapNetworkEthernetPort),
                   actionId: action.id,
+                  onError: onError,
                 ),
                 builder: (_, __) =>
                     OntapClusterActionCard<ApiOntapNetworkEthernetPort>(),
@@ -117,6 +139,7 @@ class OntapClusterActionsUi extends StatelessWidget {
                   dataStore: Provider.of<SuperStore>(context)
                       .storeForType(ApiOntapStorageDisk),
                   actionId: action.id,
+                  onError: onError,
                 ),
                 builder: (_, __) =>
                     OntapClusterActionCard<ApiOntapStorageDisk>(),
@@ -128,6 +151,7 @@ class OntapClusterActionsUi extends StatelessWidget {
                   dataStore: Provider.of<SuperStore>(context)
                       .storeForType(ApiOntapStorageAggregate),
                   actionId: action.id,
+                  onError: onError,
                 ),
                 builder: (_, __) =>
                     OntapClusterActionCard<ApiOntapStorageAggregate>(),
@@ -139,6 +163,7 @@ class OntapClusterActionsUi extends StatelessWidget {
                   dataStore: Provider.of<SuperStore>(context)
                       .storeForType(ApiOntapStorageCluster),
                   actionId: action.id,
+                  onError: onError,
                 ),
                 builder: (_, __) =>
                     OntapClusterActionCard<ApiOntapStorageCluster>(),
@@ -146,7 +171,6 @@ class OntapClusterActionsUi extends StatelessWidget {
             return Center(
               child: Text('Unknown Data-model for API ${action.api.name}'),
             );
-            // }
           },
         );
       },

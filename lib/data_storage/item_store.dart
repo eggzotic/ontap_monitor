@@ -1,9 +1,8 @@
 //
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/data_storage/storable_item.dart';
 import 'package:ontap_monitor/data_storage/persistent_item_store.dart';
+import 'package:pretty_json/pretty_json.dart';
 
 /// [T] represents the item-type that this stores
 class ItemStore<T extends StorableItem> with ChangeNotifier {
@@ -94,9 +93,9 @@ class ItemStore<T extends StorableItem> with ChangeNotifier {
       idsSorted.where((id) => _allItems[id].ownerId == ownerId).toList();
 
   // ***RLS* only used for debug
-  List<Map<String, dynamic>> get toMap =>
+  List<Map<String, dynamic>> get toMapList =>
       _allItems.values.map((value) => value.toMap).toList();
-  String get asJson => json.encode(toMap);
+  String get asJson => toMapList.map((m) => prettyJson(m)).toString();
   // ***RLS* only used for debug
 
   // load from persistent storage

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/no_results_found_tile.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
 import 'package:ontap_monitor/refresh_results_tile.dart';
 import 'package:provider/provider.dart';
@@ -8,10 +9,16 @@ class ApiOntapStorageClusterCard extends StatelessWidget {
   ApiOntapStorageClusterCard({
     Key key,
     @required this.toRefresh,
+    @required this.toReset,
   }) : super(key: key);
 
   /// [toRefresh] is a callback that should refresh the data being displayed
   final void Function() toRefresh;
+
+  /// [toReset] is a callback that should reset any previous error condition
+  ///  which should trigger the tile to be reset to it's original state, ready
+  ///  for a re-run
+  final void Function() toReset;
   //
   static const gigabyte = 1024 * 1024 * 1024;
   String _toGb(int bytes) =>
@@ -20,15 +27,9 @@ class ApiOntapStorageClusterCard extends StatelessWidget {
   //
   @override
   Widget build(BuildContext context) {
-    final clusterStorage =
-        Provider.of<List<ApiOntapStorageCluster>>(context).first;
-    if (clusterStorage == null)
-      return Card(
-        child: ListTile(
-          title: Text('Oops, no result found!'),
-          trailing: Icon(Icons.error_outline),
-        ),
-      );
+    final resultList = Provider.of<List<ApiOntapStorageCluster>>(context);
+    if (resultList.isEmpty) return NoResultsFoundTile(toReset: toReset);
+    final clusterStorage = resultList.first;
 
     return Card(
       child: ExpansionTile(
@@ -79,7 +80,8 @@ class ApiOntapStorageClusterCard extends StatelessWidget {
               subtitle: Text('Block Storage / used / inactive'),
               children: clusterStorage.blockStorage.medias
                   .map(
-                    (media) => Column(mainAxisSize: MainAxisSize.min,
+                    (media) => Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Divider(),
                         ListTile(

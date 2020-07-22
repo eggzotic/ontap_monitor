@@ -8,7 +8,7 @@ enum ApiOntapStorageDiskPool {
 extension ApiOntapDiskPoolMembers on ApiOntapStorageDiskPool {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageDiskPool fromString(String text) {
+  static ApiOntapStorageDiskPool fromName(String text) {
     return ApiOntapStorageDiskPool.values.firstWhere((v) => v.name == text,
         orElse: () => ApiOntapStorageDiskPool.none);
   }

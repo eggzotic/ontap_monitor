@@ -52,7 +52,7 @@ class ApiOntapLicense {
     final bool active = json['active'];
     final bool evaluation = json['evaluation'];
     final ApiOntapLicenseComplianceState complianceState =
-        ApiOntapLicenseComplianceStateMembers.fromString(
+        ApiOntapLicenseComplianceStateMembers.fromName(
             Map.from(json['compliance'])['state']);
     // optionally-present properties
     DateTime expiryTime;

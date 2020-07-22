@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/no_results_found_tile.dart';
 import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
 import 'package:ontap_monitor/refresh_results_tile.dart';
 import 'package:provider/provider.dart';
@@ -8,21 +9,22 @@ class OntapClusterInfoCard extends StatelessWidget {
   OntapClusterInfoCard({
     Key key,
     @required this.toRefresh,
+    @required this.toReset,
   }) : super(key: key);
 
   /// [toRefresh] is a callback that should refresh the data being displayed
   final void Function() toRefresh;
+
+  /// [toReset] is a callback that should reset any previous error condition
+  ///  which should trigger the tile to be reset to it's original state, ready
+  ///  for a re-run
+  final void Function() toReset;
   //
   @override
   Widget build(BuildContext context) {
-    final apiOntapCluster = Provider.of<List<ApiOntapCluster>>(context).first;
-    if (apiOntapCluster == null)
-      return Card(
-        child: ListTile(
-          title: Text('Oops, no result found!'),
-          trailing: Icon(Icons.error_outline),
-        ),
-      );
+    final resultList = Provider.of<List<ApiOntapCluster>>(context);
+    if (resultList.isEmpty) return NoResultsFoundTile(toReset: toReset);
+    final apiOntapCluster = resultList.first;
 
     return Card(
       child: ExpansionTile(

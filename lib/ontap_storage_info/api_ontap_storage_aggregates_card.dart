@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/no_results_found_tile.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_block_storage_disk_class.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_block_storage_disk_type.dart';
@@ -11,10 +12,16 @@ class ApiOntapStorageAggregatesCard extends StatelessWidget {
   ApiOntapStorageAggregatesCard({
     Key key,
     @required this.toRefresh,
+    @required this.toReset,
   }) : super(key: key);
   //
   /// [toRefresh] is a callback that should refresh the data being displayed
   final void Function() toRefresh;
+
+  /// [toReset] is a callback that should reset any previous error condition
+  ///  which should trigger the tile to be reset to it's original state, ready
+  ///  for a re-run
+  final void Function() toReset;
   //
   static const gigabyte = 1024 * 1024 * 1024;
 
@@ -72,12 +79,7 @@ class ApiOntapStorageAggregatesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final aggrs = Provider.of<List<ApiOntapStorageAggregate>>(context);
     if (aggrs == null || aggrs.isEmpty)
-      return Card(
-        child: ListTile(
-          title: Text('Oops, no result found!'),
-          trailing: Icon(Icons.error_outline),
-        ),
-      );
+      return NoResultsFoundTile(toReset: toReset);
     final lastUpdated = aggrs.first.lastUpdated;
     return Card(
       child: ExpansionTile(

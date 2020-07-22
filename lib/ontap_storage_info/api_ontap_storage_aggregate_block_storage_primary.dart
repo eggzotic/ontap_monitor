@@ -26,7 +26,8 @@ class ApiOntapStorageAggregateBlockStoragePrimary {
         diskCount: json["disk_count"],
         diskClass: json["disk_class"] == null
             ? null
-            : ApiOntapStorageAggregateBlockStorageDiskClassMembers.fromName(json["disk_class"]),
+            : ApiOntapStorageAggregateBlockStorageDiskClassMembers.fromName(
+                json["disk_class"]),
         raidType: json["raid_type"] == null
             ? null
             : ApiOntapStorageAggregateRaidTypeMembers.fromName(
@@ -38,7 +39,7 @@ class ApiOntapStorageAggregateBlockStoragePrimary {
                 json["checksum_style"]),
         diskType: json["disk_type"] == null
             ? null
-            : ApiOntapStorageAggregateBlockStorageDiskTypeMembers.fromString(
+            : ApiOntapStorageAggregateBlockStorageDiskTypeMembers.fromName(
                 json["disk_type"]),
       );
 

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/builtins/store_setup.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_page.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,13 @@ class OntapMonitorApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => SuperStore(),
+      create: (_) {
+        // create the main store-of-stores
+        final superStore = SuperStore();
+        // populate it with the initial/builtin stores & items
+        StoreSetup.shared(superStore: superStore);
+        return superStore;
+      },
       builder: (_, __) => MaterialApp(
         title: 'ONTAP Demo',
         debugShowCheckedModeBanner: false,

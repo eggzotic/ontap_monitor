@@ -16,6 +16,7 @@ class OntapApiReporter<T extends StorableItem>
     @required this.owner,
     @required this.dataStore,
     @required this.actionId,
+    this.onError,
   });
   // The status of the associated request
   ApiRequestState _statusValue = ApiRequestState.notStarted;
@@ -40,6 +41,14 @@ class OntapApiReporter<T extends StorableItem>
   /// the action ID this reporter is working for
   final String actionId;
 
+  /// [onError] - something to run if an error occured - since there is async
+  ///  stuff involved a regular try/catch at the top-level will not catch errors
+  final void Function(String message) onError;
+
+  void reset() {
+    _status = ApiRequestState.notStarted;
+  }
+
   /// Called when the [RestClient] encounters an failed response or exception.
   /// All times are UTC Millis.
   Future<void> failure({
@@ -54,7 +63,12 @@ class OntapApiReporter<T extends StorableItem>
     print('Failure exception: $exception');
     print('Failure url: $url');
     print('Request ID: $requestId');
+    // print('RC Stack trace' + stack.toString());
     _status = ApiRequestState.completeFail;
+    onError(exception);
+    // throw Exception(
+    //   exception ?? 'Error returned from server',
+    // );
     return null;
   }
 
@@ -115,9 +129,14 @@ class OntapApiReporter<T extends StorableItem>
       _status = ApiRequestState.completeSuccess;
       return null;
     }
-// ***RLS*** throw or otherwise indicate & notify of an error?
-    _status = ApiRequestState.completeFail;
-    return null;
+    String message;
+    if (statusCode >= 400) message = body;
+    //bodyAsMap['error']['message'];
+
+    // this throw will effectively call 'failure', above
+    throw Exception(
+      message?.toString() ?? 'Error accessing, or returned from, server',
+    );
   }
 
   /// Called by the [RestClient] when a successful response has been processed.

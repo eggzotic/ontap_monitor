@@ -9,7 +9,7 @@ import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
-import 'package:ontap_monitor/ontap_api_reporter.dart';
+import 'package:ontap_monitor/ontap_api/ontap_api_reporter.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_edit_page.dart';
 import 'package:ontap_monitor/ontap_license_info/ontap_cluster_licensing_card.dart';
@@ -39,13 +39,14 @@ class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
     final isCached = cachedIds != null && cachedIds.isNotEmpty;
     final reporter = Provider.of<OntapApiReporter<T>>(context);
     final cred = credentialStore.forId(cluster.credentialsId);
-    final toRun = () {
-      action.execute(
+    final toRun = () async {
+      await action.execute(
         host: cluster.adminLifAddress,
         credentials: cred,
         reporter: reporter,
       );
     };
+    final toReset = reporter.reset;
     return !isCached &&
             (reporter.status == ApiRequestState.started ||
                 reporter.status == ApiRequestState.notStarted)
@@ -71,53 +72,57 @@ class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
                   );
                   return;
                 }
-                try {
-                  toRun();
-                } catch (e) {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text('Error',
-                              style: Theme.of(context).textTheme.headline6),
-                          content: Text('$e',
-                              style: Theme.of(context).textTheme.bodyText1),
-                          actions: [
-                            FlatButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: Text('OK'),
-                            ),
-                          ],
-                        );
-                      });
-                  return;
-                }
+                toRun();
               },
             ),
           )
-        : Provider.value(
-            value: cachedItems ?? reporter.responseObject,
-            builder: (_, __) {
+        : MultiProvider(
+            providers: [
+              Provider.value(value: cachedItems ?? reporter.responseObject),
+              Provider.value(value: reporter.status == ApiRequestState.started),
+            ],
+            child: () {
               final model = action.api.responseModel;
-              // ***RLS*** need to wrap each of these in the relevant Provider.value...?
               if (model == ApiOntapCluster)
-                return OntapClusterInfoCard(toRefresh: toRun);
+                return OntapClusterInfoCard(
+                  toRefresh: toRun,
+                  toReset: toReset,
+                );
               if (model == ApiOntapLicensePackage)
-                return OntapClusterLicensingCard(toRefresh: toRun);
+                return OntapClusterLicensingCard(
+                  toRefresh: toRun,
+                  toReset: toReset,
+                );
               if (model == ApiOntapNode)
-                return OntapClusterNodesCard(toRefresh: toRun);
+                return OntapClusterNodesCard(
+                  toRefresh: toRun,
+                  toReset: toReset,
+                );
               if (model == ApiOntapNetworkEthernetPort)
-                return OntapClusterNetworkEthernetPortsCard(toRefresh: toRun);
+                return OntapClusterNetworkEthernetPortsCard(
+                  toRefresh: toRun,
+                  toReset: toReset,
+                );
               if (model == ApiOntapStorageDisk)
-                return ApiOntapStorageDisksCard(toRefresh: toRun);
+                return ApiOntapStorageDisksCard(
+                  toRefresh: toRun,
+                  toReset: toReset,
+                );
               if (model == ApiOntapStorageAggregate)
-                return ApiOntapStorageAggregatesCard(toRefresh: toRun);
+                return ApiOntapStorageAggregatesCard(
+                  toRefresh: toRun,
+                  toReset: toReset,
+                );
               if (model == ApiOntapStorageCluster)
-                return ApiOntapStorageClusterCard(toRefresh: toRun);
+                return ApiOntapStorageClusterCard(
+                  toRefresh: toRun,
+                  toReset: toReset,
+                );
               return Center(
                 child: Text('Unknown Action Card for API ${action.api.id}'),
               );
-            },
+            }(),
+            // ),
           );
   }
 }

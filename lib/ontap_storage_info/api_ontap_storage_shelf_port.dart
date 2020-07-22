@@ -34,14 +34,14 @@ class ApiOntapStorageShelfPort {
             : ApiOntapStorageShelfCable.fromMap(json["cable"]),
         designator: json["designator"] == null
             ? null
-            : ApiOntapStorageShelfPortDesignatorMembers.fromString(
+            : ApiOntapStorageShelfPortDesignatorMembers.fromName(
                 json["designator"]),
         id: json["id"],
         internal: json["internal"],
         macAddress: json["mac_address"],
         moduleId: json["module_id"] == null
             ? null
-            : ApiOntapStorageShelfPortModuleIdMembers.fromString(
+            : ApiOntapStorageShelfPortModuleIdMembers.fromName(
                 json["module_id"],
               ),
         remote: json["remote"] == null
@@ -49,7 +49,7 @@ class ApiOntapStorageShelfPort {
             : ApiOntapStorageShelfPortRemote.fromMap(json["remote"]),
         state: json["state"] == null
             ? null
-            : ApiOntapStorageShelfPortStateMembers.fromString(json["state"]),
+            : ApiOntapStorageShelfPortStateMembers.fromName(json["state"]),
         wwn: json["wwn"],
       );
 

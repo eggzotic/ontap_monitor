@@ -15,7 +15,8 @@ class ApiOntapStorageClusterMedia {
   final int used;
   final ApiOntapStorageClusterEfficiency efficiency;
 
-  factory ApiOntapStorageClusterMedia.fromMap(Map<String, dynamic> json) => ApiOntapStorageClusterMedia(
+  factory ApiOntapStorageClusterMedia.fromMap(Map<String, dynamic> json) =>
+      ApiOntapStorageClusterMedia(
         type: json["type"],
         size: json["size"],
         available: json["available"],

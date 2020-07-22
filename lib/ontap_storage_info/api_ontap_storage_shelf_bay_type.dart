@@ -8,7 +8,7 @@ enum ApiOntapStorageShelfBayType {
 extension ApiOntapStorageShelfBayTypeMembers on ApiOntapStorageShelfBayType {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageShelfBayType fromString(String text) =>
+  static ApiOntapStorageShelfBayType fromName(String text) =>
       ApiOntapStorageShelfBayType.values.firstWhere(
         (v) => v.name == text,
         orElse: () => ApiOntapStorageShelfBayType.unknown,

@@ -9,7 +9,7 @@ extension ApiOntapStorageShelfConnectionTypeMembers
     on ApiOntapStorageShelfConnectionType {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageShelfConnectionType fromString(String text) =>
+  static ApiOntapStorageShelfConnectionType fromName(String text) =>
       ApiOntapStorageShelfConnectionType.values.firstWhere(
         (v) => v.name == text,
         orElse: () => ApiOntapStorageShelfConnectionType.unknown,

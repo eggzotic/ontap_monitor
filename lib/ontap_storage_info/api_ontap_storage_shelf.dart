@@ -51,7 +51,7 @@ class ApiOntapStorageShelf extends StorableItem {
                 json["bays"].map((x) => ApiOntapStorageShelfBay.fromMap(x))),
         connectionType: json["connection_type"] == null
             ? null
-            : ApiOntapStorageShelfConnectionTypeMembers.fromString(
+            : ApiOntapStorageShelfConnectionTypeMembers.fromName(
                 json["connection_type"]),
         diskCount: json["disk_count"],
         drawers: json["drawers"] == null
@@ -67,7 +67,7 @@ class ApiOntapStorageShelf extends StorableItem {
         model: json["model"],
         moduleType: json["module_type"] == null
             ? null
-            : ApiOntapStorageShelfModuleTypeMembers.fromString(
+            : ApiOntapStorageShelfModuleTypeMembers.fromName(
                 json["module_type"]),
         name: json["name"],
         paths: json["paths"] == null
@@ -81,7 +81,7 @@ class ApiOntapStorageShelf extends StorableItem {
         serialNumber: json["serial_number"],
         state: json["state"] == null
             ? null
-            : ApiOntapStorageShelfStateMembers.fromString(json["state"]),
+            : ApiOntapStorageShelfStateMembers.fromName(json["state"]),
         uid: json["uid"],
       );
 

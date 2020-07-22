@@ -154,7 +154,8 @@ class OntapCluster extends StorableItem {
         _actionIds.where((id) => !usingStore.existsForId(id)).toList();
     final deletedStaleActionIdCount = staleIds.length;
     staleIds.forEach((id) => _actionIds.remove(id));
-    notifyListeners(); // to commit to persistent storage via the listener in the upstream datastore
+    // to commit to persistent storage via the listener in the upstream datastore
+    notifyListeners();
     return deletedStaleActionIdCount;
   }
 

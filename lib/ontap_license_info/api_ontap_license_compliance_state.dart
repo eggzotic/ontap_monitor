@@ -6,10 +6,11 @@ enum ApiOntapLicenseComplianceState {
   unknown,
 }
 
-extension ApiOntapLicenseComplianceStateMembers on ApiOntapLicenseComplianceState {
+extension ApiOntapLicenseComplianceStateMembers
+    on ApiOntapLicenseComplianceState {
   String get name => toString().split('.').last;
   //
-  static ApiOntapLicenseComplianceState fromString(String text) {
+  static ApiOntapLicenseComplianceState fromName(String text) {
     return ApiOntapLicenseComplianceState.values
         .firstWhere((v) => v.name == text, orElse: null);
   }

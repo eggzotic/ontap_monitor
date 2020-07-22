@@ -8,7 +8,7 @@ extension ApiOntapStorageShelfDrawerStateMembers
     on ApiOntapStorageShelfDrawerState {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageShelfDrawerState fromString(String text) =>
+  static ApiOntapStorageShelfDrawerState fromName(String text) =>
       ApiOntapStorageShelfDrawerState.values.firstWhere(
         (v) => v.name == text,
         orElse: () => ApiOntapStorageShelfDrawerState.error,

@@ -12,7 +12,8 @@ class ApiOntapNetworkInterface {
   final String name;
   final ApiOntapNetworkIp ip;
 
-  factory ApiOntapNetworkInterface.fromMap(Map<String, dynamic> json) => ApiOntapNetworkInterface(
+  factory ApiOntapNetworkInterface.fromMap(Map<String, dynamic> json) =>
+      ApiOntapNetworkInterface(
         uuid: json["uuid"],
         name: json["name"],
         ip: json["ip"] == null ? null : ApiOntapNetworkIp.fromMap(json["ip"]),

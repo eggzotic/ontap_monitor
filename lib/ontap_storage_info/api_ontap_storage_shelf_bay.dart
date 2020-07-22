@@ -20,10 +20,10 @@ class ApiOntapStorageShelfBay {
         id: json["id"],
         state: json["state"] == null
             ? null
-            : ApiOntapStorageShelfBayStateMembers.fromString(json["state"]),
+            : ApiOntapStorageShelfBayStateMembers.fromName(json["state"]),
         type: json["type"] == null
             ? null
-            : ApiOntapStorageShelfBayTypeMembers.fromString(json["type"]),
+            : ApiOntapStorageShelfBayTypeMembers.fromName(json["type"]),
       );
 
   Map<String, dynamic> get toMap => {

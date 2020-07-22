@@ -8,7 +8,7 @@ enum ApiOntapLicenseScope {
 extension ApiOntapLicenseScopeMembers on ApiOntapLicenseScope {
   String get name => toString().split('.').last;
   //
-  static ApiOntapLicenseScope fromString(String text) {
+  static ApiOntapLicenseScope fromName(String text) {
     return ApiOntapLicenseScope.values.firstWhere(
       (value) => value.name == text,
       orElse: () => ApiOntapLicenseScope.not_available,

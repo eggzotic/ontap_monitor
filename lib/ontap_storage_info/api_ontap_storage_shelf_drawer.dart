@@ -29,7 +29,7 @@ class ApiOntapStorageShelfDrawer {
         serialNumber: json["serial_number"],
         state: json["state"] == null
             ? null
-            : ApiOntapStorageShelfDrawerStateMembers.fromString(json["state"]),
+            : ApiOntapStorageShelfDrawerStateMembers.fromName(json["state"]),
       );
 
   Map<String, dynamic> get toMap => {

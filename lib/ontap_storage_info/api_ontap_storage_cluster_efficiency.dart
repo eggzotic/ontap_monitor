@@ -9,7 +9,8 @@ class ApiOntapStorageClusterEfficiency {
   final num ratio;
   final int logicalUsed;
 
-  factory ApiOntapStorageClusterEfficiency.fromMap(Map<String, dynamic> json) => ApiOntapStorageClusterEfficiency(
+  factory ApiOntapStorageClusterEfficiency.fromMap(Map<String, dynamic> json) =>
+      ApiOntapStorageClusterEfficiency(
         savings: json["savings"],
         ratio: json["ratio"],
         logicalUsed: json["logical_used"],

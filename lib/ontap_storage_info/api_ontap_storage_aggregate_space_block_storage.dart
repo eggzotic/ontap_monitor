@@ -11,7 +11,8 @@ class ApiOntapStorageAggregateSpaceBlockStorage {
   final int used;
   final int fullThresholdPercent;
 
-  factory ApiOntapStorageAggregateSpaceBlockStorage.fromMap(Map<String, dynamic> json) =>
+  factory ApiOntapStorageAggregateSpaceBlockStorage.fromMap(
+          Map<String, dynamic> json) =>
       ApiOntapStorageAggregateSpaceBlockStorage(
         size: json["size"],
         available: json["available"],

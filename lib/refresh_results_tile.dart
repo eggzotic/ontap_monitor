@@ -1,4 +1,7 @@
+// a simple tile to be placed at the bottom of each result-set to allow
+//  conveniently triggering the fetch of a fresh set of results
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RefreshResultsTile extends StatelessWidget {
   RefreshResultsTile({
@@ -11,16 +14,23 @@ class RefreshResultsTile extends StatelessWidget {
   //
   @override
   Widget build(BuildContext context) {
+    final refreshing = Provider.of<bool>(context);
     return ListTile(
       title: Text(
         'Refresh now',
         style: TextStyle(color: Theme.of(context).accentColor),
       ),
-      trailing: Icon(
-        Icons.refresh,
-        color: Theme.of(context).accentColor,
-      ),
-      onTap: () => toRefresh(),
+      trailing: refreshing
+          ? SizedBox(
+              height: 20,
+              width: 20,
+              child: Center(child: CircularProgressIndicator()),
+            )
+          : Icon(
+              Icons.refresh,
+              color: Theme.of(context).accentColor,
+            ),
+      onTap: refreshing ? null : () => toRefresh(),
     );
   }
 }

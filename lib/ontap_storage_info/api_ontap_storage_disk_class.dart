@@ -17,5 +17,6 @@ extension ApiOntapStorageDiskClassMembers on ApiOntapStorageDiskClass {
       ApiOntapStorageDiskClass.values.firstWhere((v) => v.index == index);
   // create from name
   static ApiOntapStorageDiskClass fromName(String name) =>
-      ApiOntapStorageDiskClass.values.firstWhere((v) => v.name == name.toLowerCase());
+      ApiOntapStorageDiskClass.values
+          .firstWhere((v) => v.name == name.toLowerCase());
 }

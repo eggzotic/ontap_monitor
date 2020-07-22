@@ -14,7 +14,7 @@ extension ApiOntapStorageShelfModuleTypeMembers
     on ApiOntapStorageShelfModuleType {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageShelfModuleType fromString(String text) =>
+  static ApiOntapStorageShelfModuleType fromName(String text) =>
       ApiOntapStorageShelfModuleType.values.firstWhere(
         (v) => v.name == text,
         orElse: () => ApiOntapStorageShelfModuleType.unknown,

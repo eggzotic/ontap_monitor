@@ -8,7 +8,8 @@ class ApiOntapStorageCluster extends StorableItem {
     this.efficiencyWithoutSnapshots,
     this.blockStorage,
     this.ownerId,
-  });
+    DateTime lastUpdated,
+  }) : super(lastUpdated: lastUpdated);
 
   final ApiOntapStorageClusterEfficiency efficiency;
   final ApiOntapStorageClusterEfficiency efficiencyWithoutSnapshots;
@@ -30,11 +31,15 @@ class ApiOntapStorageCluster extends StorableItem {
             : ApiOntapStorageClusterEfficiency.fromMap(json["efficiency"]),
         efficiencyWithoutSnapshots: json["efficiency_without_snapshots"] == null
             ? null
-            : ApiOntapStorageClusterEfficiency.fromMap(json["efficiency_without_snapshots"]),
+            : ApiOntapStorageClusterEfficiency.fromMap(
+                json["efficiency_without_snapshots"]),
         blockStorage: json["block_storage"] == null
             ? null
             : ApiOntapStorageClusterBlockStorage.fromMap(json["block_storage"]),
         ownerId: json['ownerId'] ?? ownerId,
+        lastUpdated: json['lastUpdated'] != null
+            ? DateTime.parse(json['lastUpdated'])
+            : null,
       );
 
   Map<String, dynamic> get toMap => {
@@ -42,5 +47,6 @@ class ApiOntapStorageCluster extends StorableItem {
         "efficiency_without_snapshots": efficiencyWithoutSnapshots?.toMap,
         "block_storage": blockStorage?.toMap,
         'ownerId': ownerId,
+        'lastUpdated': lastUpdated?.toIso8601String(),
       };
 }

@@ -15,7 +15,7 @@ enum ApiOntapStorageDiskType {
 extension ApiOntapStorageDiskTypeMembers on ApiOntapStorageDiskType {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageDiskType fromString(String text) {
+  static ApiOntapStorageDiskType fromName(String text) {
     return ApiOntapStorageDiskType.values.firstWhere(
       (t) => t.name == text,
       orElse: () => ApiOntapStorageDiskType.unknown,

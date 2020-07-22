@@ -8,7 +8,7 @@ extension ApiOntapStorageShelfPortModuleIdMembers
     on ApiOntapStorageShelfPortModuleId {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageShelfPortModuleId fromString(String text) =>
+  static ApiOntapStorageShelfPortModuleId fromName(String text) =>
       ApiOntapStorageShelfPortModuleId.values.firstWhere(
         (v) => v.name == text,
         orElse: () => null,

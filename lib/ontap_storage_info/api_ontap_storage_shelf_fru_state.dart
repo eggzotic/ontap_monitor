@@ -4,7 +4,7 @@ enum ApiOntapStorageShelfFruState { ok, error }
 extension ApiOntapStorageShelfFruStateMembers on ApiOntapStorageShelfFruState {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageShelfFruState fromString(String text) =>
+  static ApiOntapStorageShelfFruState fromName(String text) =>
       ApiOntapStorageShelfFruState.values.firstWhere(
         (v) => v.name == text,
         orElse: () => ApiOntapStorageShelfFruState.error,

@@ -7,7 +7,7 @@ enum ApiOntapStorageShelfFruType {
 extension ApiOntapStorageShelfFruTypeMembers on ApiOntapStorageShelfFruType {
   String get name => toString().split('.').last;
   //
-  static ApiOntapStorageShelfFruType fromString(String text) =>
+  static ApiOntapStorageShelfFruType fromName(String text) =>
       ApiOntapStorageShelfFruType.values.firstWhere(
         (v) => v.name == text,
         orElse: () => null,

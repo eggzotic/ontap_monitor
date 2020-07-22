@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/no_results_found_tile.dart';
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node_state.dart';
 import 'package:ontap_monitor/refresh_results_tile.dart';
@@ -8,8 +9,16 @@ class OntapClusterNodesCard extends StatelessWidget {
   OntapClusterNodesCard({
     Key key,
     @required this.toRefresh,
+    @required this.toReset,
   }) : super(key: key);
+
+  /// [toRefresh] is a callback that should refresh the data being displayed
   final void Function() toRefresh;
+
+  /// [toReset] is a callback that should reset any previous error condition
+  ///  which should trigger the tile to be reset to it's original state, ready
+  ///  for a re-run
+  final void Function() toReset;
   //
   String _formattedDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -23,12 +32,7 @@ class OntapClusterNodesCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final nodes = Provider.of<List<ApiOntapNode>>(context);
     if (nodes == null || nodes.isEmpty)
-      return Card(
-        child: ListTile(
-          title: Text('Oops, no result found!'),
-          trailing: Icon(Icons.error_outline),
-        ),
-      );
+      return NoResultsFoundTile(toReset: toReset);
     final lastUpdated = nodes.first.lastUpdated;
 
     return Card(
@@ -71,10 +75,6 @@ class OntapClusterNodesCard extends StatelessWidget {
                   title: Text(node.state.name),
                   subtitle: Text('Node state'),
                 ),
-                // ListTile(
-                //   title: Text(''),
-                //   subtitle: Text(''),
-                // ),
               ],
             ),
           ),

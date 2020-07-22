@@ -20,7 +20,7 @@ extension ApiOntapStorageAggregateBlockStorageDiskTypeMembers
       ApiOntapStorageAggregateBlockStorageDiskType.values
           .firstWhere((v) => v.index == index);
   // create from name
-  static ApiOntapStorageAggregateBlockStorageDiskType fromString(String name) =>
+  static ApiOntapStorageAggregateBlockStorageDiskType fromName(String name) =>
       ApiOntapStorageAggregateBlockStorageDiskType.values
           .firstWhere((v) => v.name == name.toLowerCase());
 }

@@ -104,6 +104,6 @@ class ApiOntapStorageAggregate extends StorableItem {
         "block_storage": blockStorage?.toMap,
         "plexes": plexes?.map((x) => x?.toMap)?.toList(),
         "cloud_storage": cloudStorage?.toMap,
-        'lastUpdated': lastUpdated.toIso8601String(),
+        'lastUpdated': lastUpdated?.toIso8601String(),
       };
 }

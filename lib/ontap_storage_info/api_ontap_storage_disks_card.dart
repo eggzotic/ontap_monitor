@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/no_results_found_tile.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_class.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_state.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_type.dart';
@@ -14,10 +15,17 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
   ApiOntapStorageDisksCard({
     Key key,
     @required this.toRefresh,
+    @required this.toReset,
   }) : super(key: key);
 
   /// [toRefresh] is a callback that should refresh the data being displayed
   final void Function() toRefresh;
+
+  /// [toReset] is a callback that should reset any previous error condition
+  ///  which should trigger the tile to be reset to it's original state, ready
+  ///  for a re-run
+  final void Function() toReset;
+
   //
   static const gigabyte = 1024 * 1024 * 1024;
   //
@@ -79,12 +87,7 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final disks = Provider.of<List<ApiOntapStorageDisk>>(context);
     if (disks == null || disks.isEmpty)
-      return Card(
-        child: ListTile(
-          title: Text('Oops, no result found!'),
-          trailing: Icon(Icons.error_outline),
-        ),
-      );
+      return NoResultsFoundTile(toReset: toReset);
     final lastUpdated = disks.first.lastUpdated;
     return Card(
         child: ExpansionTile(
@@ -115,10 +118,10 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
                   subtitle: Text('Vendor'),
                 ),
                 if (disk.type?.name != null)
-                ListTile(
-                  title: Text(disk.type.name + ' / ' + disk.diskClass.name),
-                  subtitle: Text('Disk type / class'),
-                ),
+                  ListTile(
+                    title: Text(disk.type.name + ' / ' + disk.diskClass.name),
+                    subtitle: Text('Disk type / class'),
+                  ),
                 ListTile(
                   title: Text(disk.containerType.name),
                   subtitle: Text('Container type'),
@@ -139,9 +142,6 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
                       (disk.shelf?.name ?? '-') + ' / ' + disk.bay.toString()),
                   subtitle: Text('Shelf / Bay'),
                 ),
-                // ListTile(
-                //   title: Text(''), subtitle: Text(''),
-                // ),
                 // ListTile(
                 //   title: Text(''), subtitle: Text(''),
                 // ),

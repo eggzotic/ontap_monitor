@@ -1,19 +1,11 @@
 //
-// a class to wrap Ontap API's, their response data-models and
-// constructor-from-map (i.e. from JSON.decode)
+// a class to represent an ONTAP API, the specific method and any parameters
+//  the associated data-model for the exxpected response is also provided via a generic
 
 import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/data_storage/storable_item.dart';
-import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/ontap_api/api_parameter.dart';
 import 'package:ontap_monitor/ontap_api_models/api_method.dart';
-import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
-import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
-import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
-import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 
 class OntapApi<T extends StorableItem> extends StorableItem {
   static const _ontapApiPath = '/api/';
@@ -31,7 +23,6 @@ class OntapApi<T extends StorableItem> extends StorableItem {
 
   /// the type of data this API will return in a successful response
   Type get responseModel => T;
-  // final Type responseRecordType;
 
   /// the HTTP method to use
   final ApiMethod method;
@@ -39,24 +30,26 @@ class OntapApi<T extends StorableItem> extends StorableItem {
   /// a subset of the valid parameters
   final Set<ApiParameter> parameters;
 
-  /// indicates whether this API typically returns multiple records
-  // final bool isMulti;
-  //
   OntapApi._private(
     this.name,
     this.method,
     this.parameters,
   );
-  factory OntapApi._named({
+  factory OntapApi({
     @required String name,
     ApiMethod method = ApiMethod.get,
-    @required Set<ApiParameter> parameters,
-    Type responseRecordType,
+    Set<ApiParameter> parameters,
   }) {
     return OntapApi._private(
       name,
       method,
-      parameters,
+      parameters ??
+          // the default parameters - good for most GET's
+          {
+            ApiParameter<bool>(name: 'return_records', defaultValue: true),
+            ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
+            ApiParameter<String>(name: 'fields', defaultValue: '*'),
+          },
     );
   }
   //
@@ -68,107 +61,4 @@ class OntapApi<T extends StorableItem> extends StorableItem {
     parameters.forEach((p) => pMap[p.name] = p.value.toString());
     return pMap;
   }
-
-  //
-  // never delete/insert - append-only here - so that the builtin IDs
-  //  will remain consistent across invocations
-  static final List<OntapApi> _allApis = [
-    OntapApi<ApiOntapCluster>._named(
-      name: 'cluster',
-      method: ApiMethod.get,
-      parameters: Set.from(
-        [
-          ApiParameter<bool>(name: 'return_records', defaultValue: true),
-          ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
-          ApiParameter<String>(name: 'fields', defaultValue: '*'),
-        ],
-      ),
-    ),
-    OntapApi<ApiOntapLicensePackage>._named(
-      responseRecordType: ApiOntapLicensePackage,
-      name: 'cluster/licensing/licenses',
-      method: ApiMethod.get,
-      parameters: Set.from(
-        [
-          ApiParameter<String>(name: 'fields', defaultValue: '*'),
-          ApiParameter<bool>(name: 'return_records', defaultValue: true),
-          ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
-        ],
-      ),
-    ),
-    OntapApi<ApiOntapNode>._named(
-      responseRecordType: ApiOntapNode,
-      name: 'cluster/nodes',
-      method: ApiMethod.get,
-      parameters: Set.from(
-        [
-          ApiParameter<String>(name: 'fields', defaultValue: '*'),
-          ApiParameter<bool>(name: 'return_records', defaultValue: true),
-          ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
-        ],
-      ),
-    ),
-    OntapApi<ApiOntapNetworkEthernetPort>._named(
-      responseRecordType: ApiOntapNetworkEthernetPort,
-      name: 'network/ethernet/ports',
-      method: ApiMethod.get,
-      parameters: Set.from(
-        [
-          ApiParameter<String>(name: 'fields', defaultValue: '*'),
-          ApiParameter<bool>(name: 'return_records', defaultValue: true),
-          ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
-        ],
-      ),
-    ),
-    OntapApi<ApiOntapStorageDisk>._named(
-      name: 'storage/disks',
-      parameters: Set.from(
-        [
-          ApiParameter<String>(name: 'fields', defaultValue: '*'),
-          ApiParameter<bool>(name: 'return_records', defaultValue: true),
-          ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
-        ],
-      ),
-    ),
-    OntapApi<ApiOntapStorageAggregate>._named(
-      name: 'storage/aggregates',
-      parameters: Set.from(
-        [
-          ApiParameter<String>(name: 'fields', defaultValue: '*'),
-          ApiParameter<bool>(name: 'return_records', defaultValue: true),
-          ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
-        ],
-      ),
-    ),
-    OntapApi<ApiOntapStorageCluster>._named(
-      name: 'storage/cluster',
-      parameters: Set.from(
-        [
-          ApiParameter<String>(name: 'fields', defaultValue: '*'),
-          ApiParameter<bool>(name: 'return_records', defaultValue: true),
-          ApiParameter<int>(name: 'return_timeout', defaultValue: 15),
-        ],
-      ),
-    ),
-  ];
-  //
-  static bool _builtinsAdded = false;
-  static void addBuiltins(ItemStore<OntapApi> dataStore) {
-    if (_builtinsAdded) return;
-    _allApis.forEach(
-      (api) {
-        dataStore.add(
-          api,
-          storeNow: false,
-          neverStore: true,
-        );
-      },
-    );
-    _builtinsAdded = true;
-  }
-
-  //
-  // factory constructor to simply pick the pre-existing API from the above
-  factory OntapApi.forId(String id) =>
-      _allApis.firstWhere((api) => api.id == id, orElse: () => null);
 }

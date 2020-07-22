@@ -53,9 +53,9 @@ class ApiOntapLicensePackage extends StorableItem {
         .toList();
     final String name = json['name'];
     final ApiOntapLicenseScope scope =
-        ApiOntapLicenseScopeMembers.fromString(json['scope']);
+        ApiOntapLicenseScopeMembers.fromName(json['scope']);
     final ApiOntapLicenseComplianceState state =
-        ApiOntapLicenseComplianceStateMembers.fromString(json['state']);
+        ApiOntapLicenseComplianceStateMembers.fromName(json['state']);
     //
     return ApiOntapLicensePackage(
       ownerId: json['ownerId'] ?? ownerId,

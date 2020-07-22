@@ -49,7 +49,9 @@ class ApiOntapNetworkEthernetPort extends StorableItem {
       type: json["type"] == null
           ? null
           : ApiOntapNetworkEthernetPortTypeMembers.fromName(json["type"]),
-      node: json["node"] == null ? null : ApiOntapNode.fromMap(json["node"],ownerId: ownerId),
+      node: json["node"] == null
+          ? null
+          : ApiOntapNode.fromMap(json["node"], ownerId: ownerId),
       broadcastDomain: json["broadcast_domain"] == null
           ? null
           : ApiOntapNetworkBroadcastDomain.fromMap(json["broadcast_domain"]),

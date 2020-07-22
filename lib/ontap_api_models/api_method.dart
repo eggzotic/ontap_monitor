@@ -8,6 +8,7 @@ enum ApiMethod {
   patch,
   delete,
 }
+
 //
 extension ApiMethodMembers on ApiMethod {
   String get name => toString().split('.').last.toUpperCase();
@@ -21,4 +22,6 @@ extension ApiMethodMembers on ApiMethod {
 
   static ApiMethod fromIndex(int index) =>
       ApiMethod.values.firstWhere((value) => value.index == index);
+  static ApiMethod fromName(String name) =>
+      ApiMethod.values.firstWhere((value) => value.name == name);
 }

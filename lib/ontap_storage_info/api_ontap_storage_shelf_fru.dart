@@ -26,10 +26,10 @@ class ApiOntapStorageShelfFru {
         serialNumber: json["serial_number"],
         state: json["state"] == null
             ? null
-            : ApiOntapStorageShelfFruStateMembers.fromString(json["state"]),
+            : ApiOntapStorageShelfFruStateMembers.fromName(json["state"]),
         type: json["type"] == null
             ? null
-            : ApiOntapStorageShelfFruTypeMembers.fromString(json["type"]),
+            : ApiOntapStorageShelfFruTypeMembers.fromName(json["type"]),
       );
 
   Map<String, dynamic> get toMap => {
