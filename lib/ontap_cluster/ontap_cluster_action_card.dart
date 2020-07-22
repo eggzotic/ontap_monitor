@@ -1,27 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/builtins/model_ui.dart';
 import 'package:ontap_monitor/ontap_api_models/api_request_state.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
 import 'package:ontap_monitor/data_storage/storable_item.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
-import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
-import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
-import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
-import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
 import 'package:ontap_monitor/ontap_api/ontap_api_reporter.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_edit_page.dart';
-import 'package:ontap_monitor/ontap_license_info/ontap_cluster_licensing_card.dart';
-import 'package:ontap_monitor/ontap_network_info/ontap_cluster_network_ethernet_ports_card.dart';
-import 'package:ontap_monitor/ontap_node_info/ontap_cluster_nodes_card.dart';
-import 'package:ontap_monitor/ontap_cluster_info/ontap_cluster_info_card.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregates_card.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster_card.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
-import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disks_card.dart';
 import 'package:provider/provider.dart';
 
 class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
@@ -81,48 +68,11 @@ class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
               Provider.value(value: cachedItems ?? reporter.responseObject),
               Provider.value(value: reporter.status == ApiRequestState.started),
             ],
-            child: () {
-              final model = action.api.responseModel;
-              if (model == ApiOntapCluster)
-                return OntapClusterInfoCard(
-                  toRefresh: toRun,
-                  toReset: toReset,
-                );
-              if (model == ApiOntapLicensePackage)
-                return OntapClusterLicensingCard(
-                  toRefresh: toRun,
-                  toReset: toReset,
-                );
-              if (model == ApiOntapNode)
-                return OntapClusterNodesCard(
-                  toRefresh: toRun,
-                  toReset: toReset,
-                );
-              if (model == ApiOntapNetworkEthernetPort)
-                return OntapClusterNetworkEthernetPortsCard(
-                  toRefresh: toRun,
-                  toReset: toReset,
-                );
-              if (model == ApiOntapStorageDisk)
-                return ApiOntapStorageDisksCard(
-                  toRefresh: toRun,
-                  toReset: toReset,
-                );
-              if (model == ApiOntapStorageAggregate)
-                return ApiOntapStorageAggregatesCard(
-                  toRefresh: toRun,
-                  toReset: toReset,
-                );
-              if (model == ApiOntapStorageCluster)
-                return ApiOntapStorageClusterCard(
-                  toRefresh: toRun,
-                  toReset: toReset,
-                );
-              return Center(
-                child: Text('Unknown Action Card for API ${action.api.id}'),
-              );
-            }(),
-            // ),
+            child: ModelUi.shared().uiForModel(
+              action.api.responseModel,
+              toRefresh: toRun,
+              toReset: toReset,
+            ),
           );
   }
 }

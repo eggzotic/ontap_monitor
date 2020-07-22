@@ -131,7 +131,6 @@ class OntapApiReporter<T extends StorableItem>
     }
     String message;
     if (statusCode >= 400) message = body;
-    //bodyAsMap['error']['message'];
 
     // this throw will effectively call 'failure', above
     throw Exception(

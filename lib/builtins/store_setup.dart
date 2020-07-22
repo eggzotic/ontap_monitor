@@ -13,7 +13,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart'
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 
 class StoreSetup {
-  // a factory constructor posing as a Singleton, so the add-builtins are never run more than once
+  // a factory constructor posing as a Singleton
   factory StoreSetup.shared({SuperStore superStore}) {
     _shared ??= StoreSetup._private(superStore);
     return _shared;
