@@ -1,8 +1,12 @@
+//
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 import 'package:flutter/material.dart';
-import 'package:ontap_monitor/no_results_found_tile.dart';
+import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node_state.dart';
-import 'package:ontap_monitor/refresh_results_tile.dart';
+import 'package:ontap_monitor/misc/refresh_results_tile.dart';
 import 'package:provider/provider.dart';
 
 class OntapClusterNodesCard extends StatelessWidget {

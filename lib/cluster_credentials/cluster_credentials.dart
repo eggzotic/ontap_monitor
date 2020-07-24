@@ -1,3 +1,7 @@
+//
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/data_storage/storable_item.dart';

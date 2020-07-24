@@ -1,4 +1,8 @@
 //
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
+//
 import 'package:flutter/foundation.dart';
 
 class ApiOntapVersion {

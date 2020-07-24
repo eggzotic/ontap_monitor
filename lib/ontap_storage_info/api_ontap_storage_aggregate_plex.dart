@@ -1,3 +1,7 @@
+//
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 class ApiOntapStorageAggregatePlex {
   ApiOntapStorageAggregatePlex({this.name});
   final String name;

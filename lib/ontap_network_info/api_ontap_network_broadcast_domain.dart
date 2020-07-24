@@ -1,3 +1,7 @@
+//
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ipspace.dart';
 
 class ApiOntapNetworkBroadcastDomain {

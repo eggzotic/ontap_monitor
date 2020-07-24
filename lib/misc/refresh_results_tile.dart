@@ -1,3 +1,7 @@
+//
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 // a simple tile to be placed at the bottom of each result-set to allow
 //  conveniently triggering the fetch of a fresh set of results
 import 'package:flutter/material.dart';

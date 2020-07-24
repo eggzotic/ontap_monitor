@@ -1,4 +1,7 @@
 //
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 // parent-class/interface for things that are stored
 import 'package:flutter/foundation.dart';
 

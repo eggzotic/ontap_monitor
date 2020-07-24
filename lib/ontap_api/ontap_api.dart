@@ -1,4 +1,7 @@
 //
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 // a class to represent an ONTAP API, the specific method and any parameters
 //  the associated data-model for the exxpected response is also provided via a generic
 

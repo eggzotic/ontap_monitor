@@ -1,4 +1,7 @@
 //
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 // don't change the order of these, or insert new entries! Append only
 import 'package:rest_client/rest_client.dart';
 

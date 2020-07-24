@@ -1,4 +1,7 @@
 //
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 // the store-of-stores - where all app state is stored
 import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';

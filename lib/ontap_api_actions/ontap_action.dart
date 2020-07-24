@@ -1,3 +1,7 @@
+//
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';

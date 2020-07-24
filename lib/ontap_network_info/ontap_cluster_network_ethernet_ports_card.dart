@@ -1,10 +1,14 @@
+//
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ontap_monitor/no_results_found_tile.dart';
+import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port_state.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port_type.dart';
-import 'package:ontap_monitor/refresh_results_tile.dart';
+import 'package:ontap_monitor/misc/refresh_results_tile.dart';
 import 'package:provider/provider.dart';
 
 class OntapClusterNetworkEthernetPortsCard extends StatelessWidget {

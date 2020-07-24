@@ -1,9 +1,13 @@
+//
+// Richard Shepherd, 2020
+//  eggzotic@gmail.com, richard.shepherd3@netapp.com
+//
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:ontap_monitor/no_results_found_tile.dart';
+import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_compliance_state.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
-import 'package:ontap_monitor/refresh_results_tile.dart';
+import 'package:ontap_monitor/misc/refresh_results_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_scope.dart';
 
