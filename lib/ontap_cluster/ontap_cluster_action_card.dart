@@ -4,6 +4,8 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/builtins/model_ui.dart';
+import 'package:ontap_monitor/ontap_api/ontap_api_error.dart';
+import 'package:ontap_monitor/ontap_api/ontap_api_status_code.dart';
 import 'package:ontap_monitor/ontap_api_models/api_request_state.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
 import 'package:ontap_monitor/data_storage/storable_item.dart';
@@ -14,6 +16,7 @@ import 'package:ontap_monitor/ontap_api/ontap_api_reporter.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_edit_page.dart';
 import 'package:provider/provider.dart';
+import 'package:rest_client/rest_client.dart';
 
 class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
   @override
@@ -31,11 +34,60 @@ class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
     final reporter = Provider.of<OntapApiReporter<T>>(context);
     final cred = credentialStore.forId(cluster.credentialsId);
     final toRun = () async {
-      await action.execute(
-        host: cluster.adminLifAddress,
-        credentials: cred,
-        reporter: reporter,
-      );
+      try {
+        await action.execute(
+          host: cluster.adminLifAddress,
+          credentials: cred,
+          reporter: reporter,
+        );
+      } on RestException catch (e) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              // try to find the specific error
+              final charOne = e.response.body.toString().substring(0, 1);
+              OntapApiError error;
+              if (charOne == '{') {
+                error = OntapApiError.fromMap(e.response.body['error']);
+              }
+              // just in case, find the generic error
+              final code = e.response.statusCode;
+              final status = OntapApiStatusCodeMembers.fromCode(code);
+              // use the specific, otherwise the generic
+              final message =
+                  error?.message ?? '${status.name}: ${status.description}';
+              return AlertDialog(
+                title:
+                    Text('Error', style: Theme.of(context).textTheme.headline6),
+                content: Text('$message',
+                    style: Theme.of(context).textTheme.bodyText1),
+                actions: [
+                  FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            });
+      } catch (e) {
+        // last resort error
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title:
+                  Text('Error', style: Theme.of(context).textTheme.headline6),
+              content: Text('$e', style: Theme.of(context).textTheme.bodyText1),
+              actions: [
+                FlatButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
     };
     final toReset = reporter.reset;
     return !isCached &&

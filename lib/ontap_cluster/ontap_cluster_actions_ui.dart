@@ -65,24 +65,6 @@ class OntapClusterActionsUi extends StatelessWidget {
       itemCount: actionsCount,
       itemBuilder: (context, index) {
         final action = actionStore.forId(actionIds[index]);
-        final onError = (String e) {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text('Error',
-                      style: Theme.of(context).textTheme.headline6),
-                  content:
-                      Text('$e', style: Theme.of(context).textTheme.bodyText1),
-                  actions: [
-                    FlatButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text('OK'),
-                    ),
-                  ],
-                );
-              });
-        };
         return ChangeNotifierProvider.value(
           value: action,
           builder: (_, __) {
@@ -95,7 +77,6 @@ class OntapClusterActionsUi extends StatelessWidget {
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
-                onError: onError,
               );
             if (model == ApiOntapLicensePackage)
               return ModelUi.shared().preUiForModel<ApiOntapLicensePackage>(
@@ -103,7 +84,6 @@ class OntapClusterActionsUi extends StatelessWidget {
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
-                onError: onError,
               );
             if (model == ApiOntapNode)
               return ModelUi.shared().preUiForModel<ApiOntapNode>(
@@ -111,7 +91,6 @@ class OntapClusterActionsUi extends StatelessWidget {
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
-                onError: onError,
               );
             if (model == ApiOntapNetworkEthernetPort)
               return ModelUi.shared().preUiForModel<ApiOntapNetworkEthernetPort>(
@@ -119,7 +98,6 @@ class OntapClusterActionsUi extends StatelessWidget {
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
-                onError: onError,
               );
             if (model == ApiOntapStorageDisk)
               return ModelUi.shared().preUiForModel<ApiOntapStorageDisk>(
@@ -127,7 +105,6 @@ class OntapClusterActionsUi extends StatelessWidget {
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
-                onError: onError,
               );
             if (model == ApiOntapStorageAggregate)
               return ModelUi.shared().preUiForModel<ApiOntapStorageAggregate>(
@@ -135,7 +112,6 @@ class OntapClusterActionsUi extends StatelessWidget {
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
-                onError: onError,
               );
             if (model == ApiOntapStorageCluster)
               return ModelUi.shared().preUiForModel<ApiOntapStorageCluster>(
@@ -143,7 +119,6 @@ class OntapClusterActionsUi extends StatelessWidget {
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
-                onError: onError,
               );
             return Center(
               child: Text('Unknown Data-model for API ${action.api.name}'),

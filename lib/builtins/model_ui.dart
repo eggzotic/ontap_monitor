@@ -29,7 +29,7 @@ class ModelUi {
   static ModelUi _shared;
   ModelUi._private();
 
-  // a factory posigin as a Singleton
+  // a factory posing as a Singleton
   factory ModelUi.shared() {
     _shared ??= ModelUi._private();
     return _shared;
@@ -76,7 +76,6 @@ class ModelUi {
     OntapCluster owner,
     ItemStore<T> dataStore,
     String actionId,
-    void Function(String) onError,
   }) {
     if (!_uiForType.containsKey(T))
       return Center(
@@ -88,7 +87,6 @@ class ModelUi {
         dataStore: Provider.of<SuperStore>(context)
             .storeForType(T),
         actionId: actionId,
-        onError: onError,
       ),
       builder: (_, __) => OntapClusterActionCard<T>(),
     );

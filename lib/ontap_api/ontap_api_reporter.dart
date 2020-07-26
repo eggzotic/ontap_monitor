@@ -4,7 +4,6 @@
 //
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:ontap_monitor/ontap_api_models/api_request_state.dart';
@@ -20,7 +19,6 @@ class OntapApiReporter<T extends StorableItem>
     @required this.owner,
     @required this.dataStore,
     @required this.actionId,
-    this.onError,
   });
   // The status of the associated request
   ApiRequestState _statusValue = ApiRequestState.notStarted;
@@ -45,10 +43,6 @@ class OntapApiReporter<T extends StorableItem>
   /// the action ID this reporter is working for
   final String actionId;
 
-  /// [onError] - something to run if an error occured - since there is async
-  ///  stuff involved a regular try/catch at the top-level will not catch errors
-  final void Function(String message) onError;
-
   void reset() {
     _status = ApiRequestState.notStarted;
   }
@@ -66,13 +60,8 @@ class OntapApiReporter<T extends StorableItem>
   }) {
     print('Failure exception: $exception');
     print('Failure url: $url');
-    print('Request ID: $requestId');
-    // print('RC Stack trace' + stack.toString());
+    print('Failure Request ID: $requestId');
     _status = ApiRequestState.completeFail;
-    onError(exception);
-    // throw Exception(
-    //   exception ?? 'Error returned from server',
-    // );
     return null;
   }
 
@@ -86,10 +75,9 @@ class OntapApiReporter<T extends StorableItem>
     @required String requestId,
     @required String url,
   }) {
-    // print('Request headers: $headers');
+    print('Request headers: $headers');
     // print('Request body: $body');
     print('Request url:  $url');
-    // print('Request ID: $requestId');
     _status = ApiRequestState.started;
     return null;
   }
@@ -107,39 +95,34 @@ class OntapApiReporter<T extends StorableItem>
     print('Response body: $body');
     print('Request ID: $requestId');
     //
-    if (statusCode >= 200 && statusCode <= 299) {
-      final Map<String, dynamic> bodyAsMap = Map.from(json.decode(body));
-      if (bodyAsMap.containsKey('records')) {
-        print('Begin create List<$T> fromMap');
-        final List<Map<String, dynamic>> listOfRecords =
-            List.from(bodyAsMap['records']);
-        _responseObjects = listOfRecords
-            .map((e) => dataStore.itemFromMap(e, ownerId: owner.id))
-            .toList();
-        print('End create List<$T> fromMap');
-      } else {
-        print('Begin create $T fromMap');
-        // create a 1-element list so
-        _responseObjects = [
-          dataStore.itemFromMap(bodyAsMap, ownerId: owner.id)
-        ];
-        print('End create $T fromMap');
-      }
-      _responseObjects.forEach((obj) {
-        dataStore.add(obj);
-      });
-      owner.setCachedResultId(
-          actionId, _responseObjects.map((e) => e.id).toSet());
-      _status = ApiRequestState.completeSuccess;
+    if (statusCode < 200 || statusCode > 299) {
+      _status = ApiRequestState.completeFail;
       return null;
     }
-    String message;
-    if (statusCode >= 400) message = body;
 
-    // this throw will effectively call 'failure', above
-    throw Exception(
-      message?.toString() ?? 'Error accessing, or returned from, server',
-    );
+    final Map<String, dynamic> bodyAsMap = Map.from(json.decode(body));
+    if (bodyAsMap.containsKey('records')) {
+      print('Begin create List<$T> fromMap');
+      final List<Map<String, dynamic>> listOfRecords =
+          List.from(bodyAsMap['records']);
+      _responseObjects = listOfRecords
+          .map((e) => dataStore.itemFromMap(e, ownerId: owner.id))
+          .toList();
+      print('End create List<$T> fromMap');
+    } else {
+      // otherwise we have a single-record response
+      print('Begin create $T fromMap');
+      // create a 1-element list
+      _responseObjects = [dataStore.itemFromMap(bodyAsMap, ownerId: owner.id)];
+      print('End create $T fromMap');
+    }
+    _responseObjects.forEach((obj) {
+      dataStore.add(obj);
+    });
+    owner.setCachedResultId(
+        actionId, _responseObjects.map((e) => e.id).toSet());
+    _status = ApiRequestState.completeSuccess;
+    return null;
   }
 
   /// Called by the [RestClient] when a successful response has been processed.
