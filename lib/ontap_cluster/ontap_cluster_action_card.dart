@@ -124,7 +124,7 @@ class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
               Provider.value(value: cachedItems ?? reporter.responseObject),
               Provider.value(value: reporter.status == ApiRequestState.started),
             ],
-            child: ModelUi.shared().uiForModel(
+            child: ModelUi.shared.uiForModel(
               action.api.responseModel,
               toRefresh: toRun,
               toReset: toReset,

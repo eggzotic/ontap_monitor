@@ -52,7 +52,7 @@ class ApiOntapStorageAggregate extends StorableItem {
     Map<String, dynamic> json, {
     String ownerId,
   }) {
-    assert(ownerId != null || json['ownerId'] != null);
+    // assert(ownerId != null || json['ownerId'] != null);
     return ApiOntapStorageAggregate._private(
       uuid: json["uuid"],
       name: json["name"],

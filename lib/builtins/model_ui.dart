@@ -23,17 +23,20 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart'
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster_card.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disks_card.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port.dart';
+import 'package:ontap_monitor/ontap_storage_info/ontap_api_storage_ports_card.dart';
 import 'package:provider/provider.dart';
 
 class ModelUi {
   static ModelUi _shared;
   ModelUi._private();
 
-  // a factory posing as a Singleton
-  factory ModelUi.shared() {
+  // a Singleton getter
+  static get shared {
     _shared ??= ModelUi._private();
     return _shared;
   }
+
   //
   final Map<
       Type,
@@ -56,6 +59,8 @@ class ModelUi {
         ApiOntapStorageAggregatesCard(toRefresh: toRefresh, toReset: toReset),
     ApiOntapStorageCluster: ({toRefresh, toReset}) =>
         ApiOntapStorageClusterCard(toRefresh: toRefresh, toReset: toReset),
+    ApiOntapStoragePort: ({toRefresh, toReset}) =>
+        ApiOntapStoragePortCard(toRefresh: toRefresh, toReset: toReset),
   };
   //
   Widget uiForModel(
@@ -84,8 +89,7 @@ class ModelUi {
     return ChangeNotifierProvider(
       create: (_) => OntapApiReporter<T>(
         owner: owner,
-        dataStore: Provider.of<SuperStore>(context)
-            .storeForType(T),
+        dataStore: Provider.of<SuperStore>(context).storeForType(T),
         actionId: actionId,
       ),
       builder: (_, __) => OntapClusterActionCard<T>(),

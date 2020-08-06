@@ -15,6 +15,7 @@ import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port.dart';
 
 class StoreSetup {
   // a factory constructor posing as a Singleton
@@ -131,6 +132,15 @@ class StoreSetup {
             ApiOntapStorageCluster.fromMap(map, ownerId: ownerId),
       ),
     );
+    _superStore.add(
+      type: ApiOntapStoragePort,
+      store: ItemStore<ApiOntapStoragePort>(
+        isCacheData: true,
+        itemIdPrefix: 'api-ontap-storage-port-response_',
+        itemFromMap: (map, {ownerId}) =>
+            ApiOntapStoragePort.fromMap(map, ownerId: ownerId),
+      ),
+    );
     print('_addItemStores ending');
   }
 
@@ -189,6 +199,13 @@ class StoreSetup {
         ..setApi(apiStore.forId('GET storage/cluster')),
       neverStore: true,
     );
+    actionStore.add(
+      OntapAction(builtin: true)
+        ..setName('Storage Ports')
+        ..setDescription('Builtin Action')
+        ..setApi(apiStore.forId('GET storage/ports')),
+      neverStore: true,
+    );
     print('_setupBuiltinActions ending');
   }
 
@@ -222,6 +239,10 @@ class StoreSetup {
     );
     apiStore.add(
       OntapApi<ApiOntapStorageCluster>(name: 'storage/cluster'),
+      neverStore: true,
+    );
+    apiStore.add(
+      OntapApi<ApiOntapStoragePort>(name: 'storage/ports'),
       neverStore: true,
     );
     print('_setupBuiltinApis ending');

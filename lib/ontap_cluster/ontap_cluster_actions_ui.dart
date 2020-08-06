@@ -16,6 +16,7 @@ import 'package:ontap_monitor/ontap_cluster/ontap_cluster_select_actions_page.da
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
+import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port.dart';
 import 'package:provider/provider.dart';
 
 class OntapClusterActionsUi extends StatelessWidget {
@@ -72,49 +73,56 @@ class OntapClusterActionsUi extends StatelessWidget {
             //
             final model = action.api.responseModel;
             if (model == ApiOntapCluster)
-              return ModelUi.shared().preUiForModel<ApiOntapCluster>(
+              return ModelUi.shared.preUiForModel<ApiOntapCluster>(
                 context: context,
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
               );
             if (model == ApiOntapLicensePackage)
-              return ModelUi.shared().preUiForModel<ApiOntapLicensePackage>(
+              return ModelUi.shared.preUiForModel<ApiOntapLicensePackage>(
                 context: context,
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
               );
             if (model == ApiOntapNode)
-              return ModelUi.shared().preUiForModel<ApiOntapNode>(
+              return ModelUi.shared.preUiForModel<ApiOntapNode>(
                 context: context,
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
               );
             if (model == ApiOntapNetworkEthernetPort)
-              return ModelUi.shared().preUiForModel<ApiOntapNetworkEthernetPort>(
+              return ModelUi.shared.preUiForModel<ApiOntapNetworkEthernetPort>(
                 context: context,
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
               );
             if (model == ApiOntapStorageDisk)
-              return ModelUi.shared().preUiForModel<ApiOntapStorageDisk>(
+              return ModelUi.shared.preUiForModel<ApiOntapStorageDisk>(
                 context: context,
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
               );
             if (model == ApiOntapStorageAggregate)
-              return ModelUi.shared().preUiForModel<ApiOntapStorageAggregate>(
+              return ModelUi.shared.preUiForModel<ApiOntapStorageAggregate>(
                 context: context,
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
                 actionId: action.id,
               );
             if (model == ApiOntapStorageCluster)
-              return ModelUi.shared().preUiForModel<ApiOntapStorageCluster>(
+              return ModelUi.shared.preUiForModel<ApiOntapStorageCluster>(
+                context: context,
+                owner: cluster,
+                dataStore: Provider.of<SuperStore>(context).storeForType(model),
+                actionId: action.id,
+              );
+            if (model == ApiOntapStoragePort)
+              return ModelUi.shared.preUiForModel<ApiOntapStoragePort>(
                 context: context,
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),
