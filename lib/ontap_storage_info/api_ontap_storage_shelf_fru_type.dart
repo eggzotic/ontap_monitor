@@ -9,17 +9,19 @@ enum ApiOntapStorageShelfFruType {
 
 //
 extension ApiOntapStorageShelfFruTypeMembers on ApiOntapStorageShelfFruType {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapStorageShelfFruType fromName(String text) =>
-      ApiOntapStorageShelfFruType.values.firstWhere(
-        (v) => v.name == text,
-        orElse: () => null,
-      );
+  static ApiOntapStorageShelfFruType fromName(String name) => name != null
+      ? ApiOntapStorageShelfFruType.values.firstWhere(
+          (v) => v.name == name,
+          orElse: () => null,
+        )
+      : null;
   //
-  static ApiOntapStorageShelfFruType fromIndex(int index) =>
-      ApiOntapStorageShelfFruType.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => null,
-      );
+  static ApiOntapStorageShelfFruType fromIndex(int index) => index != null
+      ? ApiOntapStorageShelfFruType.values.firstWhere(
+          (v) => v.index == index,
+          orElse: () => null,
+        )
+      : null;
 }

@@ -11,16 +11,20 @@ enum ApiOntapStorageAggregateBlockStorageChecksumStyle {
 //
 extension ApiOntapStorageAggregateBlockStorageChecksumStyleMembers
     on ApiOntapStorageAggregateBlockStorageChecksumStyle {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
   // create from index
   static ApiOntapStorageAggregateBlockStorageChecksumStyle fromIndex(
           int index) =>
-      ApiOntapStorageAggregateBlockStorageChecksumStyle.values
-          .firstWhere((v) => v.index == index);
+      index != null
+          ? ApiOntapStorageAggregateBlockStorageChecksumStyle.values
+              .firstWhere((v) => v.index == index)
+          : null;
   // create from name
   static ApiOntapStorageAggregateBlockStorageChecksumStyle fromName(
           String name) =>
-      ApiOntapStorageAggregateBlockStorageChecksumStyle.values
-          .firstWhere((v) => v.name == name.toLowerCase());
+      name != null
+          ? ApiOntapStorageAggregateBlockStorageChecksumStyle.values
+              .firstWhere((v) => v.name == name.toLowerCase())
+          : null;
 }

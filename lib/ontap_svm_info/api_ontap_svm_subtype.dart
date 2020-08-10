@@ -13,12 +13,12 @@ enum ApiOntapSvmSubtype {
 extension ApiOntapSvmSubtypeMembers on ApiOntapSvmSubtype {
   String get name {
     if (this == ApiOntapSvmSubtype.svm_default) return 'default';
-    return toString().split('.').last;
+    return toString()?.split('.')?.last;
   }
 
   //
   static ApiOntapSvmSubtype fromName(String name) {
-    if (name == 'default') return ApiOntapSvmSubtype.svm_default;
+    if (name == null) return null;
     return ApiOntapSvmSubtype.values.firstWhere((v) => v.name == name);
   }
 }

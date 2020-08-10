@@ -9,7 +9,7 @@ import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
 
 class ApiOntapNetworkEthernetPort extends StorableItem {
-  ApiOntapNetworkEthernetPort({
+  ApiOntapNetworkEthernetPort._private({
     this.uuid,
     this.name,
     this.macAddress,
@@ -43,25 +43,19 @@ class ApiOntapNetworkEthernetPort extends StorableItem {
     Map<String, dynamic> json, {
     String ownerId,
   }) {
+    if (json == null) return null;
     // must have an owner
     assert(ownerId != null || json['ownerId'] != null);
-    return ApiOntapNetworkEthernetPort(
+    return ApiOntapNetworkEthernetPort._private(
       uuid: json["uuid"],
       name: json["name"],
       macAddress: json["mac_address"],
-      type: json["type"] == null
-          ? null
-          : ApiOntapNetworkEthernetPortTypeMembers.fromName(json["type"]),
-      node: json["node"] == null
-          ? null
-          : ApiOntapNode.fromMap(json["node"], ownerId: ownerId),
-      broadcastDomain: json["broadcast_domain"] == null
-          ? null
-          : ApiOntapNetworkBroadcastDomain.fromMap(json["broadcast_domain"]),
+      type: ApiOntapNetworkEthernetPortTypeMembers.fromName(json["type"]),
+      node: ApiOntapNode.fromMap(json["node"], ownerId: ownerId),
+      broadcastDomain:
+          ApiOntapNetworkBroadcastDomain.fromMap(json["broadcast_domain"]),
       enabled: json["enabled"],
-      state: json["state"] == null
-          ? null
-          : ApioOntapNetworkEthernetPortStateMembers.fromName(json['state']),
+      state: ApioOntapNetworkEthernetPortStateMembers.fromName(json['state']),
       mtu: json["mtu"],
       speed: json["speed"],
       ownerId: json['ownerId'] ?? ownerId,

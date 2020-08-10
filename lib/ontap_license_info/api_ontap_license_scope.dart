@@ -12,9 +12,10 @@ enum ApiOntapLicenseScope {
 extension ApiOntapLicenseScopeMembers on ApiOntapLicenseScope {
   String get name => toString().split('.').last;
   //
-  static ApiOntapLicenseScope fromName(String text) {
+  static ApiOntapLicenseScope fromName(String name) {
+    if (name == null) return null;
     return ApiOntapLicenseScope.values.firstWhere(
-      (value) => value.name == text,
+      (value) => value.name == name,
       orElse: () => ApiOntapLicenseScope.not_available,
     );
   }

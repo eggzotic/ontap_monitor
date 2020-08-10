@@ -10,7 +10,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port_error.da
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port_state.dart';
 
 class ApiOntapStoragePort extends StorableItem {
-  ApiOntapStoragePort({
+  ApiOntapStoragePort._private({
     this.ownerId,
     this.boardName,
     this.cable,
@@ -49,37 +49,33 @@ class ApiOntapStoragePort extends StorableItem {
     Map<String, dynamic> json, {
     String ownerId,
   }) =>
-      ApiOntapStoragePort(
-        ownerId: json['ownerId'] ?? ownerId,
-        boardName: json["board_name"],
-        cable: json["cable"] == null
-            ? null
-            : ApiOntapStorageCable.fromMap(json["cable"]),
-        description: json["description"],
-        error: json["error"] == null
-            ? null
-            : ApiOntapStoragePortError.fromMap(json["error"]),
-        macAddress: json["mac_address"],
-        name: json["name"],
-        node: json["node"] == null ? null : ApiOntapNode.fromMap(json["node"]),
-        partNumber: json["part_number"],
-        serialNumber: json["serial_number"],
-        speed: json["speed"],
-        state: json["state"] == null
-            ? null
-            : ApiOntapStoragePortStateMembers.fromName(json["state"]),
-        wwn: json["wwn"],
-      );
+      json != null
+          ? ApiOntapStoragePort._private(
+              ownerId: json['ownerId'] ?? ownerId,
+              boardName: json["board_name"],
+              cable: ApiOntapStorageCable.fromMap(json["cable"]),
+              description: json["description"],
+              error: ApiOntapStoragePortError.fromMap(json["error"]),
+              macAddress: json["mac_address"],
+              name: json["name"],
+              node: ApiOntapNode.fromMap(json["node"]),
+              partNumber: json["part_number"],
+              serialNumber: json["serial_number"],
+              speed: json["speed"],
+              state: ApiOntapStoragePortStateMembers.fromName(json["state"]),
+              wwn: json["wwn"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         'ownerId': ownerId,
         "board_name": boardName,
-        "cable": cable == null ? null : cable?.toMap,
+        "cable": cable?.toMap,
         "description": description,
-        "error": error == null ? null : error?.toMap,
+        "error": error?.toMap,
         "mac_address": macAddress,
         "name": name,
-        "node": node == null ? null : node?.toMap,
+        "node": node?.toMap,
         "part_number": partNumber,
         "serial_number": serialNumber,
         "speed": speed,

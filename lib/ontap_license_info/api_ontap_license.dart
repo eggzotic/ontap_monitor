@@ -3,7 +3,6 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 //
-import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_compliance_state.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_capacity.dart';
 
@@ -17,7 +16,7 @@ class ApiOntapLicense {
   final DateTime startTime;
   final ApiOntapLicenseCapacity capacity;
   //
-  ApiOntapLicense._private(
+  ApiOntapLicense._private({
     this.owner,
     this.serialNumber,
     this.active,
@@ -26,57 +25,27 @@ class ApiOntapLicense {
     this.expiryTime,
     this.startTime,
     this.capacity,
-  );
-  //
-  factory ApiOntapLicense({
-    @required String owner,
-    @required String serialNumber,
-    @required bool active,
-    @required bool evaluation,
-    @required ApiOntapLicenseComplianceState complianceState,
-    DateTime expiryTime,
-    DateTime startTime,
-    ApiOntapLicenseCapacity capacity,
-  }) {
-    return ApiOntapLicense._private(
-      owner,
-      serialNumber,
-      active,
-      evaluation,
-      complianceState,
-      expiryTime,
-      startTime,
-      capacity,
-    );
-  }
+  });
   //
   factory ApiOntapLicense.fromMap(Map<String, dynamic> json) {
-    final String owner = json['owner'];
-    final String serialNumber = json['serial_number'] ?? 'none';
-    final bool active = json['active'];
-    final bool evaluation = json['evaluation'];
-    final ApiOntapLicenseComplianceState complianceState =
-        ApiOntapLicenseComplianceStateMembers.fromName(
-            Map.from(json['compliance'])['state']);
-    // optionally-present properties
+    // DateTime properties
     DateTime expiryTime;
     DateTime startTime;
-    ApiOntapLicenseCapacity capacity;
     if (json['expiry_time'] != null)
       expiryTime = DateTime.parse(json['expiry_time']);
     if (json['start_time'] != null)
       startTime = DateTime.parse(json['start_time']);
-    if (json['capacity'] != null)
-      capacity = ApiOntapLicenseCapacity.fromMap(json['capacity']);
-    return ApiOntapLicense(
-      owner: owner,
-      serialNumber: serialNumber,
-      active: active,
-      evaluation: evaluation,
-      complianceState: complianceState,
+    //
+    return ApiOntapLicense._private(
+      owner: json['owner'],
+      serialNumber: json['serial_number'] ?? 'none',
+      active: json['active'],
+      evaluation: json['evaluation'],
+      complianceState: ApiOntapLicenseComplianceStateMembers.fromName(
+            Map.from(json['compliance'])['state']),
       expiryTime: expiryTime,
       startTime: startTime,
-      capacity: capacity,
+      capacity: ApiOntapLicenseCapacity.fromMap(json['capacity']),
     );
   }
   //

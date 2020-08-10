@@ -3,7 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapSvmSnapmirror {
-  ApiOntapSvmSnapmirror({
+  ApiOntapSvmSnapmirror._private({
     this.isProtected,
     this.protectedVolumesCount,
   });
@@ -11,10 +11,13 @@ class ApiOntapSvmSnapmirror {
   final bool isProtected;
   final int protectedVolumesCount;
 
-  factory ApiOntapSvmSnapmirror.fromMap(Map<String, dynamic> json) => ApiOntapSvmSnapmirror(
-        isProtected: json["is_protected"],
-        protectedVolumesCount: json["protected_volumes_count"],
-      );
+  factory ApiOntapSvmSnapmirror.fromMap(Map<String, dynamic> json) =>
+      json != null
+          ? ApiOntapSvmSnapmirror._private(
+              isProtected: json["is_protected"],
+              protectedVolumesCount: json["protected_volumes_count"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "is_protected": isProtected,

@@ -9,7 +9,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_shelf_port_re
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_shelf_port_state.dart';
 
 class ApiOntapStorageShelfPort {
-  ApiOntapStorageShelfPort({
+  ApiOntapStorageShelfPort._private({
     this.cable,
     this.designator,
     this.id,
@@ -32,30 +32,23 @@ class ApiOntapStorageShelfPort {
   final String wwn;
 
   factory ApiOntapStorageShelfPort.fromMap(Map<String, dynamic> json) =>
-      ApiOntapStorageShelfPort(
-        cable: json["cable"] == null
-            ? null
-            : ApiOntapStorageShelfCable.fromMap(json["cable"]),
-        designator: json["designator"] == null
-            ? null
-            : ApiOntapStorageShelfPortDesignatorMembers.fromName(
-                json["designator"]),
-        id: json["id"],
-        internal: json["internal"],
-        macAddress: json["mac_address"],
-        moduleId: json["module_id"] == null
-            ? null
-            : ApiOntapStorageShelfPortModuleIdMembers.fromName(
+      json != null
+          ? ApiOntapStorageShelfPort._private(
+              cable: ApiOntapStorageShelfCable.fromMap(json["cable"]),
+              designator: ApiOntapStorageShelfPortDesignatorMembers.fromName(
+                  json["designator"]),
+              id: json["id"],
+              internal: json["internal"],
+              macAddress: json["mac_address"],
+              moduleId: ApiOntapStorageShelfPortModuleIdMembers.fromName(
                 json["module_id"],
               ),
-        remote: json["remote"] == null
-            ? null
-            : ApiOntapStorageShelfPortRemote.fromMap(json["remote"]),
-        state: json["state"] == null
-            ? null
-            : ApiOntapStorageShelfPortStateMembers.fromName(json["state"]),
-        wwn: json["wwn"],
-      );
+              remote: ApiOntapStorageShelfPortRemote.fromMap(json["remote"]),
+              state:
+                  ApiOntapStorageShelfPortStateMembers.fromName(json["state"]),
+              wwn: json["wwn"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "cable": cable?.toMap,

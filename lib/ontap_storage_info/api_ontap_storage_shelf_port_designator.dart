@@ -26,15 +26,19 @@ extension ApiOntapStorageShelfPortDesignatorMembers
         ApiOntapStorageShelfPortDesignator.p4: '4',
       }[this];
   //
-  static ApiOntapStorageShelfPortDesignator fromName(String text) =>
-      ApiOntapStorageShelfPortDesignator.values.firstWhere(
-        (v) => v.name == text,
-        orElse: () => null,
-      );
+  static ApiOntapStorageShelfPortDesignator fromName(String name) =>
+      name != null
+          ? ApiOntapStorageShelfPortDesignator.values.firstWhere(
+              (v) => v.name == name,
+              orElse: () => null,
+            )
+          : null;
   //
   static ApiOntapStorageShelfPortDesignator fromIndex(int index) =>
-      ApiOntapStorageShelfPortDesignator.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => null,
-      );
+      index != null
+          ? ApiOntapStorageShelfPortDesignator.values.firstWhere(
+              (v) => v.index == index,
+              orElse: () => null,
+            )
+          : null;
 }

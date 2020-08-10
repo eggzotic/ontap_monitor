@@ -18,18 +18,20 @@ enum ApiOntapStorageAggregateState {
 //
 extension ApiOntapStorageAggregateStateMembers
     on ApiOntapStorageAggregateState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
   // create from index
-  static ApiOntapStorageAggregateState fromIndex(int index) =>
-      ApiOntapStorageAggregateState.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => ApiOntapStorageAggregateState.unknown,
-      );
+  static ApiOntapStorageAggregateState fromIndex(int index) => index != null
+      ? ApiOntapStorageAggregateState.values.firstWhere(
+          (v) => v.index == index,
+          orElse: () => ApiOntapStorageAggregateState.unknown,
+        )
+      : null;
   // create from name
-  static ApiOntapStorageAggregateState fromName(String name) =>
-      ApiOntapStorageAggregateState.values.firstWhere(
-        (v) => v.name == name.toLowerCase(),
-        orElse: () => ApiOntapStorageAggregateState.unknown,
-      );
+  static ApiOntapStorageAggregateState fromName(String name) => name != null
+      ? ApiOntapStorageAggregateState.values.firstWhere(
+          (v) => v.name == name.toLowerCase(),
+          orElse: () => ApiOntapStorageAggregateState.unknown,
+        )
+      : null;
 }

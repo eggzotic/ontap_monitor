@@ -3,7 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapStorageAggregateDataEncryption {
-  ApiOntapStorageAggregateDataEncryption({
+  ApiOntapStorageAggregateDataEncryption._private({
     this.softwareEncryptionEnabled,
     this.driveProtectionEnabled,
   });
@@ -13,10 +13,12 @@ class ApiOntapStorageAggregateDataEncryption {
 
   factory ApiOntapStorageAggregateDataEncryption.fromMap(
           Map<String, dynamic> json) =>
-      ApiOntapStorageAggregateDataEncryption(
-        softwareEncryptionEnabled: json["software_encryption_enabled"],
-        driveProtectionEnabled: json["drive_protection_enabled"],
-      );
+      json != null
+          ? ApiOntapStorageAggregateDataEncryption._private(
+              softwareEncryptionEnabled: json["software_encryption_enabled"],
+              driveProtectionEnabled: json["drive_protection_enabled"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "software_encryption_enabled": softwareEncryptionEnabled,

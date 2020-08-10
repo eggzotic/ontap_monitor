@@ -3,7 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapStorageCable {
-  ApiOntapStorageCable({
+  ApiOntapStorageCable._private({
     this.identifier,
     this.length,
     this.partNumber,
@@ -16,12 +16,14 @@ class ApiOntapStorageCable {
   final String serialNumber;
 
   factory ApiOntapStorageCable.fromMap(Map<String, dynamic> json) =>
-      ApiOntapStorageCable(
-        identifier: json["identifier"],
-        length: json["length"],
-        partNumber: json["part_number"],
-        serialNumber: json["serial_number"],
-      );
+      json != null
+          ? ApiOntapStorageCable._private(
+              identifier: json["identifier"],
+              length: json["length"],
+              partNumber: json["part_number"],
+              serialNumber: json["serial_number"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "identifier": identifier,

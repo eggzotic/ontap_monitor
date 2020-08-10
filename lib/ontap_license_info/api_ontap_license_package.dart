@@ -2,7 +2,6 @@
 // Richard Shepherd, 2020
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
-import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_compliance_state.dart';
 import 'package:ontap_monitor/data_storage/storable_item.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license.dart';
@@ -19,53 +18,30 @@ class ApiOntapLicensePackage extends StorableItem {
   @override
   String get id => ownerId + '_' + name;
   //
-  ApiOntapLicensePackage._private(
+  ApiOntapLicensePackage._private({
     this.ownerId,
     this.licenses,
     this.name,
     this.scope,
     this.state,
     DateTime lastUpdated,
-  ) : super(lastUpdated: lastUpdated);
-  //
-  factory ApiOntapLicensePackage({
-    @required String ownerId,
-    @required List<ApiOntapLicense> licenses,
-    @required String name,
-    @required ApiOntapLicenseScope scope,
-    @required ApiOntapLicenseComplianceState state,
-    DateTime lastUpdated,
-  }) {
-    return ApiOntapLicensePackage._private(
-      ownerId,
-      licenses,
-      name,
-      scope,
-      state,
-      lastUpdated,
-    );
-  }
+  }) : super(lastUpdated: lastUpdated);
   //
   factory ApiOntapLicensePackage.fromMap(
     Map<String, dynamic> json, {
     String ownerId,
   }) {
+    if (json == null) return null;
     assert(ownerId != null || json['ownerId'] != null);
-    final List<ApiOntapLicense> licenses = List.from(json['licenses'])
-        .map((e) => ApiOntapLicense.fromMap(e))
-        .toList();
-    final String name = json['name'];
-    final ApiOntapLicenseScope scope =
-        ApiOntapLicenseScopeMembers.fromName(json['scope']);
-    final ApiOntapLicenseComplianceState state =
-        ApiOntapLicenseComplianceStateMembers.fromName(json['state']);
     //
-    return ApiOntapLicensePackage(
+    return ApiOntapLicensePackage._private(
       ownerId: json['ownerId'] ?? ownerId,
-      licenses: licenses,
-      name: name,
-      scope: scope,
-      state: state,
+      licenses: json['licenses']
+        ?.map((e) => ApiOntapLicense.fromMap(e))
+        ?.toList(),
+      name: json['name'],
+      scope: ApiOntapLicenseScopeMembers.fromName(json['scope']),
+      state: ApiOntapLicenseComplianceStateMembers.fromName(json['state']),
       lastUpdated: json['lastUpdated'] != null
           ? DateTime.parse(json['lastUpdated'])
           : null,
@@ -75,10 +51,10 @@ class ApiOntapLicensePackage extends StorableItem {
   @override
   Map<String, dynamic> get toMap => {
         'ownerId': ownerId,
-        'licenses': licenses.map((lic) => lic.toMap).toList(),
+        'licenses': licenses?.map((lic) => lic?.toMap)?.toList(),
         'name': name,
-        'scope': scope.name,
-        'state': state.name,
-        'lastUpdated': lastUpdated.toIso8601String(),
+        'scope': scope?.name,
+        'state': state?.name,
+        'lastUpdated': lastUpdated?.toIso8601String(),
       };
 }

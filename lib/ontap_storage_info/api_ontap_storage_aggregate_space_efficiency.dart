@@ -7,7 +7,7 @@ class ApiOntapStorageAggregateSpaceEfficiency {
   final num ratio;
   final int savings;
   //
-  ApiOntapStorageAggregateSpaceEfficiency({
+  ApiOntapStorageAggregateSpaceEfficiency._private({
     this.logicalUsed,
     this.ratio,
     this.savings,
@@ -21,7 +21,8 @@ class ApiOntapStorageAggregateSpaceEfficiency {
   //
   factory ApiOntapStorageAggregateSpaceEfficiency.fromMap(
       Map<String, dynamic> json) {
-    return ApiOntapStorageAggregateSpaceEfficiency(
+    if (json == null) return null;
+    return ApiOntapStorageAggregateSpaceEfficiency._private(
       logicalUsed: json['logical_used'],
       ratio: json['ratio'],
       savings: json['savings'],

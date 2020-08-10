@@ -8,7 +8,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_blo
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_raid_type.dart';
 
 class ApiOntapStorageAggregateBlockStoragePrimary {
-  ApiOntapStorageAggregateBlockStoragePrimary({
+  ApiOntapStorageAggregateBlockStoragePrimary._private({
     this.diskCount,
     this.diskClass,
     this.raidType,
@@ -26,26 +26,23 @@ class ApiOntapStorageAggregateBlockStoragePrimary {
 
   factory ApiOntapStorageAggregateBlockStoragePrimary.fromMap(
           Map<String, dynamic> json) =>
-      ApiOntapStorageAggregateBlockStoragePrimary(
-        diskCount: json["disk_count"],
-        diskClass: json["disk_class"] == null
-            ? null
-            : ApiOntapStorageAggregateBlockStorageDiskClassMembers.fromName(
-                json["disk_class"]),
-        raidType: json["raid_type"] == null
-            ? null
-            : ApiOntapStorageAggregateRaidTypeMembers.fromName(
-                json["raid_type"]),
-        raidSize: json["raid_size"],
-        checksumStyle: json["checksum_style"] == null
-            ? null
-            : ApiOntapStorageAggregateBlockStorageChecksumStyleMembers.fromName(
-                json["checksum_style"]),
-        diskType: json["disk_type"] == null
-            ? null
-            : ApiOntapStorageAggregateBlockStorageDiskTypeMembers.fromName(
-                json["disk_type"]),
-      );
+      json != null
+          ? ApiOntapStorageAggregateBlockStoragePrimary._private(
+              diskCount: json["disk_count"],
+              diskClass:
+                  ApiOntapStorageAggregateBlockStorageDiskClassMembers.fromName(
+                      json["disk_class"]),
+              raidType: ApiOntapStorageAggregateRaidTypeMembers.fromName(
+                  json["raid_type"]),
+              raidSize: json["raid_size"],
+              checksumStyle:
+                  ApiOntapStorageAggregateBlockStorageChecksumStyleMembers
+                      .fromName(json["checksum_style"]),
+              diskType:
+                  ApiOntapStorageAggregateBlockStorageDiskTypeMembers.fromName(
+                      json["disk_type"]),
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "disk_count": diskCount,

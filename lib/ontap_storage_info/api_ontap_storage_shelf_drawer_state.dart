@@ -10,17 +10,19 @@ enum ApiOntapStorageShelfDrawerState {
 //
 extension ApiOntapStorageShelfDrawerStateMembers
     on ApiOntapStorageShelfDrawerState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapStorageShelfDrawerState fromName(String text) =>
-      ApiOntapStorageShelfDrawerState.values.firstWhere(
-        (v) => v.name == text,
-        orElse: () => ApiOntapStorageShelfDrawerState.error,
-      );
+  static ApiOntapStorageShelfDrawerState fromName(String name) => name != null
+      ? ApiOntapStorageShelfDrawerState.values.firstWhere(
+          (v) => v.name == name,
+          orElse: () => ApiOntapStorageShelfDrawerState.error,
+        )
+      : null;
   //
-  static ApiOntapStorageShelfDrawerState fromIndex(int index) =>
-      ApiOntapStorageShelfDrawerState.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => ApiOntapStorageShelfDrawerState.error,
-      );
+  static ApiOntapStorageShelfDrawerState fromIndex(int index) => index != null
+      ? ApiOntapStorageShelfDrawerState.values.firstWhere(
+          (v) => v.index == index,
+          orElse: () => ApiOntapStorageShelfDrawerState.error,
+        )
+      : null;
 }

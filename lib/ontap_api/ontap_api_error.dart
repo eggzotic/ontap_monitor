@@ -7,16 +7,18 @@ class OntapApiError {
   final String code;
   final String target;
   //
-  OntapApiError({
+  OntapApiError._private({
     this.message,
     this.code,
     this.target,
   });
   //
   factory OntapApiError.fromMap(Map<String, dynamic> json) {
-    final String message = json['message'];
-    final String code = json['code'];
-    final String target = json['target'];
-    return OntapApiError(message: message, code: code, target: target);
+    if (json == null) return null;
+    return OntapApiError._private(
+      message: json['message'],
+      code: json['code'],
+      target: json['target'],
+    );
   }
 }

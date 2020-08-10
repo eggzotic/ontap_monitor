@@ -5,7 +5,7 @@
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_shelf_drawer_state.dart';
 
 class ApiOntapStorageShelfDrawer {
-  ApiOntapStorageShelfDrawer({
+  ApiOntapStorageShelfDrawer._private({
     this.closed,
     this.diskCount,
     this.error,
@@ -24,17 +24,18 @@ class ApiOntapStorageShelfDrawer {
   final ApiOntapStorageShelfDrawerState state;
 
   factory ApiOntapStorageShelfDrawer.fromMap(Map<String, dynamic> json) =>
-      ApiOntapStorageShelfDrawer(
-        closed: json["closed"] ?? false,
-        diskCount: json["disk_count"],
-        error: json["error"],
-        id: json["id"],
-        partNumber: json["part_number"],
-        serialNumber: json["serial_number"],
-        state: json["state"] == null
-            ? null
-            : ApiOntapStorageShelfDrawerStateMembers.fromName(json["state"]),
-      );
+      json != null
+          ? ApiOntapStorageShelfDrawer._private(
+              closed: json["closed"] ?? false,
+              diskCount: json["disk_count"],
+              error: json["error"],
+              id: json["id"],
+              partNumber: json["part_number"],
+              serialNumber: json["serial_number"],
+              state: ApiOntapStorageShelfDrawerStateMembers.fromName(
+                  json["state"]),
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "closed": closed ?? false,

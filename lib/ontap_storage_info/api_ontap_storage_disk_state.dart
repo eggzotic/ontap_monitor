@@ -17,13 +17,15 @@ enum ApiOntapStorageDiskState {
 }
 
 extension ApiOntapDiskStateMembers on ApiOntapStorageDiskState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
 //
   // create from index
-  static ApiOntapStorageDiskState fromIndex(int index) =>
-      ApiOntapStorageDiskState.values.firstWhere((v) => v.index == index);
+  static ApiOntapStorageDiskState fromIndex(int index) => index != null
+      ? ApiOntapStorageDiskState.values.firstWhere((v) => v.index == index)
+      : null;
   // create from name
-  static ApiOntapStorageDiskState fromName(String name) =>
-      ApiOntapStorageDiskState.values
-          .firstWhere((v) => v.name == name.toLowerCase());
+  static ApiOntapStorageDiskState fromName(String name) => name != null
+      ? ApiOntapStorageDiskState.values
+          .firstWhere((v) => v.name == name.toLowerCase())
+      : null;
 }

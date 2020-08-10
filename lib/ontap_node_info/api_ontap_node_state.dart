@@ -14,12 +14,14 @@ enum ApiOntapNodeState {
 
 //
 extension ApiOntapNodeStateMembers on ApiOntapNodeState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
   // create from index
-  static ApiOntapNodeState fromIndex(int index) =>
-      ApiOntapNodeState.values.firstWhere((v) => v.index == index);
+  static ApiOntapNodeState fromIndex(int index) => index != null
+      ? ApiOntapNodeState.values.firstWhere((v) => v.index == index)
+      : null;
   // create from name
-  static ApiOntapNodeState fromName(String name) =>
-      ApiOntapNodeState.values.firstWhere((v) => v.name == name.toLowerCase());
+  static ApiOntapNodeState fromName(String name) => name != null
+      ? ApiOntapNodeState.values.firstWhere((v) => v.name == name.toLowerCase())
+      : null;
 }

@@ -11,10 +11,11 @@ enum ApiOntapLicenseComplianceState {
 
 extension ApiOntapLicenseComplianceStateMembers
     on ApiOntapLicenseComplianceState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapLicenseComplianceState fromName(String text) {
+  static ApiOntapLicenseComplianceState fromName(String name) {
+    if (name == null) return null;
     return ApiOntapLicenseComplianceState.values
-        .firstWhere((v) => v.name == text, orElse: null);
+        .firstWhere((v) => v.name == name, orElse: null);
   }
 }

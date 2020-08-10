@@ -3,7 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapSvmAdDomain {
-  ApiOntapSvmAdDomain({
+  ApiOntapSvmAdDomain._private({
     this.fqdn,
     this.organizationalUnit,
   });
@@ -11,11 +11,12 @@ class ApiOntapSvmAdDomain {
   final String fqdn;
   final String organizationalUnit;
 
-  factory ApiOntapSvmAdDomain.fromMap(Map<String, dynamic> json) =>
-      ApiOntapSvmAdDomain(
-        fqdn: json["fqdn"],
-        organizationalUnit: json["organizational_unit"],
-      );
+  factory ApiOntapSvmAdDomain.fromMap(Map<String, dynamic> json) => json != null
+      ? ApiOntapSvmAdDomain._private(
+          fqdn: json["fqdn"],
+          organizationalUnit: json["organizational_unit"],
+        )
+      : null;
 
   Map<String, dynamic> get toMap => {
         "fqdn": fqdn,

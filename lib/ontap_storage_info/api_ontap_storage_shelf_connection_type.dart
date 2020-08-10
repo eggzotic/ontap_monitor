@@ -11,17 +11,21 @@ enum ApiOntapStorageShelfConnectionType {
 
 extension ApiOntapStorageShelfConnectionTypeMembers
     on ApiOntapStorageShelfConnectionType {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapStorageShelfConnectionType fromName(String text) =>
-      ApiOntapStorageShelfConnectionType.values.firstWhere(
-        (v) => v.name == text,
-        orElse: () => ApiOntapStorageShelfConnectionType.unknown,
-      );
+  static ApiOntapStorageShelfConnectionType fromName(String name) =>
+      name != null
+          ? ApiOntapStorageShelfConnectionType.values.firstWhere(
+              (v) => v.name == name,
+              orElse: () => ApiOntapStorageShelfConnectionType.unknown,
+            )
+          : null;
   //
   static ApiOntapStorageShelfConnectionType fromIndex(int index) =>
-      ApiOntapStorageShelfConnectionType.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => ApiOntapStorageShelfConnectionType.unknown,
-      );
+      index != null
+          ? ApiOntapStorageShelfConnectionType.values.firstWhere(
+              (v) => v.index == index,
+              orElse: () => ApiOntapStorageShelfConnectionType.unknown,
+            )
+          : null;
 }

@@ -3,7 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapStoragePortError {
-  ApiOntapStoragePortError({
+  ApiOntapStoragePortError._private({
     this.correctiveAction,
     this.message,
   });
@@ -12,10 +12,12 @@ class ApiOntapStoragePortError {
   final String message;
 
   factory ApiOntapStoragePortError.fromMap(Map<String, dynamic> json) =>
-      ApiOntapStoragePortError(
-        correctiveAction: json["corrective_action"],
-        message: json["message"],
-      );
+      json != null
+          ? ApiOntapStoragePortError._private(
+              correctiveAction: json["corrective_action"],
+              message: json["message"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "corrective_action": correctiveAction,

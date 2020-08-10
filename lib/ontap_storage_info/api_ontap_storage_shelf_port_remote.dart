@@ -3,7 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapStorageShelfPortRemote {
-  ApiOntapStorageShelfPortRemote({
+  ApiOntapStorageShelfPortRemote._private({
     this.chassis,
     this.macAddress,
     this.phy,
@@ -17,15 +17,16 @@ class ApiOntapStorageShelfPortRemote {
   final String port;
   final String wwn;
 
-  factory ApiOntapStorageShelfPortRemote.fromMap(
-          Map<String, dynamic> json) =>
-      ApiOntapStorageShelfPortRemote(
-        chassis: json["chassis"],
-        macAddress: json["mac_address"],
-        phy: json["phy"],
-        port: json["port"],
-        wwn: json["wwn"],
-      );
+  factory ApiOntapStorageShelfPortRemote.fromMap(Map<String, dynamic> json) =>
+      json != null
+          ? ApiOntapStorageShelfPortRemote._private(
+              chassis: json["chassis"],
+              macAddress: json["mac_address"],
+              phy: json["phy"],
+              port: json["port"],
+              wwn: json["wwn"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "chassis": chassis,

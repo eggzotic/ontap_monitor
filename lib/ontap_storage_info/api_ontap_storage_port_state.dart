@@ -10,11 +10,12 @@ enum ApiOntapStoragePortState {
 
 //
 extension ApiOntapStoragePortStateMembers on ApiOntapStoragePortState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapStoragePortState fromName(String name) =>
-      ApiOntapStoragePortState.values.firstWhere(
-        (v) => v.name == name,
-        orElse: () => ApiOntapStoragePortState.error,
-      );
+  static ApiOntapStoragePortState fromName(String name) => name != null
+      ? ApiOntapStoragePortState.values.firstWhere(
+          (v) => v.name == name,
+          orElse: () => ApiOntapStoragePortState.error,
+        )
+      : null;
 }

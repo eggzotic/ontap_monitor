@@ -5,7 +5,7 @@
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_raid_type.dart';
 
 class ApiOntapStorageAggregateHybridCache {
-  ApiOntapStorageAggregateHybridCache({
+  ApiOntapStorageAggregateHybridCache._private({
     this.enabled,
     this.diskCount,
     this.raidType,
@@ -21,16 +21,16 @@ class ApiOntapStorageAggregateHybridCache {
 
   factory ApiOntapStorageAggregateHybridCache.fromMap(
           Map<String, dynamic> json) =>
-      ApiOntapStorageAggregateHybridCache(
-        enabled: json["enabled"],
-        diskCount: json['disk_count'],
-        raidType: json['raid_type'] == null
-            ? null
-            : ApiOntapStorageAggregateRaidTypeMembers.fromName(
-                json['raid_type']),
-        size: json['size'],
-        used: json['used'],
-      );
+      json != null
+          ? ApiOntapStorageAggregateHybridCache._private(
+              enabled: json["enabled"],
+              diskCount: json['disk_count'],
+              raidType: ApiOntapStorageAggregateRaidTypeMembers.fromName(
+                  json['raid_type']),
+              size: json['size'],
+              used: json['used'],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "enabled": enabled,

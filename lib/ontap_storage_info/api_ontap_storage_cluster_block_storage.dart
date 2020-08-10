@@ -5,7 +5,7 @@
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster_media.dart';
 
 class ApiOntapStorageClusterBlockStorage {
-  ApiOntapStorageClusterBlockStorage({
+  ApiOntapStorageClusterBlockStorage._private({
     this.used,
     this.size,
     this.inactiveData,
@@ -19,14 +19,16 @@ class ApiOntapStorageClusterBlockStorage {
 
   factory ApiOntapStorageClusterBlockStorage.fromMap(
           Map<String, dynamic> json) =>
-      ApiOntapStorageClusterBlockStorage(
-        used: json["used"],
-        size: json["size"],
-        inactiveData: json["inactive_data"],
-        medias: List.from(json["medias"])
-            ?.map((x) => ApiOntapStorageClusterMedia.fromMap(x))
-            ?.toList(),
-      );
+      json != null
+          ? ApiOntapStorageClusterBlockStorage._private(
+              used: json["used"],
+              size: json["size"],
+              inactiveData: json["inactive_data"],
+              medias: json["medias"]
+                  ?.map((x) => ApiOntapStorageClusterMedia.fromMap(x))
+                  ?.toList(),
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "used": used,

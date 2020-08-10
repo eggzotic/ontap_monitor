@@ -7,7 +7,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_spa
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_space_efficiency.dart';
 
 class ApiOntapStorageAggregateSpace {
-  ApiOntapStorageAggregateSpace({
+  ApiOntapStorageAggregateSpace._private({
     this.blockStorage,
     this.cloudStorage,
     this.efficiency,
@@ -22,25 +22,20 @@ class ApiOntapStorageAggregateSpace {
   final int footprint;
 
   factory ApiOntapStorageAggregateSpace.fromMap(Map<String, dynamic> json) =>
-      ApiOntapStorageAggregateSpace(
-        blockStorage: json["block_storage"] == null
-            ? null
-            : ApiOntapStorageAggregateSpaceBlockStorage.fromMap(
-                json["block_storage"]),
-        cloudStorage: json["cloud_storage"] == null
-            ? null
-            : ApiOntapStorageAggregateSpaceCloudStorage.fromMap(
-                json["cloud_storage"]),
-        efficiency: json["efficiency"] == null
-            ? null
-            : ApiOntapStorageAggregateSpaceEfficiency.fromMap(
-                json["efficiency"]),
-        efficiencyWithoutSnapshots: json["efficiency_without_snapshots"] == null
-            ? null
-            : ApiOntapStorageAggregateSpaceEfficiency.fromMap(
-                json["efficiency_without_snapshots"]),
-        footprint: json['footprint'],
-      );
+      json != null
+          ? ApiOntapStorageAggregateSpace._private(
+              blockStorage: ApiOntapStorageAggregateSpaceBlockStorage.fromMap(
+                  json["block_storage"]),
+              cloudStorage: ApiOntapStorageAggregateSpaceCloudStorage.fromMap(
+                  json["cloud_storage"]),
+              efficiency: ApiOntapStorageAggregateSpaceEfficiency.fromMap(
+                  json["efficiency"]),
+              efficiencyWithoutSnapshots:
+                  ApiOntapStorageAggregateSpaceEfficiency.fromMap(
+                      json["efficiency_without_snapshots"]),
+              footprint: json['footprint'],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "block_storage": blockStorage?.toMap,

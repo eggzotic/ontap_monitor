@@ -52,41 +52,28 @@ class ApiOntapStorageAggregate extends StorableItem {
     Map<String, dynamic> json, {
     String ownerId,
   }) {
-    // assert(ownerId != null || json['ownerId'] != null);
+    if (json == null) return null;
     return ApiOntapStorageAggregate._private(
       uuid: json["uuid"],
       name: json["name"],
-      node: json["node"] == null ? null : ApiOntapNode.fromMap(json["node"]),
-      homeNode: json["home_node"] == null
-          ? null
-          : ApiOntapNode.fromMap(json["home_node"]),
-      space: json["space"] == null
-          ? null
-          : ApiOntapStorageAggregateSpace.fromMap(json["space"]),
-      state: json["state"] == null
-          ? null
-          : ApiOntapStorageAggregateStateMembers.fromName(json["state"]),
-      snaplockType: json["snaplock_type"] == null
-          ? null
-          : ApiOntapStorageAggregateSnaplockTypeMembers.fromName(
-              json["snaplock_type"]),
+      node: ApiOntapNode.fromMap(json["node"]),
+      homeNode: ApiOntapNode.fromMap(json["home_node"]),
+      space: ApiOntapStorageAggregateSpace.fromMap(json["space"]),
+      state: ApiOntapStorageAggregateStateMembers.fromName(json["state"]),
+      snaplockType: ApiOntapStorageAggregateSnaplockTypeMembers.fromName(
+          json["snaplock_type"]),
       createTime: json["create_time"] == null
           ? null
           : DateTime.parse(json["create_time"]),
-      dataEncryption: json["data_encryption"] == null
-          ? null
-          : ApiOntapStorageAggregateDataEncryption.fromMap(
-              json["data_encryption"]),
-      blockStorage: json["block_storage"] == null
-          ? null
-          : ApiOntapStorageAggregateBlockStorage.fromMap(json["block_storage"]),
-      plexes: json["plexes"] == null
-          ? null
-          : List<ApiOntapStorageAggregatePlex>.from(json["plexes"]
-              .map((x) => ApiOntapStorageAggregatePlex.fromMap(x))),
-      cloudStorage: json["cloud_storage"] == null
-          ? null
-          : ApiOntapStorageAggregateCloudStorage.fromMap(json["cloud_storage"]),
+      dataEncryption: ApiOntapStorageAggregateDataEncryption.fromMap(
+          json["data_encryption"]),
+      blockStorage:
+          ApiOntapStorageAggregateBlockStorage.fromMap(json["block_storage"]),
+      plexes: json["plexes"]
+          ?.map((x) => ApiOntapStorageAggregatePlex.fromMap(x))
+          ?.toList(),
+      cloudStorage:
+          ApiOntapStorageAggregateCloudStorage.fromMap(json["cloud_storage"]),
       ownerId: json['ownerId'] ?? ownerId,
       lastUpdated: json['lastUpdated'] != null
           ? DateTime.parse(json['lastUpdated'])

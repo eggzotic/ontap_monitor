@@ -5,7 +5,7 @@
 import 'package:ontap_monitor/ontap_node_info/api_ontap_node.dart';
 
 class ApiOntapStorageShelfPath {
-  ApiOntapStorageShelfPath({
+  ApiOntapStorageShelfPath._private({
     this.name,
     this.node,
   });
@@ -14,10 +14,12 @@ class ApiOntapStorageShelfPath {
   final ApiOntapNode node;
 
   factory ApiOntapStorageShelfPath.fromMap(Map<String, dynamic> json) =>
-      ApiOntapStorageShelfPath(
-        name: json["name"],
-        node: json["node"] == null ? null : ApiOntapNode.fromMap(json["node"]),
-      );
+      json != null
+          ? ApiOntapStorageShelfPath._private(
+              name: json["name"],
+              node: ApiOntapNode.fromMap(json["node"]),
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "name": name,

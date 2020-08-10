@@ -3,15 +3,12 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapSvmFcp {
-  ApiOntapSvmFcp({
-    this.enabled,
-  });
+  ApiOntapSvmFcp._private({this.enabled});
 
   final bool enabled;
 
-  factory ApiOntapSvmFcp.fromMap(Map<String, dynamic> json) => ApiOntapSvmFcp(
-        enabled: json["enabled"],
-      );
+  factory ApiOntapSvmFcp.fromMap(Map<String, dynamic> json) =>
+      json != null ? ApiOntapSvmFcp._private(enabled: json["enabled"]) : null;
 
   Map<String, dynamic> get toMap => {
         "enabled": enabled,

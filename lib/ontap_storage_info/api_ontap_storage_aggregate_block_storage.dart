@@ -7,7 +7,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_hyb
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_mirror.dart';
 
 class ApiOntapStorageAggregateBlockStorage {
-  ApiOntapStorageAggregateBlockStorage({
+  ApiOntapStorageAggregateBlockStorage._private({
     this.primary,
     this.hybridCache,
     this.mirror,
@@ -19,17 +19,12 @@ class ApiOntapStorageAggregateBlockStorage {
 
   factory ApiOntapStorageAggregateBlockStorage.fromMap(
           Map<String, dynamic> json) =>
-      ApiOntapStorageAggregateBlockStorage(
-        primary: json["primary"] == null
-            ? null
-            : ApiOntapStorageAggregateBlockStoragePrimary.fromMap(
-                json["primary"]),
-        hybridCache: json["hybrid_cache"] == null
-            ? null
-            : ApiOntapStorageAggregateHybridCache.fromMap(json["hybrid_cache"]),
-        mirror: json["mirror"] == null
-            ? null
-            : ApiOntapStorageAggregateMirror.fromMap(json["mirror"]),
+      ApiOntapStorageAggregateBlockStorage._private(
+        primary: ApiOntapStorageAggregateBlockStoragePrimary.fromMap(
+            json["primary"]),
+        hybridCache:
+            ApiOntapStorageAggregateHybridCache.fromMap(json["hybrid_cache"]),
+        mirror: ApiOntapStorageAggregateMirror.fromMap(json["mirror"]),
       );
 
   Map<String, dynamic> get toMap => {

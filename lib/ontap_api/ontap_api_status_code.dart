@@ -46,9 +46,10 @@ extension OntapApiStatusCodeMembers on OntapApiStatusCode {
         OntapApiStatusCode.s500: 'Another internal error has occurred',
       }[this];
   //
-  static OntapApiStatusCode fromCode(int code) =>
-      OntapApiStatusCode.values.firstWhere(
-        (v) => v.code == code,
-        orElse: () => OntapApiStatusCode.s500,
-      );
+  static OntapApiStatusCode fromCode(int code) => code != null
+      ? OntapApiStatusCode.values.firstWhere(
+          (v) => v.code == code,
+          orElse: () => OntapApiStatusCode.s500,
+        )
+      : null;
 }

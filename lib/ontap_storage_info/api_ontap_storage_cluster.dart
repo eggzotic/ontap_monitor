@@ -7,7 +7,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster_block
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster_efficiency.dart';
 
 class ApiOntapStorageCluster extends StorableItem {
-  ApiOntapStorageCluster({
+  ApiOntapStorageCluster._private({
     this.efficiency,
     this.efficiencyWithoutSnapshots,
     this.blockStorage,
@@ -29,22 +29,21 @@ class ApiOntapStorageCluster extends StorableItem {
     Map<String, dynamic> json, {
     String ownerId,
   }) =>
-      ApiOntapStorageCluster(
-        efficiency: json["efficiency"] == null
-            ? null
-            : ApiOntapStorageClusterEfficiency.fromMap(json["efficiency"]),
-        efficiencyWithoutSnapshots: json["efficiency_without_snapshots"] == null
-            ? null
-            : ApiOntapStorageClusterEfficiency.fromMap(
-                json["efficiency_without_snapshots"]),
-        blockStorage: json["block_storage"] == null
-            ? null
-            : ApiOntapStorageClusterBlockStorage.fromMap(json["block_storage"]),
-        ownerId: json['ownerId'] ?? ownerId,
-        lastUpdated: json['lastUpdated'] != null
-            ? DateTime.parse(json['lastUpdated'])
-            : null,
-      );
+      json != null
+          ? ApiOntapStorageCluster._private(
+              efficiency:
+                  ApiOntapStorageClusterEfficiency.fromMap(json["efficiency"]),
+              efficiencyWithoutSnapshots:
+                  ApiOntapStorageClusterEfficiency.fromMap(
+                      json["efficiency_without_snapshots"]),
+              blockStorage: ApiOntapStorageClusterBlockStorage.fromMap(
+                  json["block_storage"]),
+              ownerId: json['ownerId'] ?? ownerId,
+              lastUpdated: json['lastUpdated'] != null
+                  ? DateTime.parse(json['lastUpdated'])
+                  : null,
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "efficiency": efficiency?.toMap,

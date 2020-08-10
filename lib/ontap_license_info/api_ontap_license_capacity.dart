@@ -24,11 +24,10 @@ class ApiOntapLicenseCapacity {
   }
   //
   factory ApiOntapLicenseCapacity.fromMap(Map<String, dynamic> json) {
-    final int maximumSize = json['maximum_size'];
-    final int usedSize = json['used_size'];
+    if (json == null) return null;
     return ApiOntapLicenseCapacity(
-      maximumSize: maximumSize,
-      usedSize: usedSize,
+      maximumSize: json['maximum_size'],
+      usedSize: json['used_size'],
     );
   }
   //

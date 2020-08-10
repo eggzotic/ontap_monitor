@@ -14,7 +14,7 @@ enum ApiMethod {
 
 //
 extension ApiMethodMembers on ApiMethod {
-  String get name => toString().split('.').last.toUpperCase();
+  String get name => toString().split('.')?.last?.toUpperCase();
 
   RequestMethod get requestMethod => const {
         ApiMethod.get: RequestMethod.get,
@@ -23,8 +23,10 @@ extension ApiMethodMembers on ApiMethod {
         ApiMethod.delete: RequestMethod.delete,
       }[this];
 
-  static ApiMethod fromIndex(int index) =>
-      ApiMethod.values.firstWhere((value) => value.index == index);
-  static ApiMethod fromName(String name) =>
-      ApiMethod.values.firstWhere((value) => value.name == name);
+  static ApiMethod fromIndex(int index) => index != null
+      ? ApiMethod.values.firstWhere((value) => value.index == index)
+      : null;
+  static ApiMethod fromName(String name) => name != null
+      ? ApiMethod.values.firstWhere((value) => value.name == name)
+      : null;
 }

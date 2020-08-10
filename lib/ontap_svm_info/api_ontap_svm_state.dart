@@ -12,10 +12,9 @@ enum ApiOntapSvmState {
 
 //
 extension ApiOntapSvmStateMembers on ApiOntapSvmState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapSvmState fromName(String name) =>
-      ApiOntapSvmState.values.firstWhere(
-        (v) => v.name == name,
-      );
+  static ApiOntapSvmState fromName(String name) => name != null
+      ? ApiOntapSvmState.values.firstWhere((v) => v.name == name)
+      : null;
 }

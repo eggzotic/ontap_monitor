@@ -10,17 +10,19 @@ enum ApiOntapStorageShelfBayState {
 
 //
 extension ApiOntapStorageShelfBayStateMembers on ApiOntapStorageShelfBayState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapStorageShelfBayState fromName(String text) =>
-      ApiOntapStorageShelfBayState.values.firstWhere(
-        (v) => v.name == text,
-        orElse: () => ApiOntapStorageShelfBayState.unknown,
-      );
+  static ApiOntapStorageShelfBayState fromName(String name) => name != null
+      ? ApiOntapStorageShelfBayState.values.firstWhere(
+          (v) => v.name == name,
+          orElse: () => ApiOntapStorageShelfBayState.unknown,
+        )
+      : null;
   //
-  static ApiOntapStorageShelfBayState fromIndex(int index) =>
-      ApiOntapStorageShelfBayState.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => ApiOntapStorageShelfBayState.unknown,
-      );
+  static ApiOntapStorageShelfBayState fromIndex(int index) => index != null
+      ? ApiOntapStorageShelfBayState.values.firstWhere(
+          (v) => v.index == index,
+          orElse: () => ApiOntapStorageShelfBayState.unknown,
+        )
+      : null;
 }

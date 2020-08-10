@@ -11,17 +11,21 @@ enum ApiOntapStorageAggregateSnaplockType {
 //
 extension ApiOntapStorageAggregateSnaplockTypeMembers
     on ApiOntapStorageAggregateSnaplockType {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   // create from index
   static ApiOntapStorageAggregateSnaplockType fromIndex(int index) =>
-      ApiOntapStorageAggregateSnaplockType.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => ApiOntapStorageAggregateSnaplockType.non_snaplock,
-      );
+      index != null
+          ? ApiOntapStorageAggregateSnaplockType.values.firstWhere(
+              (v) => v.index == index,
+              orElse: () => ApiOntapStorageAggregateSnaplockType.non_snaplock,
+            )
+          : null;
   // create from name
   static ApiOntapStorageAggregateSnaplockType fromName(String name) =>
-      ApiOntapStorageAggregateSnaplockType.values.firstWhere(
-        (v) => v.name == name.toLowerCase(),
-        orElse: () => ApiOntapStorageAggregateSnaplockType.non_snaplock,
-      );
+      name != null
+          ? ApiOntapStorageAggregateSnaplockType.values.firstWhere(
+              (v) => v.name == name.toLowerCase(),
+              orElse: () => ApiOntapStorageAggregateSnaplockType.non_snaplock,
+            )
+          : null;
 }

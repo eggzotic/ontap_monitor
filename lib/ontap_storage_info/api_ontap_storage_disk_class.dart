@@ -15,12 +15,14 @@ enum ApiOntapStorageDiskClass {
 
 extension ApiOntapStorageDiskClassMembers on ApiOntapStorageDiskClass {
   //
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   // create from index
-  static ApiOntapStorageDiskClass fromIndex(int index) =>
-      ApiOntapStorageDiskClass.values.firstWhere((v) => v.index == index);
+  static ApiOntapStorageDiskClass fromIndex(int index) => index != null
+      ? ApiOntapStorageDiskClass.values.firstWhere((v) => v.index == index)
+      : null;
   // create from name
-  static ApiOntapStorageDiskClass fromName(String name) =>
-      ApiOntapStorageDiskClass.values
-          .firstWhere((v) => v.name == name.toLowerCase());
+  static ApiOntapStorageDiskClass fromName(String name) => name != null
+      ? ApiOntapStorageDiskClass.values
+          .firstWhere((v) => v.name == name.toLowerCase())
+      : null;
 }

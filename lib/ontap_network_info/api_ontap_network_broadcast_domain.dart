@@ -16,13 +16,13 @@ class ApiOntapNetworkBroadcastDomain {
   final ApiOntapNetworkIpspace ipspace;
 
   factory ApiOntapNetworkBroadcastDomain.fromMap(Map<String, dynamic> json) =>
-      ApiOntapNetworkBroadcastDomain(
-        uuid: json["uuid"],
-        name: json["name"],
-        ipspace: json["ipspace"] == null
-            ? null
-            : ApiOntapNetworkIpspace.fromMap(json["ipspace"]),
-      );
+      json != null
+          ? ApiOntapNetworkBroadcastDomain(
+              uuid: json["uuid"],
+              name: json["name"],
+              ipspace: ApiOntapNetworkIpspace.fromMap(json["ipspace"]),
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "uuid": uuid,

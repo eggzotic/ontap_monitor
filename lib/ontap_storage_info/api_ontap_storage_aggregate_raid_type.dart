@@ -12,13 +12,15 @@ enum ApiOntapStorageAggregateRaidType {
 //
 extension ApiOntapStorageAggregateRaidTypeMembers
     on ApiOntapStorageAggregateRaidType {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   // create from index
-  static ApiOntapStorageAggregateRaidType fromIndex(int index) =>
-      ApiOntapStorageAggregateRaidType.values
-          .firstWhere((v) => v.index == index);
+  static ApiOntapStorageAggregateRaidType fromIndex(int index) => index != null
+      ? ApiOntapStorageAggregateRaidType.values
+          .firstWhere((v) => v.index == index)
+      : null;
   // create from name
-  static ApiOntapStorageAggregateRaidType fromName(String name) =>
-      ApiOntapStorageAggregateRaidType.values
-          .firstWhere((v) => v.name == name.toLowerCase());
+  static ApiOntapStorageAggregateRaidType fromName(String name) => name != null
+      ? ApiOntapStorageAggregateRaidType.values
+          .firstWhere((v) => v.name == name.toLowerCase())
+      : null;
 }

@@ -11,17 +11,19 @@ enum ApiOntapStorageShelfPortState {
 //
 extension ApiOntapStorageShelfPortStateMembers
     on ApiOntapStorageShelfPortState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapStorageShelfPortState fromName(String text) =>
-      ApiOntapStorageShelfPortState.values.firstWhere(
-        (v) => v.name == text,
-        orElse: () => ApiOntapStorageShelfPortState.disconnected,
-      );
+  static ApiOntapStorageShelfPortState fromName(String name) => name != null
+      ? ApiOntapStorageShelfPortState.values.firstWhere(
+          (v) => v.name == name,
+          orElse: () => ApiOntapStorageShelfPortState.disconnected,
+        )
+      : null;
   //
-  static ApiOntapStorageShelfPortState fromIndex(int index) =>
-      ApiOntapStorageShelfPortState.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => ApiOntapStorageShelfPortState.disconnected,
-      );
+  static ApiOntapStorageShelfPortState fromIndex(int index) => index != null
+      ? ApiOntapStorageShelfPortState.values.firstWhere(
+          (v) => v.index == index,
+          orElse: () => ApiOntapStorageShelfPortState.disconnected,
+        )
+      : null;
 }

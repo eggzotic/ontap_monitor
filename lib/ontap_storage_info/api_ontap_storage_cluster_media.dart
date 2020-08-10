@@ -5,7 +5,7 @@
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster_efficiency.dart';
 
 class ApiOntapStorageClusterMedia {
-  ApiOntapStorageClusterMedia({
+  ApiOntapStorageClusterMedia._private({
     this.type,
     this.size,
     this.available,
@@ -20,14 +20,13 @@ class ApiOntapStorageClusterMedia {
   final ApiOntapStorageClusterEfficiency efficiency;
 
   factory ApiOntapStorageClusterMedia.fromMap(Map<String, dynamic> json) =>
-      ApiOntapStorageClusterMedia(
+      ApiOntapStorageClusterMedia._private(
         type: json["type"],
         size: json["size"],
         available: json["available"],
         used: json["used"],
-        efficiency: json["efficiency"] == null
-            ? null
-            : ApiOntapStorageClusterEfficiency.fromMap(json["efficiency"]),
+        efficiency:
+            ApiOntapStorageClusterEfficiency.fromMap(json["efficiency"]),
       );
 
   Map<String, dynamic> get toMap => {

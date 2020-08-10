@@ -3,12 +3,13 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapController {
-  ApiOntapController({this.overTemperature});
+  ApiOntapController._private({this.overTemperature});
+  //
   final String overTemperature;
-  factory ApiOntapController.fromMap(Map<String, dynamic> json) =>
-      ApiOntapController(
-        overTemperature: json["over_temperature"],
-      );
+  //
+  factory ApiOntapController.fromMap(Map<String, dynamic> json) => json != null
+      ? ApiOntapController._private(overTemperature: json["over_temperature"])
+      : null;
   Map<String, dynamic> get toMap => {
         "over_temperature": overTemperature,
       };

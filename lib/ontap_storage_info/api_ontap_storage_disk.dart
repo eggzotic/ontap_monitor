@@ -70,6 +70,7 @@ class ApiOntapStorageDisk extends StorableItem {
     Map<String, dynamic> json, {
     String ownerId,
   }) {
+    if (json == null) return null;
     return ApiOntapStorageDisk._private(
       name: json["name"],
       uid: json["uid"],
@@ -79,32 +80,17 @@ class ApiOntapStorageDisk extends StorableItem {
       firmwareVersion: json["firmware_version"],
       usableSize: json["usable_size"],
       rpm: json["rpm"],
-      type: json["type"] == null
-          ? null
-          : ApiOntapStorageDiskTypeMembers.fromName(json["type"]),
-      diskClass: json["class"] == null
-          ? null
-          : ApiOntapStorageDiskClassMembers.fromName(json["class"]),
-      containerType: json["container_type"] == null
-          ? null
-          : ApiOntapStorageContainerTypeMembers.fromName(
-              json["container_type"]),
-      pool: json["pool"] == null
-          ? null
-          : ApiOntapDiskPoolMembers.fromName(json["pool"]),
-      state: json["state"] == null
-          ? null
-          : ApiOntapDiskStateMembers.fromName(json["state"]),
-      node: json["node"] == null
-          ? null
-          : ApiOntapNode.fromMap(json["node"], ownerId: ownerId),
-      homeNode: json["home_node"] == null
-          ? null
-          : ApiOntapNode.fromMap(json["home_node"], ownerId: ownerId),
-      aggregates: json["aggregates"] == null
-          ? null
-          : List<ApiOntapStorageAggregate>.from(json["aggregates"].map(
-              (x) => ApiOntapStorageAggregate.fromMap(x, ownerId: ownerId))),
+      type: ApiOntapStorageDiskTypeMembers.fromName(json["type"]),
+      diskClass: ApiOntapStorageDiskClassMembers.fromName(json["class"]),
+      containerType:
+          ApiOntapStorageContainerTypeMembers.fromName(json["container_type"]),
+      pool: ApiOntapDiskPoolMembers.fromName(json["pool"]),
+      state: ApiOntapDiskStateMembers.fromName(json["state"]),
+      node: ApiOntapNode.fromMap(json["node"], ownerId: ownerId),
+      homeNode: ApiOntapNode.fromMap(json["home_node"], ownerId: ownerId),
+      aggregates: json["aggregates"]
+          ?.map((x) => ApiOntapStorageAggregate.fromMap(x, ownerId: ownerId))
+          ?.toList(),
       bay: json["bay"],
       selfEncrypting: json["self_encrypting"] ?? false,
       fipsCertified: json["fips_certified"] ?? false,
@@ -112,9 +98,7 @@ class ApiOntapStorageDisk extends StorableItem {
           ? DateTime.parse(json['lastUpdated'])
           : null,
       ownerId: json['ownerId'] ?? ownerId,
-      shelf: json['shelf'] == null
-          ? null
-          : ApiOntapStorageShelf.fromMap(json['shelf']),
+      shelf: ApiOntapStorageShelf.fromMap(json['shelf']),
     );
   }
 

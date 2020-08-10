@@ -10,17 +10,19 @@ enum ApiOntapStorageShelfPortModuleId {
 //
 extension ApiOntapStorageShelfPortModuleIdMembers
     on ApiOntapStorageShelfPortModuleId {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapStorageShelfPortModuleId fromName(String text) =>
-      ApiOntapStorageShelfPortModuleId.values.firstWhere(
-        (v) => v.name == text,
-        orElse: () => null,
-      );
+  static ApiOntapStorageShelfPortModuleId fromName(String name) => name != null
+      ? ApiOntapStorageShelfPortModuleId.values.firstWhere(
+          (v) => v.name == name,
+          orElse: () => null,
+        )
+      : null;
   //
-  static ApiOntapStorageShelfPortModuleId fromIndex(int index) =>
-      ApiOntapStorageShelfPortModuleId.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => null,
-      );
+  static ApiOntapStorageShelfPortModuleId fromIndex(int index) => index != null
+      ? ApiOntapStorageShelfPortModuleId.values.firstWhere(
+          (v) => v.index == index,
+          orElse: () => null,
+        )
+      : null;
 }

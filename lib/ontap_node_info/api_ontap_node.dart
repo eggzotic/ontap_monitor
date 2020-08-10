@@ -10,7 +10,7 @@ import 'package:ontap_monitor/ontap_node_info/api_ontap_node_state.dart';
 import 'package:ontap_monitor/ontap_cluster_info/api_ontap_version.dart';
 
 class ApiOntapNode extends StorableItem {
-  ApiOntapNode({
+  ApiOntapNode._private({
     this.uuid,
     this.name,
     this.serialNumber,
@@ -50,32 +50,25 @@ class ApiOntapNode extends StorableItem {
     Map<String, dynamic> json, {
     String ownerId,
   }) {
-    return ApiOntapNode(
+    if (json == null) return null;
+    return ApiOntapNode._private(
       uuid: json["uuid"],
       name: json["name"],
       serialNumber: json["serial_number"],
       location: json["location"],
       model: json["model"],
-      version: json["version"] == null
-          ? null
-          : ApiOntapVersion.fromMap(json["version"]),
-      date: json["date"] == null ? null : DateTime.parse(json["date"]),
+      version: ApiOntapVersion.fromMap(json["version"]),
+      date: json["date"] != null ? DateTime.parse(json["date"]) : null,
       uptime: json["uptime"],
-      state: json["state"] == null
-          ? null
-          : ApiOntapNodeStateMembers.fromName(json['state']),
+      state: ApiOntapNodeStateMembers.fromName(json['state']),
       membership: json["membership"],
-      managementInterfaces: json["management_interfaces"] == null
-          ? null
-          : List<ApiOntapNetworkInterface>.from(json["management_interfaces"]
-              .map((x) => ApiOntapNetworkInterface.fromMap(x))),
-      clusterInterfaces: json["cluster_interfaces"] == null
-          ? null
-          : List<ApiOntapNetworkInterface>.from(json["cluster_interfaces"]
-              .map((x) => ApiOntapNetworkInterface.fromMap(x))),
-      controller: json["controller"] == null
-          ? null
-          : ApiOntapController.fromMap(json["controller"]),
+      managementInterfaces: json["management_interfaces"]
+          ?.map((x) => ApiOntapNetworkInterface.fromMap(x))
+          ?.toList(),
+      clusterInterfaces: json["cluster_interfaces"]
+          ?.map((x) => ApiOntapNetworkInterface.fromMap(x))
+          ?.toList(),
+      controller: ApiOntapController.fromMap(json["controller"]),
       lastUpdated: json['lastUpdated'] != null
           ? DateTime.parse(json['lastUpdated'])
           : null,
@@ -94,14 +87,11 @@ class ApiOntapNode extends StorableItem {
         "uptime": uptime,
         "state": state?.name,
         "membership": membership,
-        "management_interfaces": managementInterfaces == null
-            ? null
-            : List<dynamic>.from(managementInterfaces.map((x) => x.toMap)),
-        "cluster_interfaces": clusterInterfaces == null
-            ? null
-            : List<dynamic>.from(clusterInterfaces.map((x) => x.toMap)),
+        "management_interfaces":
+            managementInterfaces?.map((x) => x?.toMap)?.toList(),
+        "cluster_interfaces": clusterInterfaces?.map((x) => x?.toMap)?.toList(),
         "controller": controller?.toMap,
-        'lastUpdated': lastUpdated.toIso8601String(),
+        'lastUpdated': lastUpdated?.toIso8601String(),
         'ownerId': ownerId,
       };
 }

@@ -13,7 +13,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_shelf_port.da
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_shelf_state.dart';
 
 class ApiOntapStorageShelf extends StorableItem {
-  ApiOntapStorageShelf({
+  ApiOntapStorageShelf._private({
     this.bays,
     this.connectionType,
     this.diskCount,
@@ -48,46 +48,38 @@ class ApiOntapStorageShelf extends StorableItem {
   final String uid;
 
   factory ApiOntapStorageShelf.fromMap(Map<String, dynamic> json) =>
-      ApiOntapStorageShelf(
-        bays: json["bays"] == null
-            ? null
-            : List<ApiOntapStorageShelfBay>.from(
-                json["bays"].map((x) => ApiOntapStorageShelfBay.fromMap(x))),
-        connectionType: json["connection_type"] == null
-            ? null
-            : ApiOntapStorageShelfConnectionTypeMembers.fromName(
-                json["connection_type"]),
-        diskCount: json["disk_count"],
-        drawers: json["drawers"] == null
-            ? null
-            : List<ApiOntapStorageShelfDrawer>.from(json["drawers"]
-                .map((x) => ApiOntapStorageShelfDrawer.fromMap(x))),
-        frus: json["frus"] == null
-            ? null
-            : List<ApiOntapStorageShelfFru>.from(
-                json["frus"].map((x) => ApiOntapStorageShelfFru.fromMap(x))),
-        id: json["id"],
-        internal: json["internal"] ?? false,
-        model: json["model"],
-        moduleType: json["module_type"] == null
-            ? null
-            : ApiOntapStorageShelfModuleTypeMembers.fromName(
-                json["module_type"]),
-        name: json["name"],
-        paths: json["paths"] == null
-            ? null
-            : List<ApiOntapStorageShelfPath>.from(
-                json["paths"].map((x) => ApiOntapStorageShelfPath.fromMap(x))),
-        ports: json["ports"] == null
-            ? null
-            : List<ApiOntapStorageShelfPort>.from(
-                json["ports"].map((x) => ApiOntapStorageShelfPort.fromMap(x))),
-        serialNumber: json["serial_number"],
-        state: json["state"] == null
-            ? null
-            : ApiOntapStorageShelfStateMembers.fromName(json["state"]),
-        uid: json["uid"],
-      );
+      json != null
+          ? ApiOntapStorageShelf._private(
+              bays: json["bays"]
+                  ?.map((x) => ApiOntapStorageShelfBay.fromMap(x))
+                  ?.toList(),
+              connectionType:
+                  ApiOntapStorageShelfConnectionTypeMembers.fromName(
+                      json["connection_type"]),
+              diskCount: json["disk_count"],
+              drawers: json["drawers"]
+                  ?.map((x) => ApiOntapStorageShelfDrawer.fromMap(x))
+                  ?.toList(),
+              frus: json["frus"]
+                  ?.map((x) => ApiOntapStorageShelfFru.fromMap(x))
+                  ?.toList(),
+              id: json["id"],
+              internal: json["internal"] ?? false,
+              model: json["model"],
+              moduleType: ApiOntapStorageShelfModuleTypeMembers.fromName(
+                  json["module_type"]),
+              name: json["name"],
+              paths: json["paths"]
+                  ?.map((x) => ApiOntapStorageShelfPath.fromMap(x))
+                  ?.toList(),
+              ports: json["ports"]
+                  ?.map((x) => ApiOntapStorageShelfPort.fromMap(x))
+                  ?.toList(),
+              serialNumber: json["serial_number"],
+              state: ApiOntapStorageShelfStateMembers.fromName(json["state"]),
+              uid: json["uid"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "bays": bays?.map((x) => x?.toMap)?.toList(),

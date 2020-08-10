@@ -6,7 +6,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_shelf_bay_sta
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_shelf_bay_type.dart';
 
 class ApiOntapStorageShelfBay {
-  ApiOntapStorageShelfBay({
+  ApiOntapStorageShelfBay._private({
     this.hasDisk,
     this.id,
     this.state,
@@ -19,16 +19,15 @@ class ApiOntapStorageShelfBay {
   final ApiOntapStorageShelfBayType type;
 
   factory ApiOntapStorageShelfBay.fromMap(Map<String, dynamic> json) =>
-      ApiOntapStorageShelfBay(
-        hasDisk: json["has_disk"] ?? false,
-        id: json["id"],
-        state: json["state"] == null
-            ? null
-            : ApiOntapStorageShelfBayStateMembers.fromName(json["state"]),
-        type: json["type"] == null
-            ? null
-            : ApiOntapStorageShelfBayTypeMembers.fromName(json["type"]),
-      );
+      json != null
+          ? ApiOntapStorageShelfBay._private(
+              hasDisk: json["has_disk"] ?? false,
+              id: json["id"],
+              state:
+                  ApiOntapStorageShelfBayStateMembers.fromName(json["state"]),
+              type: ApiOntapStorageShelfBayTypeMembers.fromName(json["type"]),
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "has_disk": hasDisk ?? false,

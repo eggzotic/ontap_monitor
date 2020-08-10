@@ -4,16 +4,12 @@
 //
 
 class ApiOntapCertificate {
-  ApiOntapCertificate({
-    this.uuid,
-  });
+  ApiOntapCertificate._private({this.uuid});
 
   final String uuid;
 
   factory ApiOntapCertificate.fromMap(Map<String, dynamic> json) =>
-      ApiOntapCertificate(
-        uuid: json["uuid"],
-      );
+      json != null ? ApiOntapCertificate._private(uuid: json["uuid"]) : null;
 
   Map<String, dynamic> get toMap => {
         "uuid": uuid,

@@ -3,7 +3,6 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 //
-import 'package:flutter/foundation.dart';
 import 'package:ontap_monitor/data_storage/storable_item.dart';
 import 'package:ontap_monitor/ontap_cluster_info/api_ontap_version.dart';
 
@@ -30,11 +29,11 @@ class ApiOntapCluster extends StorableItem {
         'contact': contact,
         'location': location,
         'san_optimized': isAsa,
-        'version': version.toMap,
-        'lastUpdated': lastUpdated.toIso8601String(),
+        'version': version?.toMap,
+        'lastUpdated': lastUpdated?.toIso8601String(),
       };
   //
-  ApiOntapCluster._private(
+  ApiOntapCluster._private({
     this.ownerId,
     this.uuid,
     this.name,
@@ -43,54 +42,26 @@ class ApiOntapCluster extends StorableItem {
     this.isAsa,
     this.version,
     DateTime lastUpdated,
-  ) : super(lastUpdated: lastUpdated);
+  }) : super(lastUpdated: lastUpdated);
   //
-  // for re-inflating
-  factory ApiOntapCluster({
-    @required String uuid,
-    String ownerId,
-    String name = '',
-    String contact = '',
-    String location = '',
-    bool isAsa = false,
-    ApiOntapVersion version,
-    DateTime lastUpdated,
-  }) {
-    return ApiOntapCluster._private(
-      ownerId,
-      uuid,
-      name,
-      contact,
-      location,
-      isAsa,
-      version,
-      lastUpdated,
-    );
-  }
-
   factory ApiOntapCluster.fromMap(
     Map<String, dynamic> json, {
     String ownerId,
   }) {
+    if (json == null) return null;
     assert(ownerId != null || json['ownerId'] != null);
-    final String name = json['name'];
-    final String uuid = json['uuid'];
-    final String contact = json['contact'];
-    final String location = json['location'];
-    final bool isAsa = json['san_optimized'] ?? false;
-    final ApiOntapVersion version = ApiOntapVersion.fromMap(json['version']);
     // covering the case where the input is coming from both persistent storage
     //  and from an API call
     DateTime lastUpdated;
     if (json['lastUpdated'] != null)
       lastUpdated = DateTime.parse(json['lastUpdated']);
-    return ApiOntapCluster(
-      uuid: uuid,
-      contact: contact,
-      location: location,
-      name: name,
-      isAsa: isAsa,
-      version: version,
+    return ApiOntapCluster._private(
+      uuid: json['uuid'],
+      contact: json['contact'],
+      location: json['location'],
+      name: json['name'],
+      isAsa: json['san_optimized'] ?? false,
+      version: ApiOntapVersion.fromMap(json['version']),
       lastUpdated: lastUpdated,
       ownerId: json['ownerId'] ?? ownerId,
     );

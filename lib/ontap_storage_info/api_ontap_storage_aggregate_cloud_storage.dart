@@ -3,7 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapStorageAggregateCloudStorage {
-  ApiOntapStorageAggregateCloudStorage({
+  ApiOntapStorageAggregateCloudStorage._private({
     this.attachEligible,
     this.tieringFullnessThreshold,
   });
@@ -13,9 +13,11 @@ class ApiOntapStorageAggregateCloudStorage {
 
   factory ApiOntapStorageAggregateCloudStorage.fromMap(
           Map<String, dynamic> json) =>
-      ApiOntapStorageAggregateCloudStorage(
-        attachEligible: json["attach_eligible"],
-      );
+      json != null
+          ? ApiOntapStorageAggregateCloudStorage._private(
+              attachEligible: json["attach_eligible"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "attach_eligible": attachEligible,

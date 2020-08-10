@@ -17,13 +17,17 @@ enum ApiOntapStorageAggregateBlockStorageDiskClass {
 extension ApiOntapStorageAggregateBlockStorageDiskClassMembers
     on ApiOntapStorageAggregateBlockStorageDiskClass {
   //
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   // create from index
   static ApiOntapStorageAggregateBlockStorageDiskClass fromIndex(int index) =>
-      ApiOntapStorageAggregateBlockStorageDiskClass.values
-          .firstWhere((v) => v.index == index);
+      index != null
+          ? ApiOntapStorageAggregateBlockStorageDiskClass.values
+              .firstWhere((v) => v.index == index)
+          : null;
   // create from name
   static ApiOntapStorageAggregateBlockStorageDiskClass fromName(String name) =>
-      ApiOntapStorageAggregateBlockStorageDiskClass.values
-          .firstWhere((v) => v.name == name.toLowerCase());
+      name != null
+          ? ApiOntapStorageAggregateBlockStorageDiskClass.values
+              .firstWhere((v) => v.name == name.toLowerCase())
+          : null;
 }

@@ -10,17 +10,19 @@ enum ApiOntapStorageShelfBayType {
 
 //
 extension ApiOntapStorageShelfBayTypeMembers on ApiOntapStorageShelfBayType {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
-  static ApiOntapStorageShelfBayType fromName(String text) =>
-      ApiOntapStorageShelfBayType.values.firstWhere(
-        (v) => v.name == text,
-        orElse: () => ApiOntapStorageShelfBayType.unknown,
-      );
+  static ApiOntapStorageShelfBayType fromName(String name) => name != null
+      ? ApiOntapStorageShelfBayType.values.firstWhere(
+          (v) => v.name == name,
+          orElse: () => ApiOntapStorageShelfBayType.unknown,
+        )
+      : null;
   //
-  static ApiOntapStorageShelfBayType fromIndex(int index) =>
-      ApiOntapStorageShelfBayType.values.firstWhere(
-        (v) => v.index == index,
-        orElse: () => ApiOntapStorageShelfBayType.unknown,
-      );
+  static ApiOntapStorageShelfBayType fromIndex(int index) => index != null
+      ? ApiOntapStorageShelfBayType.values.firstWhere(
+          (v) => v.index == index,
+          orElse: () => ApiOntapStorageShelfBayType.unknown,
+        )
+      : null;
 }

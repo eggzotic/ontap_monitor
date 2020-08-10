@@ -3,7 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 class ApiOntapStorageAggregateSpaceBlockStorage {
-  ApiOntapStorageAggregateSpaceBlockStorage({
+  ApiOntapStorageAggregateSpaceBlockStorage._private({
     this.size,
     this.available,
     this.used,
@@ -17,12 +17,14 @@ class ApiOntapStorageAggregateSpaceBlockStorage {
 
   factory ApiOntapStorageAggregateSpaceBlockStorage.fromMap(
           Map<String, dynamic> json) =>
-      ApiOntapStorageAggregateSpaceBlockStorage(
-        size: json["size"],
-        available: json["available"],
-        used: json["used"],
-        fullThresholdPercent: json["full_threshold_percent"],
-      );
+      json != null
+          ? ApiOntapStorageAggregateSpaceBlockStorage._private(
+              size: json["size"],
+              available: json["available"],
+              used: json["used"],
+              fullThresholdPercent: json["full_threshold_percent"],
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "size": size,

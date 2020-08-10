@@ -13,14 +13,18 @@ enum ApiOntapStorageAggregateMirrorState {
 //
 extension ApiOntapStorageAggregateMirrorStateMembers
     on ApiOntapStorageAggregateMirrorState {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
   // create from index
   static ApiOntapStorageAggregateMirrorState fromIndex(int index) =>
-      ApiOntapStorageAggregateMirrorState.values
-          .firstWhere((v) => v.index == index);
+      index != null
+          ? ApiOntapStorageAggregateMirrorState.values
+              .firstWhere((v) => v.index == index)
+          : null;
   // create from name
   static ApiOntapStorageAggregateMirrorState fromName(String name) =>
-      ApiOntapStorageAggregateMirrorState.values
-          .firstWhere((v) => v.name == name.toLowerCase());
+      name != null
+          ? ApiOntapStorageAggregateMirrorState.values
+              .firstWhere((v) => v.name == name.toLowerCase())
+          : null;
 }
