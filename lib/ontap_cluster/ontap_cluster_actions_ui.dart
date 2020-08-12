@@ -70,8 +70,6 @@ class OntapClusterActionsUi extends StatelessWidget {
         return ChangeNotifierProvider.value(
           value: action,
           builder: (_, __) {
-            // print('API responseModel = ${action.api.responseModel}');
-            //
             final model = action.api.responseModel;
             if (model == ApiOntapCluster)
               return ModelUi.shared.preUiForModel<ApiOntapCluster>(

@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/builtins/model_ui.dart';
+import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_api/ontap_api_error.dart';
 import 'package:ontap_monitor/ontap_api/ontap_api_status_code.dart';
 import 'package:ontap_monitor/ontap_api_models/api_request_state.dart';
@@ -95,6 +96,10 @@ class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
                 reporter.status == ApiRequestState.notStarted)
         ? Card(
             child: ListTile(
+              leading: ChangeNotifierProvider.value(
+                value: action,
+                builder: (_, __) => ShowApiResultsButton(),
+              ),
               title: Text(action.name),
               trailing: reporter.status == ApiRequestState.started
                   ? CircularProgressIndicator()

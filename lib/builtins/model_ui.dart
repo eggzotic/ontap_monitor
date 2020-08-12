@@ -3,6 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/data_storage/api_raw_response.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/data_storage/storable_item.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
@@ -95,6 +96,8 @@ class ModelUi {
         owner: owner,
         dataStore: Provider.of<SuperStore>(context).storeForType(T),
         actionId: actionId,
+        jsonStore:
+            Provider.of<SuperStore>(context).storeForType(ApiRawResponse),
       ),
       builder: (_, __) => OntapClusterActionCard<T>(),
     );

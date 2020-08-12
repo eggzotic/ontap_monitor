@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/refresh_results_tile.dart';
+import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_svm_info/api_ontap_svm.dart';
 import 'package:ontap_monitor/ontap_svm_info/api_ontap_svm_state.dart';
 import 'package:provider/provider.dart';
@@ -76,6 +77,7 @@ class ApiOntapSvmsCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         key: PageStorageKey('SVMs'),
+        leading: ShowApiResultsButton(),
         title: Text('SVMs (${svms.length})'),
         subtitle: Text(
           'Last updated: ' + lastUpdated.toString().substring(0, 19),

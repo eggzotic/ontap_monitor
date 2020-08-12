@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
+import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port_state.dart';
 import 'package:ontap_monitor/ontap_network_info/api_ontap_network_ethernet_port_type.dart';
@@ -36,6 +37,7 @@ class OntapClusterNetworkEthernetPortsCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         key: PageStorageKey('Ethernet Ports'),
+        leading: ShowApiResultsButton(),
         title: Text('Ethernet Ports (${ports.length})'),
         subtitle: Text(
           'Last updated: ' + lastUpdated.toString().substring(0, 19),

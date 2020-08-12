@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
+import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
 import 'package:ontap_monitor/misc/refresh_results_tile.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,7 @@ class OntapClusterInfoCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         key: PageStorageKey('Cluster Info'),
+        leading: ShowApiResultsButton(),
         title: Text('Cluster Info (${apiOntapCluster.name})'),
         subtitle: Text(
           'Last updated: ' +

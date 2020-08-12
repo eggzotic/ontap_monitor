@@ -11,10 +11,15 @@ abstract class StorableItem with ChangeNotifier {
   String get ownerId => '';
   String get name;
   String get id;
+
   /// [toMap] a getter to provide a Map representation suitable for JSON encoding
-  Map<String, dynamic> get toMap;
+  Map<String, dynamic> get toMap => {};
   DateTime _lastUpdated;
   DateTime get lastUpdated => _lastUpdated;
+  //
+  /// [rawJson] can be overridden in concrete subclasses to store the raw JSON
+  ///  as returned by the API (where relevant)
+  String get rawJson => '';
   //
   // each subclass constructor should finish with super(lastUpdated: ...)
   StorableItem({DateTime lastUpdated}) {

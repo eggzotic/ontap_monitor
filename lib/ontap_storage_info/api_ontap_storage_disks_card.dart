@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
+import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_class.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_state.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_type.dart';
@@ -59,7 +60,6 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
         _diskStateColor = Colors.red;
         return;
       case ApiOntapStorageDiskState.spare:
-        // _diskStateIcon = Icons.more_horiz;
         _diskStateIcon = FontAwesomeIcons.wrench;
         _diskStateColor = Colors.blue;
         return;
@@ -96,6 +96,7 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         key: PageStorageKey('Disks'),
+        leading: ShowApiResultsButton(),
         title: Text('Disks (${disks.length})'),
         subtitle: Text(
           'Last updated: ' + lastUpdated.toString().substring(0, 19),

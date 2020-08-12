@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
+import 'package:ontap_monitor/data_storage/api_raw_response.dart';
 import 'package:ontap_monitor/ontap_api_models/api_request_state.dart';
 import 'package:ontap_monitor/data_storage/storable_item.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
@@ -19,6 +20,7 @@ class OntapApiReporter<T extends StorableItem>
     @required this.owner,
     @required this.dataStore,
     @required this.actionId,
+    @required this.jsonStore,
   });
   // The status of the associated request
   ApiRequestState _statusValue = ApiRequestState.notStarted;
@@ -39,6 +41,9 @@ class OntapApiReporter<T extends StorableItem>
 
   /// where to store the object
   final ItemStore<T> dataStore;
+
+  /// where to store the raw JSON
+  final ItemStore<ApiRawResponse> jsonStore;
 
   /// the action ID this reporter is working for
   final String actionId;
@@ -102,20 +107,35 @@ class OntapApiReporter<T extends StorableItem>
 
     final Map<String, dynamic> bodyAsMap = Map.from(json.decode(body));
     if (bodyAsMap.containsKey('records')) {
+      // multi-record response
       print('Begin create List<$T> fromMap');
       final List<Map<String, dynamic>> listOfRecords =
           List.from(bodyAsMap['records']);
       _responseObjects = listOfRecords
-          .map((e) => dataStore.itemFromMap(e, ownerId: owner.id))
+          .map((record) => dataStore.itemFromMap(
+                record,
+                ownerId: owner.id,
+              ))
           .toList();
       print('End create List<$T> fromMap');
     } else {
       // otherwise we have a single-record response
       print('Begin create $T fromMap');
       // create a 1-element list
-      _responseObjects = [dataStore.itemFromMap(bodyAsMap, ownerId: owner.id)];
+      _responseObjects = [
+        dataStore.itemFromMap(
+          bodyAsMap,
+          ownerId: owner.id,
+        )
+      ];
       print('End create $T fromMap');
     }
+    // store the raw JSON to allow for later viewing
+    jsonStore.add(ApiRawResponse.fromJson(
+      body,
+      actionId: actionId,
+      ownerId: owner.id,
+    ));
     _responseObjects.forEach((obj) {
       dataStore.add(obj);
     });

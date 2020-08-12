@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/refresh_results_tile.dart';
+import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port_state.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,6 @@ class ApiOntapStoragePortCard extends StatelessWidget {
     // non-null cases
     switch (port.state) {
       case ApiOntapStoragePortState.online:
-
         _portStateIcon = FontAwesomeIcons.plug;
         _portStateColor = Colors.green;
         return;
@@ -73,6 +73,7 @@ class ApiOntapStoragePortCard extends StatelessWidget {
     return Card(
         child: ExpansionTile(
       key: PageStorageKey('Storage Ports'),
+      leading: ShowApiResultsButton(),
       title: Text('Storage Ports (${ports.length})'),
       subtitle: Text(
         'Last updated: ' + lastUpdated.toString().substring(0, 19),

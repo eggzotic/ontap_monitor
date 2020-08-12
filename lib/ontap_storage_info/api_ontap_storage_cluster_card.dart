@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
+import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
 import 'package:ontap_monitor/misc/refresh_results_tile.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,7 @@ class ApiOntapStorageClusterCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         key: PageStorageKey('Cluster Storage Summary'),
+        leading: ShowApiResultsButton(),
         title: Text('Cluster Storage Summary'),
         subtitle: Text(
           'Last updated: ' +

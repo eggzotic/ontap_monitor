@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
+import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_compliance_state.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_package.dart';
 import 'package:ontap_monitor/misc/refresh_results_tile.dart';
@@ -34,8 +35,8 @@ class OntapClusterLicensingCard extends StatelessWidget {
 
     return Card(
       child: ExpansionTile(
-        onExpansionChanged: (open) => print(open ? "opening" : "closing"),
         key: PageStorageKey('Cluster Licenses'),
+        leading: ShowApiResultsButton(),
         title: Text('Cluster Licenses (${licenses.length})'),
         subtitle: Text(
           'Last updated: ' + lastUpdated.toString().substring(0, 19),

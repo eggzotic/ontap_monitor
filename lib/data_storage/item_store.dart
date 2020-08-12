@@ -18,7 +18,11 @@ class ItemStore<T extends StorableItem> with ChangeNotifier {
     _load();
   }
 
-  final T Function(Map<String, dynamic> map, {String ownerId}) itemFromMap;
+  final T Function(
+    Map<String, dynamic> map, {
+    String ownerId,
+    // bool storeRaw,
+  }) itemFromMap;
 
   //
   PersistentItemStore<T> _persistentStorage;

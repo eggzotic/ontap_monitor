@@ -3,6 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
+import 'package:ontap_monitor/data_storage/api_raw_response.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api/ontap_api.dart';
@@ -69,7 +70,16 @@ class StoreSetup {
         itemFromMap: (map, {ownerId}) => OntapCluster.fromMap(map),
       ),
     );
-    // below here, these are all cached, as all originate from API responses
+    // below here, are all "cached", as all originate from API responses
+    _superStore.add(
+      type: ApiRawResponse,
+      store: ItemStore<ApiRawResponse>(
+        itemIdPrefix: 'api-ontap-raw-response',
+        isCacheData: true,
+        itemFromMap: (map, {ownerId}) => ApiRawResponse.fromMap(map),
+      ),
+    );
+    //
     _superStore.add(
       type: ApiOntapCluster,
       store: ItemStore<ApiOntapCluster>(

@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 class OntapActionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('OntapActionCard build');
     final action = Provider.of<OntapAction>(context);
     return Card(
       child: ListTile(

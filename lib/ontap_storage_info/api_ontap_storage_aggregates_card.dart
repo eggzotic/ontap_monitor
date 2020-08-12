@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
+import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_block_storage_disk_class.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate_block_storage_disk_type.dart';
@@ -88,6 +89,7 @@ class ApiOntapStorageAggregatesCard extends StatelessWidget {
     return Card(
       child: ExpansionTile(
         key: PageStorageKey('Aggregates'),
+        leading: ShowApiResultsButton(),
         title: Text('Aggregates (${aggrs.length})'),
         subtitle: Text(
           'Last updated: ' + lastUpdated.toString().substring(0, 19),

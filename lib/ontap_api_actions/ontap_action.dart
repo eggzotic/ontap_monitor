@@ -103,20 +103,22 @@ class OntapAction extends StorableItem {
   }
 
   //
+  // this getter is public, for use in the "show raw API" dialog
+  Uri urlForHost(String host) => Uri(
+        scheme: 'https',
+        host: host,
+        path: _api.path,
+        queryParameters: _api.parameterMap,
+      );
+  //
   Future<void> execute({
     @required String host,
     @required ClusterCredentials credentials,
     @required OntapApiReporter reporter,
   }) async {
     final client = rc.Client(reporter: reporter);
-    final url = Uri(
-      scheme: 'https',
-      host: host,
-      path: _api.path,
-      queryParameters: _api.parameterMap,
-    );
     final request = rc.Request(
-      url: url.toString(),
+      url: urlForHost(host).toString(),
       method: _api.method.requestMethod,
     );
     await client.execute(
