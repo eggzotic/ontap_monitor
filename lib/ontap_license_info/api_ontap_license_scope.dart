@@ -10,7 +10,7 @@ enum ApiOntapLicenseScope {
 }
 
 extension ApiOntapLicenseScopeMembers on ApiOntapLicenseScope {
-  String get name => toString().split('.').last;
+  String get name => toString()?.split('.')?.last;
   //
   static ApiOntapLicenseScope fromName(String name) {
     if (name == null) return null;

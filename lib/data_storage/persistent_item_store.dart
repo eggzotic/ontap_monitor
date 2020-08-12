@@ -24,11 +24,9 @@ class PersistentItemStore<T extends StorableItem> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     // load the relevant keys
     final ids = prefs.getKeys();
-    print('$T stored keys = $ids');
     final prefLen = itemIdPrefix.length;
     final itemIds = ids.where(
         (id) => id.substring(0, min(id.length, prefLen)) == itemIdPrefix);
-    print('itemIdPrefix = $itemIdPrefix, itemIds = $itemIds');
     itemIds?.forEach((id) => addItem(json.decode(prefs.getString(id))));
   }
 

@@ -25,6 +25,8 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disks_card.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port.dart';
 import 'package:ontap_monitor/ontap_storage_info/ontap_api_storage_ports_card.dart';
+import 'package:ontap_monitor/ontap_svm_info/api_ontap_svm.dart';
+import 'package:ontap_monitor/ontap_svm_info/api_ontap_svms_card.dart';
 import 'package:provider/provider.dart';
 
 class ModelUi {
@@ -61,6 +63,8 @@ class ModelUi {
         ApiOntapStorageClusterCard(toRefresh: toRefresh, toReset: toReset),
     ApiOntapStoragePort: ({toRefresh, toReset}) =>
         ApiOntapStoragePortCard(toRefresh: toRefresh, toReset: toReset),
+    ApiOntapSvm: ({toRefresh, toReset}) =>
+        ApiOntapSvmsCard(toRefresh: toRefresh, toReset: toReset),
   };
   //
   Widget uiForModel(

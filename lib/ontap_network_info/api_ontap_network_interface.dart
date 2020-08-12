@@ -32,7 +32,8 @@ class ApiOntapNetworkInterface {
           ip: ApiOntapNetworkIp.fromMap(json["ip"]),
           location: ApiOntapNetworkInterfaceLocation.fromMap(json['location']),
           services: json["services"]
-              ?.map((x) => ApiOntapNetworkInterfaceServiceMembers.fromName(x))
+              ?.map<ApiOntapNetworkInterfaceService>(
+                  (x) => ApiOntapNetworkInterfaceServiceMembers.fromName(x))
               ?.toList(),
           servicePolicy: ApiOntapNetworkInterfaceServicePolicyMembers.fromName(
               json['service_policy']),

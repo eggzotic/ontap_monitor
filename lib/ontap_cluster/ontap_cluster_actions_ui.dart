@@ -17,6 +17,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dar
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port.dart';
+import 'package:ontap_monitor/ontap_svm_info/api_ontap_svm.dart';
 import 'package:provider/provider.dart';
 
 class OntapClusterActionsUi extends StatelessWidget {
@@ -69,7 +70,7 @@ class OntapClusterActionsUi extends StatelessWidget {
         return ChangeNotifierProvider.value(
           value: action,
           builder: (_, __) {
-            print('API responseModel = ${action.api.responseModel}');
+            // print('API responseModel = ${action.api.responseModel}');
             //
             final model = action.api.responseModel;
             if (model == ApiOntapCluster)
@@ -123,6 +124,13 @@ class OntapClusterActionsUi extends StatelessWidget {
               );
             if (model == ApiOntapStoragePort)
               return ModelUi.shared.preUiForModel<ApiOntapStoragePort>(
+                context: context,
+                owner: cluster,
+                dataStore: Provider.of<SuperStore>(context).storeForType(model),
+                actionId: action.id,
+              );
+            if (model == ApiOntapSvm)
+              return ModelUi.shared.preUiForModel<ApiOntapSvm>(
                 context: context,
                 owner: cluster,
                 dataStore: Provider.of<SuperStore>(context).storeForType(model),

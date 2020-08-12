@@ -37,12 +37,11 @@ class SuperStore with ChangeNotifier {
   List<ItemStore> get _cachedDataStores =>
       _allItemStores.values.where((store) => store.isCacheData).toList();
   //
-  Map<Type, int> clearCaches() {
-    final Map<Type, int> cacheCount = {};
-    // empty the cached-data stores
-    _cachedDataStores.forEach((dataStore) {
-      cacheCount[dataStore.itemType] = dataStore.clear();
-    });
-    return cacheCount;
+  void clearCaches() {
+    _cachedDataStores.forEach((dataStore) => dataStore.clear());
   }
+
+  // report on the count of each type of item in the cached stores
+  Map<Type, int> cacheCounts() => Map.fromEntries(
+      _cachedDataStores.map((s) => MapEntry(s.itemType, s.itemCount)));
 }

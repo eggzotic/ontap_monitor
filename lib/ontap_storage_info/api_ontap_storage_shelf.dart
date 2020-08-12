@@ -51,17 +51,20 @@ class ApiOntapStorageShelf extends StorableItem {
       json != null
           ? ApiOntapStorageShelf._private(
               bays: json["bays"]
-                  ?.map((x) => ApiOntapStorageShelfBay.fromMap(x))
+                  ?.map<ApiOntapStorageShelfBay>(
+                      (x) => ApiOntapStorageShelfBay.fromMap(x))
                   ?.toList(),
               connectionType:
                   ApiOntapStorageShelfConnectionTypeMembers.fromName(
                       json["connection_type"]),
               diskCount: json["disk_count"],
               drawers: json["drawers"]
-                  ?.map((x) => ApiOntapStorageShelfDrawer.fromMap(x))
+                  ?.map<ApiOntapStorageShelfDrawer>(
+                      (x) => ApiOntapStorageShelfDrawer.fromMap(x))
                   ?.toList(),
               frus: json["frus"]
-                  ?.map((x) => ApiOntapStorageShelfFru.fromMap(x))
+                  ?.map<ApiOntapStorageShelfFru>(
+                      (x) => ApiOntapStorageShelfFru.fromMap(x))
                   ?.toList(),
               id: json["id"],
               internal: json["internal"] ?? false,
@@ -70,10 +73,12 @@ class ApiOntapStorageShelf extends StorableItem {
                   json["module_type"]),
               name: json["name"],
               paths: json["paths"]
-                  ?.map((x) => ApiOntapStorageShelfPath.fromMap(x))
+                  ?.map<ApiOntapStorageShelfPath>(
+                      (x) => ApiOntapStorageShelfPath.fromMap(x))
                   ?.toList(),
               ports: json["ports"]
-                  ?.map((x) => ApiOntapStorageShelfPort.fromMap(x))
+                  ?.map<ApiOntapStorageShelfPort>(
+                      (x) => ApiOntapStorageShelfPort.fromMap(x))
                   ?.toList(),
               serialNumber: json["serial_number"],
               state: ApiOntapStorageShelfStateMembers.fromName(json["state"]),

@@ -16,6 +16,7 @@ import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dar
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_port.dart';
+import 'package:ontap_monitor/ontap_svm_info/api_ontap_svm.dart';
 
 class StoreSetup {
   // a factory constructor posing as a Singleton
@@ -141,6 +142,15 @@ class StoreSetup {
             ApiOntapStoragePort.fromMap(map, ownerId: ownerId),
       ),
     );
+    _superStore.add(
+      type: ApiOntapSvm,
+      store: ItemStore<ApiOntapSvm>(
+        isCacheData: true,
+        itemIdPrefix: 'api-ontap-svm-response_',
+        itemFromMap: (map, {ownerId}) =>
+            ApiOntapSvm.fromMap(map, ownerId: ownerId),
+      ),
+    );
     print('_addItemStores ending');
   }
 
@@ -206,6 +216,13 @@ class StoreSetup {
         ..setApi(apiStore.forId('GET storage/ports')),
       neverStore: true,
     );
+    actionStore.add(
+      OntapAction(builtin: true)
+        ..setName('Storage Virtual Machines')
+        ..setDescription('Builtin Action')
+        ..setApi(apiStore.forId('GET svm/svms')),
+      neverStore: true,
+    );
     print('_setupBuiltinActions ending');
   }
 
@@ -243,6 +260,10 @@ class StoreSetup {
     );
     apiStore.add(
       OntapApi<ApiOntapStoragePort>(name: 'storage/ports'),
+      neverStore: true,
+    );
+    apiStore.add(
+      OntapApi<ApiOntapSvm>(name: 'svm/svms'),
       neverStore: true,
     );
     print('_setupBuiltinApis ending');

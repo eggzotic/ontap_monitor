@@ -89,7 +89,8 @@ class ApiOntapStorageDisk extends StorableItem {
       node: ApiOntapNode.fromMap(json["node"], ownerId: ownerId),
       homeNode: ApiOntapNode.fromMap(json["home_node"], ownerId: ownerId),
       aggregates: json["aggregates"]
-          ?.map((x) => ApiOntapStorageAggregate.fromMap(x, ownerId: ownerId))
+          ?.map<ApiOntapStorageAggregate>(
+              (x) => ApiOntapStorageAggregate.fromMap(x, ownerId: ownerId))
           ?.toList(),
       bay: json["bay"],
       selfEncrypting: json["self_encrypting"] ?? false,

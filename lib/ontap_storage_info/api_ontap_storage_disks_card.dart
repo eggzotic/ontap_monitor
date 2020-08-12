@@ -33,7 +33,7 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
   //
   static const gigabyte = 1024 * 1024 * 1024;
   //
-  // Select the disk-state icon
+  // Select the disk-state icon & color
   final List<IconData> _diskStateIconList = [Icons.ac_unit];
   IconData get _diskStateIcon => _diskStateIconList.first;
   set _diskStateIcon(IconData icon) => _diskStateIconList[0] = icon;
@@ -51,7 +51,6 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
     // non-null cases
     switch (disk.state) {
       case ApiOntapStorageDiskState.present:
-        // _diskStateIcon = Icons.check;
         _diskStateIcon = FontAwesomeIcons.hdd;
         _diskStateColor = Colors.green;
         return;
@@ -60,7 +59,8 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
         _diskStateColor = Colors.red;
         return;
       case ApiOntapStorageDiskState.spare:
-        _diskStateIcon = Icons.more_horiz;
+        // _diskStateIcon = Icons.more_horiz;
+        _diskStateIcon = FontAwesomeIcons.wrench;
         _diskStateColor = Colors.blue;
         return;
       case ApiOntapStorageDiskState.zeroing:
@@ -94,67 +94,70 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
       return NoResultsFoundTile(toReset: toReset);
     final lastUpdated = disks.first.lastUpdated;
     return Card(
-        child: ExpansionTile(
-      key: PageStorageKey('Disks'),
-      title: Text('Disks (${disks.length})'),
-      subtitle: Text(
-        'Last updated: ' + lastUpdated.toString().substring(0, 19),
-      ),
-      children: [
-        ...disks.map(
-          (disk) {
-            _diskState(context, disk);
-            return ExpansionTile(
-              key: PageStorageKey(disk.name),
-              leading: FaIcon(_diskStateIcon, color: _diskStateColor),
-              title: Text(disk.name + ' ' + _toGb(disk?.usableSize)),
-              subtitle: Text((disk.node?.name ?? 'unassigned') +
-                  (disk.containerType == ApiOntapStorageContainerType.aggregate
-                      ? (': ' +
-                          (disk.aggregates
-                              .map((a) => a.name)
-                              .toList()
-                              .join(', ')))
-                      : '')),
-              children: [
-                ListTile(
-                  title: Text(disk.vendor),
-                  subtitle: Text('Vendor'),
-                ),
-                if (disk.type?.name != null)
-                  ListTile(
-                    title: Text(disk.type.name + ' / ' + disk.diskClass.name),
-                    subtitle: Text('Disk type / class'),
-                  ),
-                ListTile(
-                  title: Text(disk.containerType.name),
-                  subtitle: Text('Container type'),
-                ),
-                ListTile(
-                  title: Text(disk.model),
-                  subtitle: Text('Model'),
-                ),
-                ListTile(
-                  title: Text(disk.usableSize != null
-                      ? ((disk.usableSize / gigabyte).ceil().toString() +
-                          ' GiB')
-                      : '-'),
-                  subtitle: Text('Usable Size'),
-                ),
-                ListTile(
-                  title: Text(
-                      (disk.shelf?.name ?? '-') + ' / ' + disk.bay.toString()),
-                  subtitle: Text('Shelf / Bay'),
-                ),
-                // ListTile(
-                //   title: Text(''), subtitle: Text(''),
-                // ),
-              ],
-            );
-          },
+      child: ExpansionTile(
+        key: PageStorageKey('Disks'),
+        title: Text('Disks (${disks.length})'),
+        subtitle: Text(
+          'Last updated: ' + lastUpdated.toString().substring(0, 19),
         ),
-        RefreshResultsTile(toRefresh: toRefresh),
-      ],
-    ));
+        children: [
+          ...disks.map(
+            (disk) {
+              _diskState(context, disk);
+              return ExpansionTile(
+                key: PageStorageKey(disk.name),
+                leading: FaIcon(_diskStateIcon, color: _diskStateColor),
+                title: Text(disk.name + ' ' + _toGb(disk?.usableSize)),
+                subtitle: Text((disk.node?.name ?? 'unassigned') +
+                    (disk.containerType ==
+                            ApiOntapStorageContainerType.aggregate
+                        ? (': ' +
+                            (disk.aggregates
+                                .map((a) => a.name)
+                                .toList()
+                                .join(', ')))
+                        : '')),
+                children: [
+                  ListTile(
+                    title: Text(disk.vendor),
+                    subtitle: Text('Vendor'),
+                  ),
+                  if (disk.type?.name != null)
+                    ListTile(
+                      title: Text(disk.type.name + ' / ' + disk.diskClass.name),
+                      subtitle: Text('Disk type / class'),
+                    ),
+                  ListTile(
+                    title: Text(disk.containerType.name),
+                    subtitle: Text('Container type'),
+                  ),
+                  ListTile(
+                    title: Text(disk.model),
+                    subtitle: Text('Model'),
+                  ),
+                  ListTile(
+                    title: Text(disk.usableSize != null
+                        ? ((disk.usableSize / gigabyte).ceil().toString() +
+                            ' GiB')
+                        : '-'),
+                    subtitle: Text('Usable Size'),
+                  ),
+                  ListTile(
+                    title: Text((disk.shelf?.name ?? '-') +
+                        ' / ' +
+                        disk.bay.toString()),
+                    subtitle: Text('Shelf / Bay'),
+                  ),
+                  // ListTile(
+                  //   title: Text(''), subtitle: Text(''),
+                  // ),
+                ],
+              );
+            },
+          ),
+          RefreshResultsTile(toRefresh: toRefresh),
+        ],
+      ),
+    );
   }
 }

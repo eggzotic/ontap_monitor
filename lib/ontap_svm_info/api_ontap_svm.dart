@@ -27,6 +27,7 @@ import 'package:ontap_monitor/ontap_svm_info/api_ontap_svm_subtype.dart';
 
 class ApiOntapSvm extends StorableItem {
   ApiOntapSvm._private({
+    this.ownerId,
     this.aggregates,
     this.aggregatesDelegated,
     this.certificate,
@@ -83,41 +84,49 @@ class ApiOntapSvm extends StorableItem {
   final ApiOntapSvmSubtype subtype;
   final String uuid;
 
-  factory ApiOntapSvm.fromMap(Map<String, dynamic> json) => json != null
-      ? ApiOntapSvm._private(
-          aggregates: json["aggregates"]
-              ?.map((x) => ApiOntapStorageAggregate.fromMap(x))
-              ?.toList(),
-          aggregatesDelegated: json["aggregates_delegated"],
-          certificate: ApiOntapCertificate.fromMap(json["certificate"]),
-          cifs: ApiOntapSvmCifs.fromMap(json["cifs"]),
-          comment: json["comment"],
-          dns: ApiOntapSvmDns.fromMap(json["dns"]),
-          fcInterfaces: json["fc_interfaces"]
-              ?.map((x) => ApiOntapFcInterface.fromMap(x))
-              ?.toList(),
-          fcp: ApiOntapSvmFcp.fromMap(json["fcp"]),
-          ipInterfaces: json["ip_interfaces"]
-              ?.map((x) => ApiOntapNetworkInterface.fromMap(x))
-              ?.toList(),
-          ipspace: ApiOntapNetworkIpspace.fromMap(json["ipspace"]),
-          iscsi: ApiOntapSvmIscsi.fromMap(json["iscsi"]),
-          language: ApiOntapSvmLanguageMembers.fromName(json["language"]),
-          ldap: ApiOntapSvmLdap.fromMap(json["ldap"]),
-          name: json["name"],
-          nfs: ApiOntapSvmNfs.fromMap(json["nfs"]),
-          nis: ApiOntapSvmNis.fromMap(json["nis"]),
-          nsswitch: ApiOntapSvmNsswitch.fromMap(json["nsswitch"]),
-          nvme: ApiOntapSvmNvme.fromMap(json["nvme"]),
-          s3: ApiOntapSvmS3.fromMap(json["s3"]),
-          snapmirror: ApiOntapSvmSnapmirror.fromMap(json["snapmirror"]),
-          snapshotPolicy:
-              ApiOntapSnapshotPolicy.fromMap(json["snapshot_policy"]),
-          state: ApiOntapSvmStateMembers.fromName(json["state"]),
-          subtype: ApiOntapSvmSubtypeMembers.fromName(json["subtype"]),
-          uuid: json["uuid"],
-        )
-      : null;
+  factory ApiOntapSvm.fromMap(
+    Map<String, dynamic> json, {
+    String ownerId,
+  }) =>
+      json != null
+          ? ApiOntapSvm._private(
+              aggregates: json["aggregates"]
+                  ?.map<ApiOntapStorageAggregate>(
+                      (x) => ApiOntapStorageAggregate.fromMap(x))
+                  ?.toList(),
+              aggregatesDelegated: json["aggregates_delegated"],
+              certificate: ApiOntapCertificate.fromMap(json["certificate"]),
+              cifs: ApiOntapSvmCifs.fromMap(json["cifs"]),
+              comment: json["comment"],
+              dns: ApiOntapSvmDns.fromMap(json["dns"]),
+              fcInterfaces: json["fc_interfaces"]
+                  ?.map<ApiOntapFcInterface>(
+                      (x) => ApiOntapFcInterface.fromMap(x))
+                  ?.toList(),
+              fcp: ApiOntapSvmFcp.fromMap(json["fcp"]),
+              ipInterfaces: json["ip_interfaces"]
+                  ?.map<ApiOntapNetworkInterface>(
+                      (x) => ApiOntapNetworkInterface.fromMap(x))
+                  ?.toList(),
+              ipspace: ApiOntapNetworkIpspace.fromMap(json["ipspace"]),
+              iscsi: ApiOntapSvmIscsi.fromMap(json["iscsi"]),
+              language: ApiOntapSvmLanguageMembers.fromName(json["language"]),
+              ldap: ApiOntapSvmLdap.fromMap(json["ldap"]),
+              name: json["name"],
+              nfs: ApiOntapSvmNfs.fromMap(json["nfs"]),
+              nis: ApiOntapSvmNis.fromMap(json["nis"]),
+              nsswitch: ApiOntapSvmNsswitch.fromMap(json["nsswitch"]),
+              nvme: ApiOntapSvmNvme.fromMap(json["nvme"]),
+              s3: ApiOntapSvmS3.fromMap(json["s3"]),
+              snapmirror: ApiOntapSvmSnapmirror.fromMap(json["snapmirror"]),
+              snapshotPolicy:
+                  ApiOntapSnapshotPolicy.fromMap(json["snapshot_policy"]),
+              state: ApiOntapSvmStateMembers.fromName(json["state"]),
+              subtype: ApiOntapSvmSubtypeMembers.fromName(json["subtype"]),
+              uuid: json["uuid"],
+              ownerId: json['ownerId'] ?? ownerId,
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         'ownerId': ownerId,
@@ -125,11 +134,11 @@ class ApiOntapSvm extends StorableItem {
         "aggregates_delegated": aggregatesDelegated,
         "certificate": certificate?.toMap,
         "cifs": cifs?.toMap,
-        "comment":  comment,
+        "comment": comment,
         "dns": dns?.toMap,
         "fc_interfaces": fcInterfaces?.map((x) => x?.toMap)?.toList(),
         "fcp": fcp?.toMap,
-        "ip_interfaces": ipInterfaces.map((x) => x?.toMap).toList(),
+        "ip_interfaces": ipInterfaces?.map((x) => x?.toMap)?.toList(),
         "ipspace": ipspace?.toMap,
         "iscsi": iscsi?.toMap,
         "language": language?.name,

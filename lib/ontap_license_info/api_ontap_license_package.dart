@@ -37,8 +37,8 @@ class ApiOntapLicensePackage extends StorableItem {
     return ApiOntapLicensePackage._private(
       ownerId: json['ownerId'] ?? ownerId,
       licenses: json['licenses']
-        ?.map((e) => ApiOntapLicense.fromMap(e))
-        ?.toList(),
+          ?.map<ApiOntapLicense>((e) => ApiOntapLicense.fromMap(e))
+          ?.toList(),
       name: json['name'],
       scope: ApiOntapLicenseScopeMembers.fromName(json['scope']),
       state: ApiOntapLicenseComplianceStateMembers.fromName(json['state']),

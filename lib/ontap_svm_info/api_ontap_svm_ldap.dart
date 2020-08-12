@@ -19,7 +19,7 @@ class ApiOntapSvmLdap {
           baseDn: json["base_dn"],
           bindDn: json["bind_dn"],
           enabled: json["enabled"],
-          servers: json["servers"],
+          servers: json["servers"]?.map<String>((x) => x.toString())?.toList(),
         )
       : null;
 
@@ -28,6 +28,6 @@ class ApiOntapSvmLdap {
         "base_dn": baseDn,
         "bind_dn": bindDn,
         "enabled": enabled,
-        "servers": servers?.map((x) => x)?.toList(),
+        "servers": servers?.map<String>((x) => x)?.toList(),
       };
 }

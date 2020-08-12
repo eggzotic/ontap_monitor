@@ -13,8 +13,8 @@ class ApiOntapSvmDns {
 
   factory ApiOntapSvmDns.fromMap(Map<String, dynamic> json) => json != null
       ? ApiOntapSvmDns._private(
-          domains: json["domains"]?.map((x) => x.toString())?.toList(),
-          servers: json["servers"]?.map((x) => x.toString())?.toList(),
+          domains: json["domains"]?.map<String>((x) => x.toString())?.toList(),
+          servers: json["servers"]?.map<String>((x) => x.toString())?.toList(),
         )
       : null;
 

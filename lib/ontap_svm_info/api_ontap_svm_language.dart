@@ -76,7 +76,7 @@ enum ApiOntapSvmLanguage {
 
 //
 extension ApiOntapSvmLanguageMembers on ApiOntapSvmLanguage {
-  String get name => toString().split('.')?.last?.replaceAll('DoT', '.');
+  String get name => toString()?.split('.')?.last?.replaceAll('DoT', '.');
   //
   static ApiOntapSvmLanguage fromName(String name) => name != null
       ? ApiOntapSvmLanguage.values.firstWhere(

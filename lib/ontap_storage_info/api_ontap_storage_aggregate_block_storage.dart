@@ -19,13 +19,15 @@ class ApiOntapStorageAggregateBlockStorage {
 
   factory ApiOntapStorageAggregateBlockStorage.fromMap(
           Map<String, dynamic> json) =>
-      ApiOntapStorageAggregateBlockStorage._private(
-        primary: ApiOntapStorageAggregateBlockStoragePrimary.fromMap(
-            json["primary"]),
-        hybridCache:
-            ApiOntapStorageAggregateHybridCache.fromMap(json["hybrid_cache"]),
-        mirror: ApiOntapStorageAggregateMirror.fromMap(json["mirror"]),
-      );
+      json != null
+          ? ApiOntapStorageAggregateBlockStorage._private(
+              primary: ApiOntapStorageAggregateBlockStoragePrimary.fromMap(
+                  json["primary"]),
+              hybridCache: ApiOntapStorageAggregateHybridCache.fromMap(
+                  json["hybrid_cache"]),
+              mirror: ApiOntapStorageAggregateMirror.fromMap(json["mirror"]),
+            )
+          : null;
 
   Map<String, dynamic> get toMap => {
         "primary": primary?.toMap,

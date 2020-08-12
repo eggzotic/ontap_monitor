@@ -63,10 +63,12 @@ class ApiOntapNode extends StorableItem {
       state: ApiOntapNodeStateMembers.fromName(json['state']),
       membership: json["membership"],
       managementInterfaces: json["management_interfaces"]
-          ?.map((x) => ApiOntapNetworkInterface.fromMap(x))
+          ?.map<ApiOntapNetworkInterface>(
+              (x) => ApiOntapNetworkInterface.fromMap(x))
           ?.toList(),
       clusterInterfaces: json["cluster_interfaces"]
-          ?.map((x) => ApiOntapNetworkInterface.fromMap(x))
+          ?.map<ApiOntapNetworkInterface>(
+              (x) => ApiOntapNetworkInterface.fromMap(x))
           ?.toList(),
       controller: ApiOntapController.fromMap(json["controller"]),
       lastUpdated: json['lastUpdated'] != null

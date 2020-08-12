@@ -17,13 +17,13 @@ class ApiOntapSvmNis {
       ? ApiOntapSvmNis._private(
           domain: json["domain"],
           enabled: json["enabled"],
-          servers: json["servers"]?.map((x) => x)?.toList(),
+          servers: json["servers"]?.map<String>((x) => x?.toString())?.toList(),
         )
       : null;
 
   Map<String, dynamic> get toMap => {
         "domain": domain,
         "enabled": enabled,
-        "servers": servers,
+        "servers": servers?.map<String>((x) => x)?.toList(),
       };
 }

@@ -22,19 +22,24 @@ class ApiOntapSvmNsswitch {
   factory ApiOntapSvmNsswitch.fromMap(Map<String, dynamic> json) =>
       ApiOntapSvmNsswitch._private(
         group: json["group"]
-            ?.map((x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
+            ?.map<ApiOntapSvmNsswitchSource>(
+                (x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
             ?.toList(),
         hosts: json["hosts"]
-            ?.map((x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
+            ?.map<ApiOntapSvmNsswitchSource>(
+                (x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
             ?.toList(),
         namemap: json["namemap"]
-            ?.map((x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
+            ?.map<ApiOntapSvmNsswitchSource>(
+                (x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
             ?.toList(),
         netgroup: json["netgroup"]
-            ?.map((x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
+            ?.map<ApiOntapSvmNsswitchSource>(
+                (x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
             ?.toList(),
         passwd: json["passwd"]
-            ?.map((x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
+            ?.map<ApiOntapSvmNsswitchSource>(
+                (x) => ApiOntapSvmNsswitchSourceMembers.fromName(x))
             ?.toList(),
       );
 

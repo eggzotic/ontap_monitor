@@ -25,7 +25,8 @@ class ApiOntapStorageClusterBlockStorage {
               size: json["size"],
               inactiveData: json["inactive_data"],
               medias: json["medias"]
-                  ?.map((x) => ApiOntapStorageClusterMedia.fromMap(x))
+                  ?.map<ApiOntapStorageClusterMedia>(
+                      (x) => ApiOntapStorageClusterMedia.fromMap(x))
                   ?.toList(),
             )
           : null;

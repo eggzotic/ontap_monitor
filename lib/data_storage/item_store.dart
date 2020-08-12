@@ -69,7 +69,7 @@ class ItemStore<T extends StorableItem> with ChangeNotifier {
     assert(item != null);
     _allItems[item.id] = item;
     notifyListeners();
-    print('After add, $T Store = $asJson');
+    print('After add, $T Store items: $itemCount');
 
     // save the item when updates are notified - unless we never want it to be
     //  committed to persistent storage (neverStore == true)
@@ -84,7 +84,7 @@ class ItemStore<T extends StorableItem> with ChangeNotifier {
   // remove an item
   void deleteForId(String id) {
     final deletedItem = _allItems.remove(id);
-    print('After delete, $T store =  $asJson');
+    print('After delete, $T store items: $itemCount');
     deletedItem.removeListener(() {
       _persistentStorage.store(deletedItem);
     });

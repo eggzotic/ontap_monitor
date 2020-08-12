@@ -7,18 +7,15 @@ import 'package:ontap_monitor/misc/about_ontap_monitor.dart';
 import 'package:ontap_monitor/cluster_credentials/cluster_credential_page.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
-import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
+// import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:provider/provider.dart';
 
 class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final superStore = Provider.of<SuperStore>(context);
-    final ItemStore<OntapCluster> clusterStore =
-        superStore.storeForType(OntapCluster);
-    final ItemStore<OntapAction> actionStore =
-        superStore.storeForType(OntapAction);
+    // final ItemStore<OntapAction> actionStore =
+    //     superStore.storeForType(OntapAction);
     final iconColor = Theme.of(context).accentColor;
     //
     return Drawer(
@@ -48,7 +45,7 @@ class MainDrawer extends StatelessWidget {
               );
             },
           ),
-          // Disabling Action-editing for now
+          // Disabling Action-editing for now - builtins only
           //
           // Divider(),
           // ListTile(
@@ -64,51 +61,53 @@ class MainDrawer extends StatelessWidget {
           Divider(),
           ListTile(
             leading: Icon(Icons.cached, color: iconColor),
-            title: Text('Clear Cache'),
+            title: Text('Cache Report'),
             onTap: () {
-              // this code should probably be moved somewhere else...?
-              // Clear the cached-items datastores
-              final cacheCounters = superStore.clearCaches();
-              //
-              // Count & clear Stale Action IDs still attached to clusters
-              //  currently this will always be 0, since actions are not
-              //  deletable...
-              int deletedStaleActionIds = 0;
-              clusterStore.idsSorted.forEach((id) {
-                final cluster = clusterStore.forId(id);
-                deletedStaleActionIds +=
-                    cluster.clearStaleActionIds(usingStore: actionStore);
-                cluster.clearCachedResultIds();
-              });
-
-              // insert other cache-clearings above here
               Navigator.of(context).pop();
               showDialog(
                 context: context,
-                builder: (context) => AlertDialog(
-                  title: Text('Cache-Clear Report'),
-                  actions: [
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'OK',
-                        style: TextStyle(color: Theme.of(context).accentColor),
+                builder: (context) {
+                  final superStore = Provider.of<SuperStore>(context);
+                  final ItemStore<OntapCluster> clusterStore =
+                      superStore.storeForType(OntapCluster);
+                  final cacheCounters = superStore.cacheCounts();
+                  return AlertDialog(
+                    title: Text('Cached Items'),
+                    actions: [
+                      FlatButton(
+                        onPressed: () {
+                          superStore.clearCaches();
+                          clusterStore.idsSorted.forEach((id) {
+                            final cluster = clusterStore.forId(id);
+                            // deletedStaleActionIds += cluster.clearStaleActionIds(
+                            //     usingStore: actionStore);
+                            cluster.clearCachedResultIds();
+                            // insert other cache-clearing ops above here
+                            //
+                          });
+                        },
+                        child: Text('Clear Now'),
                       ),
-                    ),
-                  ],
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      ...cacheCounters.keys
+                      RaisedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Close',
+                          style:
+                              TextStyle(color: Theme.of(context).accentColor),
+                        ),
+                      ),
+                    ],
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: cacheCounters.keys
                           .map((type) => Text('$type: ${cacheCounters[type]}'))
                           .toList(),
-                      Text('Stale action IDs: $deletedStaleActionIds'),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               );
             },
           ),

@@ -70,7 +70,8 @@ class ApiOntapStorageAggregate extends StorableItem {
       blockStorage:
           ApiOntapStorageAggregateBlockStorage.fromMap(json["block_storage"]),
       plexes: json["plexes"]
-          ?.map((x) => ApiOntapStorageAggregatePlex.fromMap(x))
+          ?.map<ApiOntapStorageAggregatePlex>(
+              (x) => ApiOntapStorageAggregatePlex.fromMap(x))
           ?.toList(),
       cloudStorage:
           ApiOntapStorageAggregateCloudStorage.fromMap(json["cloud_storage"]),

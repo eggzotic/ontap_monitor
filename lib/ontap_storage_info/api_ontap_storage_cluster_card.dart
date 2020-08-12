@@ -46,7 +46,7 @@ class ApiOntapStorageClusterCard extends StatelessWidget {
         children: [
           ListTile(
             title: Text(
-              clusterStorage.efficiency.ratio.toString() +
+              clusterStorage.efficiency.ratio.toStringAsFixed(2) +
                   ' / ' +
                   _toGb(clusterStorage.efficiency.savings) +
                   ' / ' +
@@ -56,7 +56,8 @@ class ApiOntapStorageClusterCard extends StatelessWidget {
           ),
           ListTile(
             title: Text(
-              clusterStorage.efficiencyWithoutSnapshots.ratio.toString() +
+              clusterStorage.efficiencyWithoutSnapshots.ratio
+                      .toStringAsFixed(2) +
                   ' / ' +
                   _toGb(clusterStorage.efficiencyWithoutSnapshots.savings) +
                   ' / ' +
