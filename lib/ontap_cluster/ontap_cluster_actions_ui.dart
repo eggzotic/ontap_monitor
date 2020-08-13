@@ -62,8 +62,11 @@ class OntapClusterActionsUi extends StatelessWidget {
         ],
       );
     }
+    //
+    final scr = Provider.of<ScrollController>(context);
     // main case when some actions are already selected
     return ListView.builder(
+      controller: scr,
       itemCount: actionsCount,
       itemBuilder: (context, index) {
         final action = actionStore.forId(actionIds[index]);

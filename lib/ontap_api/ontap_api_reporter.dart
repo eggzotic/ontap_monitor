@@ -95,10 +95,10 @@ class OntapApiReporter<T extends StorableItem>
     @required String requestId,
     @required int statusCode,
   }) {
-    print('Response status: $statusCode');
-    print('Response headers: $headers');
-    print('Response body: $body');
-    print('Request ID: $requestId');
+    // print('Response status: $statusCode');
+    // print('Response headers: $headers');
+    // print('Response body: $body');
+    // print('Request ID: $requestId');
     //
     if (statusCode < 200 || statusCode > 299) {
       _status = ApiRequestState.completeFail;
@@ -108,7 +108,7 @@ class OntapApiReporter<T extends StorableItem>
     final Map<String, dynamic> bodyAsMap = Map.from(json.decode(body));
     if (bodyAsMap.containsKey('records')) {
       // multi-record response
-      print('Begin create List<$T> fromMap');
+      // print('Begin create List<$T> fromMap');
       final List<Map<String, dynamic>> listOfRecords =
           List.from(bodyAsMap['records']);
       _responseObjects = listOfRecords
@@ -117,10 +117,10 @@ class OntapApiReporter<T extends StorableItem>
                 ownerId: owner.id,
               ))
           .toList();
-      print('End create List<$T> fromMap');
+      // print('End create List<$T> fromMap');
     } else {
       // otherwise we have a single-record response
-      print('Begin create $T fromMap');
+      // print('Begin create $T fromMap');
       // create a 1-element list
       _responseObjects = [
         dataStore.itemFromMap(
@@ -128,7 +128,7 @@ class OntapApiReporter<T extends StorableItem>
           ownerId: owner.id,
         )
       ];
-      print('End create $T fromMap');
+      // print('End create $T fromMap');
     }
     // store the raw JSON to allow for later viewing
     jsonStore.add(ApiRawResponse.fromJson(

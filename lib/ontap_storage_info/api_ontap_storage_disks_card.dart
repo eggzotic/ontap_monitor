@@ -3,6 +3,8 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 import 'package:flutter/material.dart';
+import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
+import 'package:flutter_expanded_tile/tileController.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_class.dart';
@@ -93,72 +95,81 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
     if (disks == null || disks.isEmpty)
       return NoResultsFoundTile(toReset: toReset);
     final lastUpdated = disks.first.lastUpdated;
+    //
+    // final controller = Provider.of<ExpandedTileController>(context);
     return Card(
       child: ExpansionTile(
+      // child: ExpandedTile(controller: controller,
         key: PageStorageKey('Disks'),
         leading: ShowApiResultsButton(),
         title: Text('Disks (${disks.length})'),
-        subtitle: Text(
-          'Last updated: ' + lastUpdated.toString().substring(0, 19),
-        ),
+        // subtitle: Text(
+        //   'Last updated: ' + lastUpdated.toString().substring(0, 19),
+        // ),
         children: [
-          ...disks.map(
-            (disk) {
-              _diskState(context, disk);
-              return ExpansionTile(
-                key: PageStorageKey(disk.name),
-                leading: FaIcon(_diskStateIcon, color: _diskStateColor),
-                title: Text(disk.name + ' ' + _toGb(disk?.usableSize)),
-                subtitle: Text((disk.node?.name ?? 'unassigned') +
-                    (disk.containerType ==
-                            ApiOntapStorageContainerType.aggregate
-                        ? (': ' +
-                            (disk.aggregates
-                                .map((a) => a.name)
-                                .toList()
-                                .join(', ')))
-                        : '')),
-                children: [
-                  ListTile(
-                    title: Text(disk.vendor),
-                    subtitle: Text('Vendor'),
-                  ),
-                  if (disk.type?.name != null)
-                    ListTile(
-                      title: Text(disk.type.name + ' / ' + disk.diskClass.name),
-                      subtitle: Text('Disk type / class'),
-                    ),
-                  ListTile(
-                    title: Text(disk.containerType.name),
-                    subtitle: Text('Container type'),
-                  ),
-                  ListTile(
-                    title: Text(disk.model),
-                    subtitle: Text('Model'),
-                  ),
-                  ListTile(
-                    title: Text(disk.usableSize != null
-                        ? ((disk.usableSize / gigabyte).ceil().toString() +
-                            ' GiB')
-                        : '-'),
-                    subtitle: Text('Usable Size'),
-                  ),
-                  ListTile(
-                    title: Text((disk.shelf?.name ?? '-') +
-                        ' / ' +
-                        disk.bay.toString()),
-                    subtitle: Text('Shelf / Bay'),
-                  ),
-                  // ListTile(
-                  //   title: Text(''), subtitle: Text(''),
-                  // ),
-                ],
-              );
-            },
+        // content: Container(
+        //   child: Column(
+        //     children: [
+              ...disks.map(
+                (disk) {
+                  _diskState(context, disk);
+                  return ExpansionTile(
+                    key: PageStorageKey(disk.name),
+                    leading: FaIcon(_diskStateIcon, color: _diskStateColor),
+                    title: Text(disk.name + ' ' + _toGb(disk?.usableSize)),
+                    subtitle: Text((disk.node?.name ?? 'unassigned') +
+                        (disk.containerType ==
+                                ApiOntapStorageContainerType.aggregate
+                            ? (': ' +
+                                (disk.aggregates
+                                    .map((a) => a.name)
+                                    .toList()
+                                    .join(', ')))
+                            : '')),
+                    children: [
+                      ListTile(
+                        title: Text(disk.vendor),
+                        subtitle: Text('Vendor'),
+                      ),
+                      if (disk.type?.name != null)
+                        ListTile(
+                          title: Text(
+                              disk.type.name + ' / ' + disk.diskClass.name),
+                          subtitle: Text('Disk type / class'),
+                        ),
+                      ListTile(
+                        title: Text(disk.containerType.name),
+                        subtitle: Text('Container type'),
+                      ),
+                      ListTile(
+                        title: Text(disk.model),
+                        subtitle: Text('Model'),
+                      ),
+                      ListTile(
+                        title: Text(disk.usableSize != null
+                            ? ((disk.usableSize / gigabyte).ceil().toString() +
+                                ' GiB')
+                            : '-'),
+                        subtitle: Text('Usable Size'),
+                      ),
+                      ListTile(
+                        title: Text((disk.shelf?.name ?? '-') +
+                            ' / ' +
+                            disk.bay.toString()),
+                        subtitle: Text('Shelf / Bay'),
+                      ),
+                      // ListTile(
+                      //   title: Text(''), subtitle: Text(''),
+                      // ),
+                    ],
+                  );
+                },
+              ),
+              RefreshResultsTile(toRefresh: toRefresh),
+            ],
           ),
-          RefreshResultsTile(toRefresh: toRefresh),
-        ],
-      ),
+      //   ),
+      // ),
     );
   }
 }

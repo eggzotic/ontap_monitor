@@ -8,6 +8,7 @@ import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/refresh_results_tile.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_svm_info/api_ontap_svm.dart';
+import 'package:ontap_monitor/ontap_svm_info/api_ontap_svm_subtype.dart';
 import 'package:ontap_monitor/ontap_svm_info/api_ontap_svm_state.dart';
 import 'package:provider/provider.dart';
 
@@ -74,6 +75,7 @@ class ApiOntapSvmsCard extends StatelessWidget {
     if (svms == null || svms.isEmpty)
       return NoResultsFoundTile(toReset: toReset);
     final lastUpdated = svms.first.lastUpdated;
+
     return Card(
       child: ExpansionTile(
         key: PageStorageKey('SVMs'),
@@ -85,11 +87,36 @@ class ApiOntapSvmsCard extends StatelessWidget {
         children: [
           ...svms.map((svm) {
             _svmState(context, svm);
+            final servicesEnabled = (svm.nfs.enabled ? 'NFS ' : '') +
+                (svm.cifs.enabled ? 'CIFS ' : '') +
+                (svm.iscsi.enabled ? 'iSCSI ' : '') +
+                (svm.fcp.enabled ? 'FCP ' : '') +
+                (svm.nvme.enabled ? 'NVME ' : '') +
+                (svm.s3.enabled ? 'S3 ' : '');
             return ExpansionTile(
               key: PageStorageKey(svm.name),
               leading: FaIcon(_svmStateIcon, color: _svmStateColor),
               title: Text(svm.name),
               subtitle: Text(svm.state.name),
+              children: [
+                ListTile(
+                  title: Text(svm.subtype.name),
+                  subtitle: Text('Subtype'),
+                ),
+                ListTile(
+                  title: Text(svm.ipspace.name),
+                  subtitle: Text('IP Space'),
+                ),
+                ListTile(
+                  title: Text(svm.snapshotPolicy.name),
+                  subtitle: Text('Snapshot Policy'),
+                ),
+                ListTile(
+                  title: Text(
+                      servicesEnabled.isNotEmpty ? servicesEnabled : 'None'),
+                  subtitle: Text('Data Services Enabled'),
+                ),
+              ],
             );
           }),
           RefreshResultsTile(toRefresh: toRefresh),

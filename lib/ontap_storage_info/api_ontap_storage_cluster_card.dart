@@ -93,7 +93,7 @@ class ApiOntapStorageClusterCard extends StatelessWidget {
                         Divider(),
                         ListTile(
                           title: Text(
-                              '${media.efficiency.ratio} / ${_toGb(media.efficiency.savings)} / ${_toGb(media.efficiency.logicalUsed)}'),
+                              '${media.efficiency.ratio.toStringAsFixed(2)} / ${_toGb(media.efficiency.savings)} / ${_toGb(media.efficiency.logicalUsed)}'),
                           subtitle: Text(media.type.toUpperCase() +
                               ' Efficiency ratio / savings / logical-used'),
                         ),

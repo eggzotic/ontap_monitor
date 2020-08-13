@@ -13,7 +13,7 @@ import 'package:ontap_monitor/ontap_api_models/api_method.dart';
 class ShowApiResultsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    //
+    final scrollController = ScrollController();
     return IconButton(
       icon: Icon(
         Icons.visibility,
@@ -34,12 +34,30 @@ class ShowApiResultsButton extends StatelessWidget {
             return AlertDialog(
               title: Text('Action API'),
               actions: [
+                if (responseExists) ...[
+                  IconButton(
+                    icon: Icon(Icons.arrow_upward,
+                        color: Theme.of(context).accentColor),
+                    onPressed: () => scrollController.animateTo(
+                      scrollController.position.minScrollExtent,
+                      duration: Duration(milliseconds: 200),
+                      curve: Curves.bounceInOut,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.arrow_downward,
+                        color: Theme.of(context).accentColor),
+                    onPressed: () => scrollController.animateTo(
+                      scrollController.position.maxScrollExtent,
+                      duration: Duration(milliseconds: 200),
+                      curve: Curves.bounceInOut,
+                    ),
+                  ),
+                ],
                 FlatButton(
-                  onPressed: () {
-                    Navigator.pop(c);
-                  },
+                  onPressed: () => Navigator.pop(c),
                   child: Text(
-                    'Close',
+                    'OK',
                     style: TextStyle(color: Theme.of(c).accentColor),
                   ),
                 ),
@@ -50,6 +68,7 @@ class ShowApiResultsButton extends StatelessWidget {
                     ? MediaQuery.of(context).size.height * 0.6
                     : 200.0,
                 child: ListView(
+                  controller: scrollController,
                   children: [
                     ListTile(
                       title: Text(
@@ -70,7 +89,7 @@ class ShowApiResultsButton extends StatelessWidget {
                           jsonStore.forId(responseId).rawJson,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
-                        subtitle: Text('Raw JSON Response'),
+                        subtitle: Text('Full JSON Response'),
                       ),
                     ]
                   ],
