@@ -87,12 +87,15 @@ class ApiOntapSvmsCard extends StatelessWidget {
         children: [
           ...svms.map((svm) {
             _svmState(context, svm);
-            final servicesEnabled = (svm.nfs.enabled ? 'NFS ' : '') +
-                (svm.cifs.enabled ? 'CIFS ' : '') +
-                (svm.iscsi.enabled ? 'iSCSI ' : '') +
-                (svm.fcp.enabled ? 'FCP ' : '') +
-                (svm.nvme.enabled ? 'NVME ' : '') +
-                (svm.s3.enabled ? 'S3 ' : '');
+            final servicesEnabled = [
+              svm.nfs.serviceName,
+              svm.cifs.serviceName,
+              svm.iscsi.serviceName,
+              svm.fcp.serviceName,
+              svm.nvme.serviceName,
+              svm.s3.serviceName,
+            ].where((s) => s.isNotEmpty).join(', ');
+            //
             return ExpansionTile(
               key: PageStorageKey(svm.name),
               leading: FaIcon(_svmStateIcon, color: _svmStateColor),

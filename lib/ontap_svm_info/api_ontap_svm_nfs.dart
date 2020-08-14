@@ -15,4 +15,5 @@ class ApiOntapSvmNfs {
   Map<String, dynamic> get toMap => {
         "enabled": enabled,
       };
+  String get serviceName => enabled ? 'NFS' : '';
 }

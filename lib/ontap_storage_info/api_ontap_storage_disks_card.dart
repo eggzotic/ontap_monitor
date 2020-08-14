@@ -3,8 +3,6 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 import 'package:flutter/material.dart';
-import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
-import 'package:flutter_expanded_tile/tileController.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_disk_class.dart';
@@ -103,9 +101,9 @@ class ApiOntapStorageDisksCard extends StatelessWidget {
         key: PageStorageKey('Disks'),
         leading: ShowApiResultsButton(),
         title: Text('Disks (${disks.length})'),
-        // subtitle: Text(
-        //   'Last updated: ' + lastUpdated.toString().substring(0, 19),
-        // ),
+        subtitle: Text(
+          'Last updated: ' + lastUpdated.toString().substring(0, 19),
+        ),
         children: [
         // content: Container(
         //   child: Column(

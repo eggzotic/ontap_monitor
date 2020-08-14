@@ -29,4 +29,5 @@ class ApiOntapSvmCifs {
         "enabled": enabled,
         "name": name,
       };
+  String get serviceName => enabled ? 'CIFS' : '';
 }

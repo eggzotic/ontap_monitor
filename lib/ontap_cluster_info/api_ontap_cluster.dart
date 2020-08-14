@@ -19,8 +19,6 @@ class ApiOntapCluster extends StorableItem {
   final ApiOntapVersion version;
   @override
   String get id => ownerId + '_' + uuid;
-  @override
-  final String rawJson;
 
   // for storing these
   @override
@@ -33,7 +31,6 @@ class ApiOntapCluster extends StorableItem {
         'san_optimized': isAsa,
         'version': version?.toMap,
         'lastUpdated': lastUpdated?.toIso8601String(),
-        'rawJson': rawJson,
       };
   //
   ApiOntapCluster._private({
@@ -44,7 +41,6 @@ class ApiOntapCluster extends StorableItem {
     this.location,
     this.isAsa,
     this.version,
-    this.rawJson,
     DateTime lastUpdated,
   }) : super(lastUpdated: lastUpdated);
   //

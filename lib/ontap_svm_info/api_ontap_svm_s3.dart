@@ -23,4 +23,5 @@ class ApiOntapSvmS3 {
         'enabled': enabled,
         'name': name,
       };
+  String get serviceName => enabled ? 'S3' : '';
 }

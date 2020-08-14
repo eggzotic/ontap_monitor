@@ -17,10 +17,6 @@ abstract class StorableItem with ChangeNotifier {
   DateTime _lastUpdated;
   DateTime get lastUpdated => _lastUpdated;
   //
-  /// [rawJson] can be overridden in concrete subclasses to store the raw JSON
-  ///  as returned by the API (where relevant)
-  String get rawJson => '';
-  //
   // each subclass constructor should finish with super(lastUpdated: ...)
   StorableItem({DateTime lastUpdated}) {
     _lastUpdated = lastUpdated ?? DateTime.now();

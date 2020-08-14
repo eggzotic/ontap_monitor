@@ -15,4 +15,5 @@ class ApiOntapSvmNvme {
   Map<String, dynamic> get toMap => {
         "enabled": enabled,
       };
+  String get serviceName => enabled ? 'NVMe' : '';
 }

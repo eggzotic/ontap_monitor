@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
+import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster_info/api_ontap_cluster.dart';
 import 'package:ontap_monitor/misc/refresh_results_tile.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,9 @@ class OntapClusterInfoCard extends StatelessWidget {
     final resultList = Provider.of<List<ApiOntapCluster>>(context);
     if (resultList.isEmpty) return NoResultsFoundTile(toReset: toReset);
     final apiOntapCluster = resultList.first;
-    // final scr = ScrollController();
+    //
+    final cluster = Provider.of<OntapCluster>(context);
+    final namesDontMatch = cluster.name != apiOntapCluster.name;
 
     return Card(
       child: ExpansionTile(
@@ -42,7 +45,25 @@ class OntapClusterInfoCard extends StatelessWidget {
               apiOntapCluster.lastUpdated.toString().substring(0, 19),
         ),
         children: [
-          ListTile(title: Text(apiOntapCluster.name), subtitle: Text('Name')),
+          ListTile(
+            title: Text(apiOntapCluster.name),
+            // if the cluster name in the API response does not match the name
+            //  we've set then include a tile that, when tapped, will update our
+            //  in-app cluster definition
+            subtitle: Text(
+                namesDontMatch ? 'Name (tap to sync name with app)' : 'Name'),
+            trailing: namesDontMatch
+                ? Icon(
+                    Icons.sync,
+                    color: Theme.of(context).accentColor,
+                  )
+                : SizedBox(height: 0, width: 0),
+            onTap: namesDontMatch
+                ? () {
+                    cluster.setName(apiOntapCluster.name);
+                  }
+                : null,
+          ),
           ListTile(
               title: Text(apiOntapCluster.location),
               subtitle: Text('Location')),

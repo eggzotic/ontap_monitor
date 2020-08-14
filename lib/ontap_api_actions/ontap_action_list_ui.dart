@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
+import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_card.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action_edit_page.dart';
@@ -12,7 +13,8 @@ import 'package:provider/provider.dart';
 class OntapActionListUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final actionStore = Provider.of<ItemStore<OntapAction>>(context);
+    final ItemStore<OntapAction> actionStore =
+        Provider.of<SuperStore>(context).storeForType(OntapAction);
     final actionIds = actionStore.idsSorted;
     final actionCount = actionStore.itemCount;
     //

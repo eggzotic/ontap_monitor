@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/data_storage/api_raw_response.dart';
+import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
@@ -25,7 +26,7 @@ class ShowApiResultsButton extends StatelessWidget {
           builder: (c) {
             final action = Provider.of<OntapAction>(context);
             final cluster = Provider.of<OntapCluster>(context);
-            final jsonStore =
+            final ItemStore<ApiRawResponse> jsonStore =
                 Provider.of<SuperStore>(context).storeForType(ApiRawResponse);
             final responseId = ApiRawResponse.idForClusterAction(
                 cluster: cluster, action: action);

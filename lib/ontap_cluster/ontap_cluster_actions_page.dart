@@ -3,8 +3,6 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 import 'package:flutter/material.dart';
-import 'package:flutter_expanded_tile/tileController.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_actions_ui.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_edit_page.dart';

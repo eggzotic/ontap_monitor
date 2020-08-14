@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
+import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_api/ontap_api.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,8 @@ import 'package:ontap_monitor/ontap_api_models/api_method.dart';
 class OntapActionEditUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final apiStore = Provider.of<ItemStore<OntapApi>>(context);
+    final ItemStore<OntapApi> apiStore =
+        Provider.of<SuperStore>(context).storeForType(OntapApi);
     final action = Provider.of<OntapAction>(context);
     final editable = action.isEditable;
     //
@@ -42,11 +44,17 @@ class OntapActionEditUi extends StatelessWidget {
           ),
         ),
         //
-        DropdownButton<OntapApi>(
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('API',style: Theme.of(context).textTheme.caption,),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: DropdownButton<OntapApi>(
             items: apiStore.idsSorted.map(
               (apiId) {
                 final api = apiStore.forId(apiId);
-                DropdownMenuItem<OntapApi>(
+                return DropdownMenuItem<OntapApi>(
                   child: Text(api.method.name + ' ' + api.name),
                   value: api,
                   onTap: () => action.setApi(api),
@@ -54,7 +62,13 @@ class OntapActionEditUi extends StatelessWidget {
               },
             ).toList(),
             value: action.api,
-            onChanged: null),
+            onChanged: null,
+            disabledHint: Text(action.api.name),
+            hint: Text(action.api.name),
+          ),
+        ),
+
+        
         //
         // Padding(
         //   padding: const EdgeInsets.all(8.0),

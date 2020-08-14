@@ -15,4 +15,5 @@ class ApiOntapSvmIscsi {
   Map<String, dynamic> get toMap => {
         "enabled": enabled,
       };
+  String get serviceName => enabled ? 'iSCSI' : '';
 }
