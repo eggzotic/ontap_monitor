@@ -3,6 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_cluster.dart';
@@ -37,78 +38,81 @@ class ApiOntapStorageClusterCard extends StatelessWidget {
     final clusterStorage = resultList.first;
 
     return Card(
-      child: ExpansionTile(
-        key: PageStorageKey('Cluster Storage Summary'),
-        leading: ShowApiResultsButton(),
-        title: Text('Cluster Storage Summary'),
-        subtitle: Text(
-          'Last updated: ' +
-              clusterStorage.lastUpdated.toString().substring(0, 19),
-        ),
-        children: [
-          ListTile(
-            title: Text(
-              clusterStorage.efficiency.ratio.toStringAsFixed(2) +
-                  ' / ' +
-                  _toGb(clusterStorage.efficiency.savings) +
-                  ' / ' +
-                  _toGb(clusterStorage.efficiency.logicalUsed),
-            ),
-            subtitle: Text('Efficiency ratio / savings / logical-used'),
+      child: BrandedWidget(
+        child: ExpansionTile(
+          key: PageStorageKey('Cluster Storage Summary'),
+          leading: ShowApiResultsButton(),
+          title: Text('Cluster Storage Summary'),
+          subtitle: Text(
+            'Last updated: ' +
+                clusterStorage.lastUpdated.toString().substring(0, 19),
           ),
-          ListTile(
-            title: Text(
-              clusterStorage.efficiencyWithoutSnapshots.ratio
-                      .toStringAsFixed(2) +
-                  ' / ' +
-                  _toGb(clusterStorage.efficiencyWithoutSnapshots.savings) +
-                  ' / ' +
-                  _toGb(clusterStorage.efficiencyWithoutSnapshots.logicalUsed),
-            ),
-            isThreeLine: true,
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('(without snapshots)'),
-                Text('Efficiency ratio / savings / logical-used'),
-              ],
-            ),
-          ),
-          ExpansionTile(
-              key: PageStorageKey('Block Storage Summary'),
+          children: [
+            ListTile(
               title: Text(
-                _toGb(clusterStorage.blockStorage.size) +
+                clusterStorage.efficiency.ratio.toStringAsFixed(2) +
                     ' / ' +
-                    _toGb(clusterStorage.blockStorage.used) +
+                    _toGb(clusterStorage.efficiency.savings) +
                     ' / ' +
-                    _toGb(clusterStorage.blockStorage.inactiveData),
+                    _toGb(clusterStorage.efficiency.logicalUsed),
               ),
-              subtitle: Text('Block Storage / used / inactive'),
-              children: clusterStorage.blockStorage.medias
-                  .map(
-                    (media) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Divider(),
-                        ListTile(
-                          title: Text(
-                              '${media.efficiency.ratio.toStringAsFixed(2)} / ${_toGb(media.efficiency.savings)} / ${_toGb(media.efficiency.logicalUsed)}'),
-                          subtitle: Text(media.type.toUpperCase() +
-                              ' Efficiency ratio / savings / logical-used'),
-                        ),
-                        ListTile(
-                          title: Text(
-                              '${_toGb(media.size)} / ${_toGb(media.used)} / ${_toGb(media.available)}'),
-                          subtitle: Text(media.type.toUpperCase() +
-                              ' Size / used / available'),
-                        ),
-                      ],
-                    ),
-                  )
-                  .toList()),
-          RefreshResultsTile(toRefresh: toRefresh),
-        ],
+              subtitle: Text('Efficiency ratio / savings / logical-used'),
+            ),
+            ListTile(
+              title: Text(
+                clusterStorage.efficiencyWithoutSnapshots.ratio
+                        .toStringAsFixed(2) +
+                    ' / ' +
+                    _toGb(clusterStorage.efficiencyWithoutSnapshots.savings) +
+                    ' / ' +
+                    _toGb(
+                        clusterStorage.efficiencyWithoutSnapshots.logicalUsed),
+              ),
+              isThreeLine: true,
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('(without snapshots)'),
+                  Text('Efficiency ratio / savings / logical-used'),
+                ],
+              ),
+            ),
+            ExpansionTile(
+                key: PageStorageKey('Block Storage Summary'),
+                title: Text(
+                  _toGb(clusterStorage.blockStorage.size) +
+                      ' / ' +
+                      _toGb(clusterStorage.blockStorage.used) +
+                      ' / ' +
+                      _toGb(clusterStorage.blockStorage.inactiveData),
+                ),
+                subtitle: Text('Block Storage / used / inactive'),
+                children: clusterStorage.blockStorage.medias
+                    .map(
+                      (media) => Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Divider(),
+                          ListTile(
+                            title: Text(
+                                '${media.efficiency.ratio.toStringAsFixed(2)} / ${_toGb(media.efficiency.savings)} / ${_toGb(media.efficiency.logicalUsed)}'),
+                            subtitle: Text(media.type.toUpperCase() +
+                                ' Efficiency ratio / savings / logical-used'),
+                          ),
+                          ListTile(
+                            title: Text(
+                                '${_toGb(media.size)} / ${_toGb(media.used)} / ${_toGb(media.available)}'),
+                            subtitle: Text(media.type.toUpperCase() +
+                                ' Size / used / available'),
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList()),
+            RefreshResultsTile(toRefresh: toRefresh),
+          ],
+        ),
       ),
     );
   }

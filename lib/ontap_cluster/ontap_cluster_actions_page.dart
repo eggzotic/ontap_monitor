@@ -3,6 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_actions_ui.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_edit_page.dart';
@@ -34,7 +35,7 @@ class OntapClusterActionsPage extends StatelessWidget {
           ChangeNotifierProvider.value(value: scr),
           // ChangeNotifierProvider.value(value: expCtrl),
         ],
-        child: OntapClusterActionsUi(),
+        child: BrandedWidget(child: OntapClusterActionsUi()),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(

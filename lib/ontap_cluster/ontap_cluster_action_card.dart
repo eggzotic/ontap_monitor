@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/builtins/model_ui.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_api/ontap_api_error.dart';
 import 'package:ontap_monitor/ontap_api/ontap_api_status_code.dart';
@@ -95,33 +96,35 @@ class OntapClusterActionCard<T extends StorableItem> extends StatelessWidget {
             (reporter.status == ApiRequestState.started ||
                 reporter.status == ApiRequestState.notStarted)
         ? Card(
-            child: ListTile(
-              leading: ChangeNotifierProvider.value(
-                value: action,
-                builder: (_, __) => ShowApiResultsButton(),
+            child: BrandedWidget(
+              child: ListTile(
+                leading: ChangeNotifierProvider.value(
+                  value: action,
+                  builder: (_, __) => ShowApiResultsButton(),
+                ),
+                title: Text(action.name),
+                trailing: reporter.status == ApiRequestState.started
+                    ? CircularProgressIndicator()
+                    : Icon(
+                        Icons.directions_run,
+                        color: Theme.of(context).accentColor,
+                      ),
+                onTap: () {
+                  // if the cluster does not have a valid set of credentials
+                  //  assigned, we take the user to the define/associate-creds screen
+                  if (cred == null) {
+                    cluster.setCredentialsRequired(true);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) =>
+                            OntapClusterEditPage(clusterId: cluster.id),
+                      ),
+                    );
+                    return;
+                  }
+                  toRun();
+                },
               ),
-              title: Text(action.name),
-              trailing: reporter.status == ApiRequestState.started
-                  ? CircularProgressIndicator()
-                  : Icon(
-                      Icons.directions_run,
-                      color: Theme.of(context).accentColor,
-                    ),
-              onTap: () {
-                // if the cluster does not have a valid set of credentials
-                //  assigned, we take the user to the define/associate-creds screen
-                if (cred == null) {
-                  cluster.setCredentialsRequired(true);
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          OntapClusterEditPage(clusterId: cluster.id),
-                    ),
-                  );
-                  return;
-                }
-                toRun();
-              },
             ),
           )
         : MultiProvider(

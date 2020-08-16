@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:ontap_monitor/data_storage/api_raw_response.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:ontap_monitor/ontap_api_actions/ontap_action.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:provider/provider.dart';
@@ -63,37 +64,39 @@ class ShowApiResultsButton extends StatelessWidget {
                   ),
                 ),
               ],
-              content: Container(
-                width: MediaQuery.of(context).size.width * 0.95,
-                height: responseExists
-                    ? MediaQuery.of(context).size.height * 0.6
-                    : 200.0,
-                child: ListView(
-                  controller: scrollController,
-                  children: [
-                    ListTile(
-                      title: Text(
-                        action.api.method.name +
-                            ' ' +
-                            action
-                                .urlForHost(cluster.adminLifAddress)
-                                .toString(),
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      subtitle: Text('Full API URL'),
-                    ),
-                    // if there's a response then display that also
-                    if (responseExists) ...[
-                      Divider(),
+              content: BrandedWidget(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  height: responseExists
+                      ? MediaQuery.of(context).size.height * 0.6
+                      : 200.0,
+                  child: ListView(
+                    controller: scrollController,
+                    children: [
                       ListTile(
                         title: Text(
-                          jsonStore.forId(responseId).rawJson,
+                          action.api.method.name +
+                              ' ' +
+                              action
+                                  .urlForHost(cluster.adminLifAddress)
+                                  .toString(),
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
-                        subtitle: Text('Full JSON Response'),
+                        subtitle: Text('Full API URL'),
                       ),
-                    ]
-                  ],
+                      // if there's a response then display that also
+                      if (responseExists) ...[
+                        Divider(),
+                        ListTile(
+                          title: Text(
+                            jsonStore.forId(responseId).rawJson,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          subtitle: Text('Full JSON Response'),
+                        ),
+                      ]
+                    ],
+                  ),
                 ),
               ),
             );

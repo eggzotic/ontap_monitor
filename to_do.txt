@@ -18,7 +18,7 @@ Scenarios to Record
 To do:
 1. done - Add "View Available Actions" entry to main drawer
 2. done - Add "Tap to set cluster-name to match actual cluster name" after running the Cluster Info action
-3. Add some sample branding (background image?) to illustrate how that could be incorporated to make it partner-centric
+3. done - Add some sample branding (background image?) to illustrate how that could be incorporated to make it partner-centric
 4. done - Add tap-to-dismiss-keyboard to text-entry screens (e.g. credentials-edit, cluster-edit)
 
 Richard Shepherd

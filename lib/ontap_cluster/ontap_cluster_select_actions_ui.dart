@@ -42,22 +42,18 @@ class OntapClusterSelectActionsUi extends StatelessWidget {
         final action = actionStore.forId(visibleActionIds[index]);
         final checked = cluster.hasActionId(action.id);
         return ListTile(
-          leading: checked
-              ? Icon(
-                  Icons.check_circle,
-                  color: Theme.of(context).accentColor,
-                )
-              : Icon(
-                  Icons.radio_button_unchecked,
-                  color: Theme.of(context).accentColor,
-                ),
+          leading: Icon(
+            checked ? Icons.check_circle : Icons.radio_button_unchecked,
+            color: Theme.of(context).accentColor,
+          ),
           title: Text(action.name),
           onTap: () => cluster.toggleActionId(action.id),
         );
       },
       onChanged: (text) => actionStore.setFilterText(text),
       decoration: InputDecoration.collapsed(
-        hintText: searchEnabled ? 'Search...' : '(showing selected actions)',
+        hintText:
+            searchEnabled ? 'Action search...' : '(showing selected actions)',
         enabled: searchEnabled,
       ),
     );

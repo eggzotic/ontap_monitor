@@ -8,7 +8,7 @@ This project demonstrates the use of the NetApp ONTAP REST API within a Flutter 
 
 For development purposes you can have your own running ONTAP Simulator - download the OVA from the NetApp support site at https://mysupport.netapp.com/ (NetApp SSO login required).
 
-Persistent storage of config (& cached API responses) is currently local-device-only (using SharedPreferences) - for simplicity and to keep the repo self-contained - ready-to-run for new users. For a real enterprise app an external DB, with per-user authentication, and stronger encryption for credentials, would be required.
+Persistent storage of config (& cached API responses) is currently local-device-only (using SharedPreferences) for simplicity - to keep the repo self-contained and ready-to-run for new users. For an enterprise app some external DB, with per-user authentication, and stronger encryption for credentials, would likely be preferred.
 
 The aim is to demonstrate how custom apps can be built that leverage the REST API e.g. for reporting, monitoring, configuration and provisioning of ONTAP resources. This could, for example, allow a Managed Services partner to create a self-branded, customer-needs-targeted - even self-service - application to monitor/manage their customers NetApp estate.
 

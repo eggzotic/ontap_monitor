@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/refresh_results_tile.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
@@ -77,53 +78,55 @@ class ApiOntapSvmsCard extends StatelessWidget {
     final lastUpdated = svms.first.lastUpdated;
 
     return Card(
-      child: ExpansionTile(
-        key: PageStorageKey('SVMs'),
-        leading: ShowApiResultsButton(),
-        title: Text('SVMs (${svms.length})'),
-        subtitle: Text(
-          'Last updated: ' + lastUpdated.toString().substring(0, 19),
+      child: BrandedWidget(
+        child: ExpansionTile(
+          key: PageStorageKey('SVMs'),
+          leading: ShowApiResultsButton(),
+          title: Text('SVMs (${svms.length})'),
+          subtitle: Text(
+            'Last updated: ' + lastUpdated.toString().substring(0, 19),
+          ),
+          children: [
+            ...svms.map((svm) {
+              _svmState(context, svm);
+              final servicesEnabled = [
+                svm.nfs.serviceName,
+                svm.cifs.serviceName,
+                svm.iscsi.serviceName,
+                svm.fcp.serviceName,
+                svm.nvme.serviceName,
+                svm.s3.serviceName,
+              ].where((s) => s.isNotEmpty).join(', ');
+              //
+              return ExpansionTile(
+                key: PageStorageKey(svm.name),
+                leading: FaIcon(_svmStateIcon, color: _svmStateColor),
+                title: Text(svm.name),
+                subtitle: Text(svm.state.name),
+                children: [
+                  ListTile(
+                    title: Text(svm.subtype.name),
+                    subtitle: Text('Subtype'),
+                  ),
+                  ListTile(
+                    title: Text(svm.ipspace.name),
+                    subtitle: Text('IP Space'),
+                  ),
+                  ListTile(
+                    title: Text(svm.snapshotPolicy.name),
+                    subtitle: Text('Snapshot Policy'),
+                  ),
+                  ListTile(
+                    title: Text(
+                        servicesEnabled.isNotEmpty ? servicesEnabled : 'None'),
+                    subtitle: Text('Data Services Enabled'),
+                  ),
+                ],
+              );
+            }),
+            RefreshResultsTile(toRefresh: toRefresh),
+          ],
         ),
-        children: [
-          ...svms.map((svm) {
-            _svmState(context, svm);
-            final servicesEnabled = [
-              svm.nfs.serviceName,
-              svm.cifs.serviceName,
-              svm.iscsi.serviceName,
-              svm.fcp.serviceName,
-              svm.nvme.serviceName,
-              svm.s3.serviceName,
-            ].where((s) => s.isNotEmpty).join(', ');
-            //
-            return ExpansionTile(
-              key: PageStorageKey(svm.name),
-              leading: FaIcon(_svmStateIcon, color: _svmStateColor),
-              title: Text(svm.name),
-              subtitle: Text(svm.state.name),
-              children: [
-                ListTile(
-                  title: Text(svm.subtype.name),
-                  subtitle: Text('Subtype'),
-                ),
-                ListTile(
-                  title: Text(svm.ipspace.name),
-                  subtitle: Text('IP Space'),
-                ),
-                ListTile(
-                  title: Text(svm.snapshotPolicy.name),
-                  subtitle: Text('Snapshot Policy'),
-                ),
-                ListTile(
-                  title: Text(
-                      servicesEnabled.isNotEmpty ? servicesEnabled : 'None'),
-                  subtitle: Text('Data Services Enabled'),
-                ),
-              ],
-            );
-          }),
-          RefreshResultsTile(toRefresh: toRefresh),
-        ],
       ),
     );
   }

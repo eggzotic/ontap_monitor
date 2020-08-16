@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_license_info/api_ontap_license_compliance_state.dart';
@@ -34,50 +35,53 @@ class OntapClusterLicensingCard extends StatelessWidget {
     final lastUpdated = licenses.first.lastUpdated;
 
     return Card(
-      child: ExpansionTile(
-        key: PageStorageKey('Cluster Licenses'),
-        leading: ShowApiResultsButton(),
-        title: Text('Cluster Licenses (${licenses.length})'),
-        subtitle: Text(
-          'Last updated: ' + lastUpdated.toString().substring(0, 19),
-        ),
-        children: [
-          ...licenses.map(
-            (package) => ExpansionTile(
-              key: PageStorageKey(package.name),
-              title: Text(package.name),
-              leading: package.state == ApiOntapLicenseComplianceState.compliant
-                  ? FaIcon(FontAwesomeIcons.certificate, color: Colors.green)
-                  : Icon(Icons.warning, color: Colors.red),
-              subtitle: Text(package.scope.name),
-              children: package.licenses
-                  .map(
-                    (lic) => ListTile(
-                      isThreeLine: true,
-                      leading: lic.complianceState ==
-                              ApiOntapLicenseComplianceState.compliant
-                          ? Icon(Icons.check, color: Colors.green)
-                          : Icon(Icons.warning, color: Colors.red),
-                      title: Text(lic.owner),
-                      trailing: Text(lic.active ? 'Active' : 'Inactive'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(lic.serialNumber),
-                          if (lic.evaluation)
-                            Text(lic.expiryTime
-                                .toIso8601String()
-                                .substring(0, 10))
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
+      child: BrandedWidget(
+        child: ExpansionTile(
+          key: PageStorageKey('Cluster Licenses'),
+          leading: ShowApiResultsButton(),
+          title: Text('Cluster Licenses (${licenses.length})'),
+          subtitle: Text(
+            'Last updated: ' + lastUpdated.toString().substring(0, 19),
           ),
-          RefreshResultsTile(toRefresh: toRefresh),
-        ],
+          children: [
+            ...licenses.map(
+              (package) => ExpansionTile(
+                key: PageStorageKey(package.name),
+                title: Text(package.name),
+                leading: package.state ==
+                        ApiOntapLicenseComplianceState.compliant
+                    ? FaIcon(FontAwesomeIcons.certificate, color: Colors.green)
+                    : Icon(Icons.warning, color: Colors.red),
+                subtitle: Text(package.scope.name),
+                children: package.licenses
+                    .map(
+                      (lic) => ListTile(
+                        isThreeLine: true,
+                        leading: lic.complianceState ==
+                                ApiOntapLicenseComplianceState.compliant
+                            ? Icon(Icons.check, color: Colors.green)
+                            : Icon(Icons.warning, color: Colors.red),
+                        title: Text(lic.owner),
+                        trailing: Text(lic.active ? 'Active' : 'Inactive'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(lic.serialNumber),
+                            if (lic.evaluation)
+                              Text(lic.expiryTime
+                                  .toIso8601String()
+                                  .substring(0, 10))
+                          ],
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+            RefreshResultsTile(toRefresh: toRefresh),
+          ],
+        ),
       ),
     );
   }

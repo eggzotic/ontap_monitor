@@ -7,6 +7,7 @@ import 'package:ontap_monitor/cluster_credentials/cluster_credential_edit_ui.dar
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:provider/provider.dart';
 
 class ClusterCredentialEditPage extends StatelessWidget {
@@ -63,7 +64,8 @@ class ClusterCredentialEditPage extends StatelessWidget {
               //  set of credentials
               : ChangeNotifierProvider.value(
                   value: credential,
-                  builder: (_, __) => ClusterCredentialEditUi(),
+                  builder: (_, __) =>
+                      BrandedWidget(child: ClusterCredentialEditUi()),
                 ),
     );
   }

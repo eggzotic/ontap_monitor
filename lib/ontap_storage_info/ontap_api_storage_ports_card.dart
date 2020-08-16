@@ -4,6 +4,7 @@
 //
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/refresh_results_tile.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
@@ -71,42 +72,44 @@ class ApiOntapStoragePortCard extends StatelessWidget {
       return NoResultsFoundTile(toReset: toReset);
     final lastUpdated = ports.first.lastUpdated;
     return Card(
-        child: ExpansionTile(
-      key: PageStorageKey('Storage Ports'),
-      leading: ShowApiResultsButton(),
-      title: Text('Storage Ports (${ports.length})'),
-      subtitle: Text(
-        'Last updated: ' + lastUpdated.toString().substring(0, 19),
-      ),
-      children: [
-        ...ports.map(
-          (port) {
-            _portState(context, port);
-            return ExpansionTile(
-              key: PageStorageKey(port.node.name + ': ' + port.name),
-              leading: FaIcon(_portStateIcon, color: _portStateColor),
-              title: Text((port?.node?.name ?? '') + ': ' + port.name),
-              subtitle: Text(port?.wwn ?? ''),
-              children: [
-                ListTile(
-                  title: Text(port.description),
-                  subtitle: Text('Description'),
-                ),
-                if (port.speed != null)
-                  ListTile(
-                    title: Text('${port.speed} Gbps'),
-                    subtitle: Text('Port speed'),
-                  ),
-                ListTile(
-                  title: Text(port.state.name),
-                  subtitle: Text('Port state'),
-                ),
-              ],
-            );
-          },
+        child: BrandedWidget(
+      child: ExpansionTile(
+        key: PageStorageKey('Storage Ports'),
+        leading: ShowApiResultsButton(),
+        title: Text('Storage Ports (${ports.length})'),
+        subtitle: Text(
+          'Last updated: ' + lastUpdated.toString().substring(0, 19),
         ),
-        RefreshResultsTile(toRefresh: toRefresh),
-      ],
+        children: [
+          ...ports.map(
+            (port) {
+              _portState(context, port);
+              return ExpansionTile(
+                key: PageStorageKey(port.node.name + ': ' + port.name),
+                leading: FaIcon(_portStateIcon, color: _portStateColor),
+                title: Text((port?.node?.name ?? '') + ': ' + port.name),
+                subtitle: Text(port?.wwn ?? ''),
+                children: [
+                  ListTile(
+                    title: Text(port.description),
+                    subtitle: Text('Description'),
+                  ),
+                  if (port.speed != null)
+                    ListTile(
+                      title: Text('${port.speed} Gbps'),
+                      subtitle: Text('Port speed'),
+                    ),
+                  ListTile(
+                    title: Text(port.state.name),
+                    subtitle: Text('Port state'),
+                  ),
+                ],
+              );
+            },
+          ),
+          RefreshResultsTile(toRefresh: toRefresh),
+        ],
+      ),
     ));
     //
   }

@@ -3,6 +3,7 @@
 //  eggzotic@gmail.com, richard.shepherd3@netapp.com
 //
 import 'package:flutter/material.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:ontap_monitor/misc/no_results_found_tile.dart';
 import 'package:ontap_monitor/misc/show_api_results_button.dart';
 import 'package:ontap_monitor/ontap_storage_info/api_ontap_storage_aggregate.dart';
@@ -87,81 +88,83 @@ class ApiOntapStorageAggregatesCard extends StatelessWidget {
       return NoResultsFoundTile(toReset: toReset);
     final lastUpdated = aggrs.first.lastUpdated;
     return Card(
-      child: ExpansionTile(
-        key: PageStorageKey('Aggregates'),
-        leading: ShowApiResultsButton(),
-        title: Text('Aggregates (${aggrs.length})'),
-        subtitle: Text(
-          'Last updated: ' + lastUpdated.toString().substring(0, 19),
-        ),
-        children: [
-          ...aggrs.map(
-            (aggr) {
-              _aggrState(context, aggr);
-              return ExpansionTile(
-                key: PageStorageKey(aggr.name),
-                leading: Icon(
-                  _aggrStateIcon,
-                  color: _aggrStateColor,
-                ),
-                title: Text(
-                  aggr.name +
-                      ' ' +
-                      (aggr?.space?.blockStorage?.size != null
-                          ? ('  ' +
-                              _toGb(aggr.space.blockStorage.size).toString())
-                          : ''),
-                ),
-                subtitle: Text(aggr.node?.name != null ? aggr.node.name : ''),
-                children: [
-                  if (aggr?.space?.blockStorage?.available != null)
-                    ListTile(
-                      title: Text(_toGb(aggr.space.blockStorage.available) +
-                          ' / ' +
-                          _toGb(aggr.space.blockStorage.size).toString() +
-                          ' / ' +
-                          ((100 *
-                                      aggr.space.blockStorage.used /
-                                      aggr.space.blockStorage.size)
-                                  .round()
-                                  .toString() +
-                              '%')),
-                      subtitle: Text('Available / Size / Used %'),
-                    ),
-                  ListTile(
-                    title: Text(aggr?.state?.name ?? 'unknown'),
-                    subtitle: Text('State'),
-                  ),
-                  if (aggr.blockStorage?.primary?.raidType?.name != null)
-                    ListTile(
-                      title: Text(
-                        aggr.blockStorage.primary.raidType.name +
-                            ' / ' +
-                            aggr.blockStorage.primary.raidSize.toString(),
-                      ),
-                      subtitle: Text('RAID type / size'),
-                    ),
-                  if (aggr.blockStorage?.primary?.diskCount != null)
-                    ListTile(
-                      title: Text(
-                        aggr.blockStorage.primary.diskCount.toString() +
-                            ' / ' +
-                            aggr.blockStorage.primary.diskType.name +
-                            ' / ' +
-                            aggr.blockStorage.primary.diskClass.name,
-                      ),
-                      subtitle: Text('Disk count / type / class'),
-                    ),
-                  // ListTile(
-                  //   title: Text(),
-                  //   subtitle: Text(''),
-                  // ),
-                ],
-              );
-            },
+      child: BrandedWidget(
+        child: ExpansionTile(
+          key: PageStorageKey('Aggregates'),
+          leading: ShowApiResultsButton(),
+          title: Text('Aggregates (${aggrs.length})'),
+          subtitle: Text(
+            'Last updated: ' + lastUpdated.toString().substring(0, 19),
           ),
-          RefreshResultsTile(toRefresh: toRefresh),
-        ],
+          children: [
+            ...aggrs.map(
+              (aggr) {
+                _aggrState(context, aggr);
+                return ExpansionTile(
+                  key: PageStorageKey(aggr.name),
+                  leading: Icon(
+                    _aggrStateIcon,
+                    color: _aggrStateColor,
+                  ),
+                  title: Text(
+                    aggr.name +
+                        ' ' +
+                        (aggr?.space?.blockStorage?.size != null
+                            ? ('  ' +
+                                _toGb(aggr.space.blockStorage.size).toString())
+                            : ''),
+                  ),
+                  subtitle: Text(aggr.node?.name != null ? aggr.node.name : ''),
+                  children: [
+                    if (aggr?.space?.blockStorage?.available != null)
+                      ListTile(
+                        title: Text(_toGb(aggr.space.blockStorage.available) +
+                            ' / ' +
+                            _toGb(aggr.space.blockStorage.size).toString() +
+                            ' / ' +
+                            ((100 *
+                                        aggr.space.blockStorage.used /
+                                        aggr.space.blockStorage.size)
+                                    .round()
+                                    .toString() +
+                                '%')),
+                        subtitle: Text('Available / Size / Used %'),
+                      ),
+                    ListTile(
+                      title: Text(aggr?.state?.name ?? 'unknown'),
+                      subtitle: Text('State'),
+                    ),
+                    if (aggr.blockStorage?.primary?.raidType?.name != null)
+                      ListTile(
+                        title: Text(
+                          aggr.blockStorage.primary.raidType.name +
+                              ' / ' +
+                              aggr.blockStorage.primary.raidSize.toString(),
+                        ),
+                        subtitle: Text('RAID type / size'),
+                      ),
+                    if (aggr.blockStorage?.primary?.diskCount != null)
+                      ListTile(
+                        title: Text(
+                          aggr.blockStorage.primary.diskCount.toString() +
+                              ' / ' +
+                              aggr.blockStorage.primary.diskType.name +
+                              ' / ' +
+                              aggr.blockStorage.primary.diskClass.name,
+                        ),
+                        subtitle: Text('Disk count / type / class'),
+                      ),
+                    // ListTile(
+                    //   title: Text(),
+                    //   subtitle: Text(''),
+                    // ),
+                  ],
+                );
+              },
+            ),
+            RefreshResultsTile(toRefresh: toRefresh),
+          ],
+        ),
       ),
     );
   }

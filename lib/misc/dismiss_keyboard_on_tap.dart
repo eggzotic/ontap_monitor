@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 
 //
-// A simple wrapper Widget to dismiss the keyboard when tapping outside of any
+// A simple wrapper Widget to facilitate dismiss-keyboard-on-tap-outside of any
 //  regular inner-widget
 class DismissKeyboardOnTap extends StatelessWidget {
   final Widget child;

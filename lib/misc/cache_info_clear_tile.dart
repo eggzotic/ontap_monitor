@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster.dart';
 import 'package:provider/provider.dart';
 
@@ -52,12 +53,14 @@ class CacheInfoClearTile extends StatelessWidget {
                   ),
                 ),
               ],
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: cacheCounters.keys
-                    .map((type) => Text('$type: ${cacheCounters[type]}'))
-                    .toList(),
+              content: BrandedWidget(
+                              child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: cacheCounters.keys
+                      .map((type) => Text('$type: ${cacheCounters[type]}'))
+                      .toList(),
+                ),
               ),
             );
           },

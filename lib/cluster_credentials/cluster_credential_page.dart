@@ -8,6 +8,7 @@ import 'package:ontap_monitor/cluster_credentials/cluster_credential_list_ui.dar
 import 'package:ontap_monitor/cluster_credentials/cluster_credentials.dart';
 import 'package:ontap_monitor/data_storage/item_store.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
+import 'package:ontap_monitor/misc/branded_widget.dart';
 import 'package:provider/provider.dart';
 
 class ClusterCredentialPage extends StatelessWidget {
@@ -38,7 +39,7 @@ class ClusterCredentialPage extends StatelessWidget {
             ),
         ],
       ),
-      body: ClusterCredentialListUi(),
+      body: BrandedWidget(child: ClusterCredentialListUi()),
     );
   }
 }
