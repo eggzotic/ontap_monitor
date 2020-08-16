@@ -4,6 +4,7 @@
 //
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_splash/flutter_splash.dart';
 import 'package:ontap_monitor/builtins/store_setup.dart';
 import 'package:ontap_monitor/data_storage/super_store.dart';
 import 'package:ontap_monitor/ontap_cluster/ontap_cluster_page.dart';
@@ -29,7 +30,6 @@ void main() {
 }
 
 class OntapMonitorApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -41,13 +41,25 @@ class OntapMonitorApp extends StatelessWidget {
         return superStore;
       },
       builder: (_, __) => MaterialApp(
-        title: 'ONTAP Demo',
         debugShowCheckedModeBanner: false,
+        title: 'ONTAP Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: OntapClusterPage(),
+        home: SafeArea(
+          child: Splash(
+            seconds: 3,
+            photoSize: 200.0,
+            navigateAfterSeconds: OntapClusterPage(),
+            image: Image.asset('images/logo-here.jpg'),
+            title: Text(
+              'ONTAP REST API Demo',
+              style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+            ),
+            loadingText: Text('App loading...'),
+          ),
+        ),
       ),
     );
   }

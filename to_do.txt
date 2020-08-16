@@ -20,6 +20,8 @@ To do:
 2. done - Add "Tap to set cluster-name to match actual cluster name" after running the Cluster Info action
 3. done - Add some sample branding (background image?) to illustrate how that could be incorporated to make it partner-centric
 4. done - Add tap-to-dismiss-keyboard to text-entry screens (e.g. credentials-edit, cluster-edit)
+5. done - Add launch screen (serves as another opp to highlight logo)
+6. Make some recordings to demo the capabilities
 
 Richard Shepherd
 August 2020
