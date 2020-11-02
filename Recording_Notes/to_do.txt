@@ -1,0 +1,104 @@
+Scenarios to Record
+1. Fresh-install startup - Cluster and Credential management
+    a. About screen
+    b. Add first ONTAP cluster
+        i. Required: name & Admin LIF
+        ii. Optional (but useful for non-trivial use):
+        iii.Create first Credentials
+        iv. Select Actions, edit any time
+        v. Complete cluster-Add
+    c. Add next ONTAP cluster
+        i. '+' button has moved up to screen title-bar
+        ii. can re-use the credentials already created
+    d. Delete a cluster (swipe from main screen)
+    e. Credential-management from main drawer
+2. Use, and re-use
+    i. 
+
+Main scenes:
+1. Intro with me speaking on camera
+  - Anyone interested in Data management with NetApp ONTAP
+  - available since ONTAP 9.6
+  - How would you like to have completely custom App, exposing just the management features relevant for your use-case
+  - We're going to see a custom app built with the Google Flutter platform - meaning the single code-base can run on both iOS and Android
+2. ONTAP command-line of the SIMs corroborating the results shown in the App demo
+  - security session show
+  - useradmin whoami
+  - rows 0
+  - version
+  - cluster show
+  - network interface show -role cluster-mgmt
+  - system node show
+  - storage failover show
+  - vserver show
+  - storage aggregate show
+  - license show
+  - storage disk show
+  - storage port show
+  - vserver nfs show
+  - vserver iscsi show
+  - vserver cifs show
+  - vserver fcp show
+  - vserver nvme show
+3. System Manager basic login and home-screen
+  - show URL and auth
+  - a few clicks 
+  - and also the REST API log toggle
+4. ONTAP REST API docs on browser, with URL, brief flick thru of the Swagger interface
+  - show URL (incl /docs/api suffix) and auth
+  - note how this is available on every ONTAP cluster "out of the box" from 9.6 and above
+  - note the scroll bar size (smallness!) as an indication of the shear number of APIs available
+  - show clicking on the section headers to collapse the sections to tame the screen-size somewhat
+  - drill down to cluster -> GET cluster
+  - note the sample JSON output and the model link
+5. App Demo with commentary
+6. Short discussion/visual about:
+  - how Internet REST APIs are:
+    - typically a relatively small number of endpoints
+    - but designed for large scale, high concurrent access usage.
+    - typically GET oriented - they're "fetch mostly"
+  - contrast this with ONTAP REST API that has a vast number of endpoints designed for:
+    - within-enterprise usage
+    - RBAC - fine-grained user access control
+    - is more balanced w.r.t. both GET, POST, PATCH (aka read, create, modify)
+
+
+To do:
+1. done - Add "View Available Actions" entry to main drawer
+2. done - Add "Tap to set cluster-name to match actual cluster name" after running the Cluster Info action
+3. done - Add some sample branding (background image?) to illustrate how that could be incorporated to make it partner-centric
+4. done - Add tap-to-dismiss-keyboard to text-entry screens (e.g. credentials-edit, cluster-edit)
+5. done - Add launch screen (serves as another opp to highlight logo)
+5. done - distinct icons for API (before result is available) and JSON (when result is available)
+6. Add volume query (i.e. as action) and volume-create - first POST-based action?
+...
+10. Make some recordings to demo the capabilities
+    - write a voice-script to use for voice-over
+    - include
+      - Browser accessing the ONTAP API (/docs/api)
+      - app startup
+      - about-screen
+      - viewing full available actions list (from Drawer)
+      - add first ONTAP cluster
+        - define name, admin LIF
+        - add credentials
+        - select actions
+        - edit selected-actions from within and via swipe-left to delete
+      - run actions
+        - view results
+        - drill-down
+        - view API/JSON output
+      - add 2nd cluster
+        - associate previous credentials
+        - show what happens when no results are found (e.g. data-aggrs, SVMs)
+        - show CLI login to my SIMs
+        - show some CLI output to verify the results
+        - make some changes at the CLI
+        - refresh the actions results in the app to show the updates
+      - show the cache-status/clear alert
+    - show GitHub repo and link
+
+
+
+Richard Shepherd
+August 2020

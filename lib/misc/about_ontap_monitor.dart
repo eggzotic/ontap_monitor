@@ -36,7 +36,7 @@ class AboutOntapMonitor extends StatelessWidget {
         ),
       ),
       body: BrandedWidget(
-              child: ListView(
+        child: ListView(
           children: [
             paragraph(
                 'Ontap Monitor is a sample app to demonstrate the use of the NetApp ONTAP REST API from a custom app. That API is available from NetApp ONTAP 9.6 and later.'),
@@ -53,6 +53,12 @@ class AboutOntapMonitor extends StatelessWidget {
             paragraph('''Richard Shepherd
 richard.shepherd3@netapp.com
 August 2020'''),
+            paragraph('''Attributions:
+
+"API Icon" made by https://www.flaticon.com/authors/vitaly-gorbachev Vitaly Gorbachev from https://www.flaticon.com
+
+"JSON Icon" made by https://smashicons.com Smashicons from https://www.flaticon.com
+            '''),
           ],
         ),
       ),

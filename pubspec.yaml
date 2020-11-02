@@ -61,6 +61,8 @@ flutter:
     - images/logo-here.jpg
     - images/your_logo.png
     - images/yourlogohere.jpg
+    - images/api.png
+    - images/json.png
     
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

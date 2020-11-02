@@ -16,10 +16,19 @@ class ShowApiResultsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scrollController = ScrollController();
+    final action = Provider.of<OntapAction>(context);
+    final cluster = Provider.of<OntapCluster>(context);
+    final ItemStore<ApiRawResponse> jsonStore =
+        Provider.of<SuperStore>(context).storeForType(ApiRawResponse);
+    final responseId =
+        ApiRawResponse.idForClusterAction(cluster: cluster, action: action);
+    final responseExists = jsonStore.existsForId(responseId);
+    //
     return IconButton(
-      icon: Icon(
-        Icons.visibility,
+      icon: ImageIcon(
+        AssetImage(responseExists ? 'images/json.png' : 'images/api.png'),
         color: Theme.of(context).accentColor,
+        size: 50.0,
       ),
       onPressed: () {
         showDialog(

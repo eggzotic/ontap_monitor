@@ -1,0 +1,42 @@
+Hello and welcome to my series covering the NetApp ONTAP REST API
+
+What we will cover here:
+
+In this series we'll be covering topics such as:
+
+- What is a REST API (any REST API, not specific to NetApp)?
+
+- How do I call or "invoke" a REST API - what tools should I know and be comfortable with using?
+
+- How is the ONTAP REST API different from some of the Internet REST APIs that we might be familiar with already?
+
+- What is the ONTAP API used for?
+
+- We'll take a look at the primary management interfaces to NetApp ONTAP, including the CLI and System Manager
+
+- We'll then look at how we can access the ONTAP REST API and the docs
+
+- We'll look at what you will need to setup your own lab where you can develop apps that access the ONTAP REST API
+
+- Then we'll take a look at accessing a common set of information across all 3 of these ONTAP management interfaces - the CLI, System Manager and the ONTAP REST API
+
+Who will be interested in this series?
+
+The target audience I have in mind include:
+- anyone who performs system-administration of NetApp ONTAP clusters
+- and who may be thinking of how to provide a limited set of functions to authorised resource - e.g. to junior admins, to customers, to management-staff (e.g. some reporting)
+- those who are experienced with developing applications
+
+What you need to know:
+
+To follow this series I'll assume that you're familiar with NetApp - the data-storage and data-management company - and the storage operating system known as "ONTAP" - in a hands-on capacity. 
+
+- I'll assume that you know how to access an ONTAP cluster via the command-line (i.e. thru SSH), the console and thru System Manager.
+
+- Ideally you will also already know how to deploy an ONTAP cluster - or at least how to deploy the ONTAP simulator which runs as VNs on VMware ESXi. For the visual demos in this series, when we're interacting with ONTAP it will actually be ONTAP simulatoprs in most cases.
+
+- I'll assume that you know what data-serving protocols are - NFS, CIFS/SMB, iSCSI, FCP and NVMe
+
+- and I'll assume you know the difference between protocols that serve data to hosts as opposed to those which we use to access cluster management interfaces
+
+- and BTW, this material is based on ONTAP version 9.7.
